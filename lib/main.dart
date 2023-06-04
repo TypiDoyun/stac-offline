@@ -22,7 +22,7 @@ class MyTest extends State<MyApp> {
         appBar: searchPageHeader(),
         body: Column(
           children: [
-            Container(height: 25,),
+            const SizedBox(height: 25,),
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
