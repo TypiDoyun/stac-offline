@@ -27,7 +27,7 @@ class MyTest extends State<MyApp> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     ShopListItem(),
                     ShopListItem(),
                     ShopListItem(),
@@ -37,12 +37,12 @@ class MyTest extends State<MyApp> {
                   ],
                 ),
               ),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 24),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 24),
 
             )
           ]
         ),
-        bottomNavigationBar: BottomAppBar(
+        bottomNavigationBar: const BottomAppBar(
           color: Colors.grey,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,21 +73,21 @@ class MyTest extends State<MyApp> {
         controller: seatrchTextEditingController,
         decoration: InputDecoration(
           hintText: "검색어를 입력하세요!",
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             color: Colors.grey
           ),
-          enabledBorder: UnderlineInputBorder(
+          enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey,)
           ),
-          focusedBorder: UnderlineInputBorder(
+          focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.white,)
           ),
           filled: true,
-          prefixIcon: Icon(Icons.person_pin, color: Colors.white, size: 30,),
-          suffixIcon: IconButton(icon: Icon(Icons.clear,color: Colors.white,),
+          prefixIcon: const Icon(Icons.person_pin, color: Colors.white, size: 30,),
+          suffixIcon: IconButton(icon: const Icon(Icons.clear,color: Colors.white,),
             onPressed: emptyTheTextFormField)
             ),
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           color: Colors.white
         ),
