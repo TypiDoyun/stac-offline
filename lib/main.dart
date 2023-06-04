@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:offline/Widgets/Shop_Listitem.dart';
+import 'package:offline/map.dart';
 
 void main() {
-  runApp(const MyApp());
+  return runApp(const MaterialApp(
+    home: MyApp()
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -21,9 +24,9 @@ class MyTest extends State<MyApp> {
         backgroundColor: Colors.white,
         appBar: searchPageHeader(),
         body: Column(
-          children: [
-            const SizedBox(height: 25,),
-            SingleChildScrollView(
+            children: [
+              const SizedBox(height: 25,),
+              SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
@@ -37,28 +40,37 @@ class MyTest extends State<MyApp> {
                   ],
                 ),
               ),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 24),
-
-            )
-          ]
+              const Padding(padding: EdgeInsets.symmetric(horizontal: 24),
+              )
+            ]
         ),
-        bottomNavigationBar: const BottomAppBar(
-          color: Colors.grey,
+        bottomNavigationBar: BottomAppBar(
+          color: const Color(0xffeeeeee),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
+              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
+              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
+              IconButton(
+                icon: const Icon(Icons.coffee, color: Colors.black),
+                onPressed: () {
+                  changeScreen(context);
+                },
+              ),
+              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
+              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
             ],
           ),
         ),
-          ),
-        );
+      ),
+    );
   }
 
+  void changeScreen(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()),
+    );
+  }
+  
   //검색창 입력내용 controller
   TextEditingController seatrchTextEditingController = TextEditingController();
   //아이콘 X클릭시 검색어 삭제
