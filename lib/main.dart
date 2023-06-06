@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
-import 'package:offline/Widgets/Shop_Listitem.dart';
-import 'package:offline/map.dart';
+import 'package:offline/AlarmPage.dart';
+import 'package:offline/MainPage.dart';
+import 'package:offline/MapPage.dart';
+import 'package:offline/SettingPage.dart';
+import 'package:offline/UserPage.dart';
+import 'package:offline/Widgets/LikeItem.dart';
 
 void main() {
-  return runApp(const MaterialApp(
-    home: MyApp()
-  ));
+  return runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -17,93 +18,65 @@ class MyApp extends StatefulWidget {
 }
 
 class MyTest extends State<MyApp> {
+  int current_index = 0;
+
+  //네이게이션바 화면 순서
+  List body_item = [
+    UserPage(),
+    LikeItem(),
+    const MainPage(),
+    const AlarmPage(),
+    SettingPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: searchPageHeader(),
-        body: Column(
-            children: [
-              const SizedBox(height: 25,),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 20),
-                    ShopListItem(),
-                    ShopListItem(),
-                    ShopListItem(),
-                    ShopListItem(),
-                    ShopListItem(),
-                    ShopListItem(),
-                  ],
+    return DefaultTabController(
+        length: 5,
+        child: Scaffold(
+          appBar: AppBar(
+              backgroundColor: const Color(0xffeeeeee),
+              elevation: 0,
+              title: const TextField(
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),
+                  ),
+                  hintText: '검색어를 입력해주세요!',
+                  suffixIcon: Icon(Icons.search), // 돋보기 아이콘을 추가합니다.
                 ),
-              ),
-              const Padding(padding: EdgeInsets.symmetric(horizontal: 24),
               )
-            ]
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: const Color(0xffeeeeee),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              IconButton(
-                icon: const Icon(Icons.coffee, color: Colors.black),
-                onPressed: () {
-                  changeScreen(context);
-                },
-              ),
-              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
-              const IconButton(onPressed: null, icon: Icon(Icons.coffee,color: Colors.black,)),
+          ),
+          body: body_item.elementAt(current_index),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: current_index,
+            onTap: (index) {
+              setState(() {
+                current_index = index;
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline), label: '내정보'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite_outline), label: '찜하기'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.map_outlined), label: '지도'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications_outlined), label: '알람'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings_outlined), label: '설정'),
             ],
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.grey,
+            type: BottomNavigationBarType.shifting,
           ),
-        ),
-      ),
-    );
-  }
-
-  void changeScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()),
-    );
-  }
-  
-  //검색창 입력내용 controller
-  TextEditingController seatrchTextEditingController = TextEditingController();
-  //아이콘 X클릭시 검색어 삭제
-  emptyTheTextFormField() {
-    seatrchTextEditingController.clear();
-  }
-
-  AppBar searchPageHeader() {
-    return AppBar(
-      backgroundColor: Colors.black,
-      title: TextFormField(
-        controller: seatrchTextEditingController,
-        decoration: InputDecoration(
-          hintText: "검색어를 입력하세요!",
-          hintStyle: const TextStyle(
-            color: Colors.grey
-          ),
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey,)
-          ),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white,)
-          ),
-          filled: true,
-          prefixIcon: const Icon(Icons.person_pin, color: Colors.white, size: 30,),
-          suffixIcon: IconButton(icon: const Icon(Icons.clear,color: Colors.white,),
-            onPressed: emptyTheTextFormField)
-            ),
-        style: const TextStyle(
-          fontSize: 18,
-          color: Colors.white
-        ),
-        )
-      );
+        ));
   }
 }

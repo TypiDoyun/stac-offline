@@ -1,31 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ShopListItem extends StatelessWidget{
-  final String shopName = 'test';
-  // final FileImage? shopImage;
+class ShopListItem extends StatelessWidget {
+  final String? shopName = null;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 15,horizontal: 25),
-            child: Text(
-              shopName,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            color: Color(0xffeeeeee),
-          ),
-          Container(
-            width: 5,
-          )
-        ]
-    );
-  }
+    return Container(
+      decoration: BoxDecoration( //컨테이너 데코레이션
+        borderRadius: BorderRadius.circular(50),
+        color: const Color(0xffeeeeee),
 
+    ),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      height: 40,width: 80,
+      child: const Row(mainAxisAlignment: MainAxisAlignment.center,
+        ),
+      );
+  }
 }
