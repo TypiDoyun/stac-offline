@@ -75,7 +75,7 @@ class MyTest extends State<MyApp> {
             ],
             selectedItemColor: Colors.black,
             unselectedItemColor: Colors.grey,
-            type: BottomNavigationBarType.shifting,
+            type: BottomNavigationBarType.fixed,
           ),
         ));
   }
