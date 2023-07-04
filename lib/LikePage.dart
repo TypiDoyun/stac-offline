@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:offline/Widgets/LikeItem.dart';
 
 class LikePage extends StatefulWidget{
   @override
@@ -14,9 +13,6 @@ class LikePageState extends State<LikePage> {
         children: ListTile.divideTiles(
           context: context,
           tiles: [
-            LikeItem(),
-            LikeItem(),
-            LikeItem(),
           ],
         ).toList(),
       ),
