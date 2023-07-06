@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offline/main.dart';
 
@@ -23,7 +22,7 @@ class MapPageState extends State<MapPage> {
   }
 
   void changeScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()),
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const UserMian()),
     );
   }
 

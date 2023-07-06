@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class ShopListItem extends StatelessWidget {
   final String? shopName = null;
 
+  const ShopListItem({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class UserPage extends StatefulWidget{
+  const UserPage({super.key});
+
   @override
   State<UserPage> createState() => UserPageState();
 }
@@ -19,10 +17,10 @@ class UserPageState extends State<UserPage> {
         child: Center(
           child: Column(
               children: [
-                SizedBox(height: 50,),
-                Text("로그인",
+                const SizedBox(height: 50,),
+                const Text("로그인",
                 style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900,fontSize: 30),),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
 
                 //아이디 입력
                 TextField(
@@ -37,7 +35,7 @@ class UserPageState extends State<UserPage> {
                     //errorText: "error text"
                   ),
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
 
                 //비밀번호 입력
                 TextField(
@@ -61,9 +59,9 @@ class UserPageState extends State<UserPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
-                    ElevatedButton(onPressed: () {}, child: Text("회원가입")),
-                    SizedBox(width: 20,),
-                    ElevatedButton(onPressed: () {}, child: Text("매장등록")),
+                    ElevatedButton(onPressed: () {}, child: const Text("회원가입")),
+                    const SizedBox(width: 20,),
+                    ElevatedButton(onPressed: () {}, child: const Text("매장등록")),
                   ]
 
                 )

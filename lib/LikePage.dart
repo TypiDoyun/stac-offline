@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LikePage extends StatefulWidget{
+  const LikePage({super.key});
+
   @override
   State<LikePage> createState() => LikePageState();
 }
