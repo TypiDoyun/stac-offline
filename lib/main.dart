@@ -6,6 +6,7 @@ import 'package:offline/UserPage.dart';
 
 
 
+
 void main() {
   return runApp(const MaterialApp(home: UserMian()));
 }
@@ -146,6 +147,7 @@ class MyTest extends State<UserMian> {
             unselectedItemColor: Colors.grey,
             type: BottomNavigationBarType.fixed,
           ),
-        ));
+        )
+    );
   }
 }

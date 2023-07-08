@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class UserPage extends StatefulWidget{
   const UserPage({super.key});
@@ -13,7 +14,7 @@ class UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 24,horizontal: 40),
         child: Center(
           child: Column(
               children: [
@@ -53,6 +54,7 @@ class UserPageState extends State<UserPage> {
                   child: const Text("로그인"),
                   onPressed: () {
                     print("${user_id.text}\n${user_password.text}");
+                    sendRequest();
                   },
                 ),
                 Row(
@@ -71,5 +73,15 @@ class UserPageState extends State<UserPage> {
       ),
     );
   }
+  void sendRequest() async {
+    var url = Uri.parse('http://192.168.2.139:3000/login');
+    var response = await http.put(url,body: {'name': "뿡뿡이"});
 
+    if (response.statusCode == 200) {
+      print('Request sent successfully');
+      print(response.body);
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+    }
+  }
 }
