@@ -10,6 +10,7 @@ class UserPage extends StatefulWidget{
 class UserPageState extends State<UserPage> {
   final user_id = TextEditingController();
   final user_password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +76,7 @@ class UserPageState extends State<UserPage> {
   }
   void sendRequest() async {
     var url = Uri.parse('http://192.168.2.139:3000/login');
-    var response = await http.put(url,body: {'name': "뿡뿡이"});
+    var response = await http.put(url,body: {'id': user_id.text, 'password': user_password.text});
 
     if (response.statusCode == 200) {
       print('Request sent successfully');

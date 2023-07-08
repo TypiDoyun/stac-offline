@@ -136,7 +136,7 @@ class ClothesCommentInput extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       color: Colors.white70,
-      height: 140,
+      height: 170,
       child: const Column(
         children: [
           SizedBox(height: 15,),
@@ -147,14 +147,21 @@ class ClothesCommentInput extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),),
           SizedBox(height: 5,),
-          TextField(
-            style: TextStyle(
-              fontSize: 26,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "옷에 대해 간단하게 소개해주세요!",
+                hintStyle: TextStyle(fontSize: 16),
+              ),
+              style: TextStyle(
+                fontSize: 18,
+              ),
+              minLines: 3,
+              maxLines: 5,
             ),
-            minLines: 3,
-            maxLines: 5,
           )
-
         ],
       ),
     );
