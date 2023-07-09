@@ -22,7 +22,7 @@ class MapPageState extends State<MapPage> {
   }
 
   void changeScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const UserMian()),
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const UserMain()),
     );
   }
 

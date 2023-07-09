@@ -15,7 +15,8 @@ class MainPageState extends State<MainPage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            const SliverAppBar(
+            SliverAppBar(
+              toolbarHeight: 80,
               title: Search(),
               backgroundColor: Colors.white,
               pinned: false,
@@ -24,14 +25,32 @@ class MainPageState extends State<MainPage> {
               pinned: true,
               delegate: TabBarDelegate(),
             ),
-            SliverFixedExtentList(
-              itemExtent: 100.0,
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return const ListTile(
-                  title: Text('test'),
-                );
-              })),
-          ],
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 그리드 열 개수
+                  mainAxisSpacing: 20.0, // 그리드 행 간 간격
+                  crossAxisSpacing: 30.0, // 그리드 열 간 간격
+                  childAspectRatio: 0.8, // 아이템의 가로 세로 비율
+                ),
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return OutlinedButton(
+                      onPressed: () {},// 아이템 내용
+                      style: OutlinedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20)
+                              )
+                          )
+                      ),
+                      child: const Text('Item'),
+                    );
+                  },
+                  childCount: 20, // 전체 아이템 개수
+                ),
+              ),
+            )],
         ),
       ),
     );
@@ -50,83 +69,17 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(children: [
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 13),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50)
+                  )
+                )
               ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
+              onPressed: () {},
               child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: 80,
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              child: const Text(
-                "안녕",
+                "shop_name",
                 style: TextStyle(color: Colors.black, fontSize: 18),
               ),
             ),
@@ -137,10 +90,10 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 100;
+  double get maxExtent => 85;
 
   @override
-  double get minExtent => 100;
+  double get minExtent => 85;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

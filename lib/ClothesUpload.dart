@@ -8,6 +8,10 @@ class ClothesUpload extends StatefulWidget {
 }
 
 class ClothesUploadState extends State<ClothesUpload> {
+  final Clothes_name = TextEditingController();
+  final clothes_price = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +42,24 @@ class ClothesUploadState extends State<ClothesUpload> {
             ],
           ),
         ],
-      )
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: 60,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, //볼더 제거
+              ),
+            ),
+            onPressed: () {},
+            child: const Text(
+              "옷 전시하기!",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,),
+            ),
+          ),
+        )
+      ),
     );
   }
 }
@@ -59,7 +80,7 @@ class ClothesNameInput extends StatelessWidget {
           Text("옷 이름",
             style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
             ),),
           SizedBox(height: 5,),
@@ -88,7 +109,7 @@ class ClothesTagInput extends StatelessWidget {
           Text("해시태그",
             style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
             ),),
           SizedBox(height: 5,),
@@ -101,7 +122,7 @@ class ClothesTagInput extends StatelessWidget {
   }
 }
 
-//옷 사진 등록
+//옷 사진 등록 박스
 class ClothesImagesInput extends StatelessWidget {
   const ClothesImagesInput({super.key});
 
@@ -117,7 +138,7 @@ class ClothesImagesInput extends StatelessWidget {
           Text("사진 등록",
             style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
             ),),
           SizedBox(height: 5,),
@@ -127,7 +148,7 @@ class ClothesImagesInput extends StatelessWidget {
   }
 }
 
-//옷 사진 등록
+//코멘트 작성 박스
 class ClothesCommentInput extends StatelessWidget {
   const ClothesCommentInput({super.key});
 
@@ -143,7 +164,7 @@ class ClothesCommentInput extends StatelessWidget {
           Text("코멘트",
             style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
             ),),
           SizedBox(height: 5,),

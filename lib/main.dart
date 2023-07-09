@@ -4,23 +4,44 @@ import 'package:offline/MainPage.dart';
 import 'package:offline/MapPage.dart';
 import 'package:offline/UserPage.dart';
 
+//black을 MaterialColor로 변경
+const MaterialColor primaryBlack = MaterialColor(
+  _blackPrimaryValue,
+  <int, Color> {
+    50 : Color(0xFF000000),
+    100 : Color(0xFF000000),
+    200 : Color(0xFF000000),
+    300 : Color(0xFF000000),
+    400 : Color(0xFF000000),
+    500 : Color(_blackPrimaryValue),
+    600 : Color(0xFF000000),
+    700 : Color(0xFF000000),
+    800 : Color(0xFF000000),
+    900 : Color(0xFF000000),
 
+  }
+);
 
+const int _blackPrimaryValue = 0xFF000000;
 
 void main() {
-  return runApp(const MaterialApp(home: UserMian()));
+  return runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: const UserMain(),
+    theme: ThemeData(
+      scaffoldBackgroundColor: Colors.white,
+      primarySwatch: primaryBlack,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      )
+    ),
+  ));
 }
+
 //점주 화면
 class OwnerMain extends StatefulWidget {
   const OwnerMain({super.key});
-
-  List<Widget> getWidgets() {
-    List<Widget> widgets = [];
-    for (var i = 0; i < 20; i++){
-      widgets.add(ListTile(title: Text("test $i"),));
-    }
-    return widgets;
-  }
 
   @override
   State<OwnerMain> createState() => OwnerMainState();
@@ -34,84 +55,74 @@ class OwnerMainState extends State<OwnerMain> {
           child: CustomScrollView(
             slivers: [
               const SliverAppBar(
-                title: Text("어서오세요 {가게이름} 사장님!",style: TextStyle(color: Colors.black,fontSize: 23,fontWeight: FontWeight.w700),),
+                toolbarHeight: 80,
+                title: Text("어서오세요 '가게이름' 사장님!",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 23,
+                      fontWeight: FontWeight.w700
+                  ),
+                ),
                 backgroundColor: Colors.white,
                 pinned: false,
               ),
               SliverPersistentHeader(
-                  delegate: SampleHeaderDelegate(
-                    widget: ElevatedButton(
+                delegate: SampleHeaderDelegate(
+                  widget: SizedBox(
+                    height: 100,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const ClothesUpload()),
                         );
                       },
-                      child: Container(
-                        color: Colors.white,
-                        height: 100,
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("옷 전시하기",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.w700
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      child:
+                        const Text("옷 전시하기",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24),),
                     ),
                   ),
+                ),
                 pinned: true,
               ),
               SliverFixedExtentList(
-                itemExtent: 50.0,
+                itemExtent: 100.0,
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     return ListTile(
                       title: Text('test $index'),
                     );
-                  })
-              )],
+                  },
+                  childCount: 20,
+                ),
+              ),
+            ],
           ),
-      )
+      ),
     );
   }
 }
-class SampleHeaderDelegate extends SliverPersistentHeaderDelegate {
-  SampleHeaderDelegate({required this.widget});
 
-  Widget widget;
 
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return widget;
-  }
 
-  @override
-  double get maxExtent => 100;
-
-  @override
-  double get minExtent => 100;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
-  }
-}
 
 //소비자 화면
-class UserMian extends StatefulWidget {
-  const UserMian({super.key});
+class UserMain extends StatefulWidget {
+  const UserMain({super.key});
 
   @override
-  State<UserMian> createState() => MyTest();
+  State<UserMain> createState() => UserMainState();
 }
-class MyTest extends State<UserMian> {
+
+class UserMainState extends State<UserMain> {
   int current_index = 0;
   //네이게이션바 화면 순서
   List<dynamic> body_item = [
@@ -149,5 +160,31 @@ class MyTest extends State<UserMian> {
           ),
         )
     );
+  }
+}
+
+
+
+
+class SampleHeaderDelegate extends SliverPersistentHeaderDelegate {
+  SampleHeaderDelegate({required this.widget});
+
+  Widget widget;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return widget;
+  }
+
+  @override
+  double get maxExtent => 100;
+
+  @override
+  double get minExtent => 100;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

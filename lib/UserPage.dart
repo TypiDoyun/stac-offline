@@ -8,8 +8,8 @@ class UserPage extends StatefulWidget{
   State<UserPage> createState() => UserPageState();
 }
 class UserPageState extends State<UserPage> {
-  final user_id = TextEditingController();
-  final user_password = TextEditingController();
+  final TextEditingController user_number = TextEditingController();
+  final TextEditingController user_password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,11 @@ class UserPageState extends State<UserPage> {
                 const Text("로그인",
                 style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900,fontSize: 30),),
                 const SizedBox(height: 30,),
-
                 //아이디 입력
                 TextField(
                   style: const TextStyle(fontSize: 15),
                   textAlign: TextAlign.start,
-                  controller: user_id,
+                  controller: user_number,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: "전화번호",
@@ -37,8 +36,7 @@ class UserPageState extends State<UserPage> {
                     //errorText: "error text"
                   ),
                 ),
-                const SizedBox(height: 15,),
-
+                const SizedBox(height: 15,), //공백
                 //비밀번호 입력
                 TextField(
                   style: const TextStyle(fontSize: 15),
@@ -54,7 +52,7 @@ class UserPageState extends State<UserPage> {
                 ElevatedButton(
                   child: const Text("로그인"),
                   onPressed: () {
-                    print("${user_id.text}\n${user_password.text}");
+                    print("${user_number.text}\n${user_password.text}");
                     sendRequest();
                   },
                 ),
@@ -75,8 +73,11 @@ class UserPageState extends State<UserPage> {
     );
   }
   void sendRequest() async {
+    String usernumber = user_number.text;
+    String password = user_password.text;
+
     var url = Uri.parse('http://192.168.2.139:3000/login');
-    var response = await http.put(url,body: {'id': user_id.text, 'password': user_password.text});
+    var response = await http.put(url,body: {'id': usernumber, 'password': password});
 
     if (response.statusCode == 200) {
       print('Request sent successfully');
