@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class ClothesUpload extends StatefulWidget {
   const ClothesUpload({super.key});
 
+
   @override
   State<StatefulWidget> createState() => ClothesUploadState();
 }
 
 class ClothesUploadState extends State<ClothesUpload> {
-  final Clothes_name = TextEditingController();
-  final clothes_price = TextEditingController();
+  final TextEditingController clothes_name = TextEditingController();
+  late String clothesName;
 
 
   @override
@@ -27,18 +28,18 @@ class ClothesUploadState extends State<ClothesUpload> {
         ),
       ),
       body:ListView(
-        children: const[
+        children: [
           Column(
             children: [
-              SizedBox(height: 30,),
-              ClothesNameInput(),
-              SizedBox(height: 20,),
-              ClothesTagInput(),
-              SizedBox(height: 20,),
-              ClothesImagesInput(),
-              SizedBox(height: 20,),
-              ClothesCommentInput(),
-              SizedBox(height: 50,),
+              const SizedBox(height: 30,),
+              ClothesNameInput(clothesNameController: clothes_name),
+              const SizedBox(height: 20,),
+              const ClothesTagInput(),
+              const SizedBox(height: 20,),
+              const ClothesImagesInput(),
+              const SizedBox(height: 20,),
+              const ClothesCommentInput(),
+              const SizedBox(height: 50,),
             ],
           ),
         ],
@@ -52,7 +53,10 @@ class ClothesUploadState extends State<ClothesUpload> {
                 borderRadius: BorderRadius.zero, //볼더 제거
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              print(clothes_name.text);
+              Navigator.pop(context);
+            },
             child: const Text(
               "옷 전시하기!",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,),
@@ -66,7 +70,9 @@ class ClothesUploadState extends State<ClothesUpload> {
 
 //옷 이름 박스
 class ClothesNameInput extends StatelessWidget {
-  const ClothesNameInput({super.key});
+  final TextEditingController clothesNameController;
+
+  const ClothesNameInput({super.key, required this.clothesNameController});
 
   @override
   Widget build(BuildContext context) {
@@ -74,18 +80,19 @@ class ClothesNameInput extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 24),
       color: Colors.white70,
       height: 140,
-      child: const Column(
+      child: Column(
         children: [
-          SizedBox(height: 15,),
-          Text("옷 이름",
+          const SizedBox(height: 15,),
+          const Text("옷 이름",
             style: TextStyle(
               color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.w700,
             ),),
-          SizedBox(height: 5,),
+          const SizedBox(height: 5,),
           TextField(
-            style: TextStyle(fontSize: 26),
+            controller: clothesNameController,
+            style: const TextStyle(fontSize: 26),
           ),
         ],
       ),

@@ -15,18 +15,18 @@ class MainPageState extends State<MainPage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              toolbarHeight: 80,
-              title: Search(),
-              backgroundColor: Colors.white,
-              pinned: false,
-            ),
+              SliverAppBar(
+                toolbarHeight: 80,
+                title: Search(),
+                backgroundColor: Colors.white,
+                pinned: false,
+              ),
             const SliverPersistentHeader(
               pinned: true,
               delegate: TabBarDelegate(),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // 그리드 열 개수
@@ -90,10 +90,10 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 85;
+  double get maxExtent => 70;
 
   @override
-  double get minExtent => 85;
+  double get minExtent => 70;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

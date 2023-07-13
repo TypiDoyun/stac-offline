@@ -11,14 +11,11 @@ class Search extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: TextField(
-        style: const TextStyle(fontSize: 13),
+        style: const TextStyle(fontSize: 16),
         textAlign: TextAlign.start,
         controller: search,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50)
-          ),
           hintText: "검색어 입력",
         ),
       ),

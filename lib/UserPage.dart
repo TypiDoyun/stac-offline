@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:offline/ShopJoin.dart';
+import 'package:offline/SignPage.dart';
 
 class UserPage extends StatefulWidget{
   const UserPage({super.key});
@@ -59,10 +61,13 @@ class UserPageState extends State<UserPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     ElevatedButton(onPressed: () {}, child: const Text("회원가입")),
                     const SizedBox(width: 20,),
-                    ElevatedButton(onPressed: () {}, child: const Text("매장등록")),
+                    ElevatedButton(onPressed: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const ShopJoinPage()),
+                      );
+                    }, child: const Text("매장등록")),
                   ]
 
                 )

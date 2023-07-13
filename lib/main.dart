@@ -18,13 +18,12 @@ const MaterialColor primaryBlack = MaterialColor(
     700 : Color(0xFF000000),
     800 : Color(0xFF000000),
     900 : Color(0xFF000000),
-
   }
 );
 
 const int _blackPrimaryValue = 0xFF000000;
 
-void main() {
+main() {
   return runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: const UserMain(),
@@ -101,7 +100,7 @@ class OwnerMainState extends State<OwnerMain> {
                       title: Text('test $index'),
                     );
                   },
-                  childCount: 20,
+                  childCount: 10,
                 ),
               ),
             ],
@@ -110,8 +109,6 @@ class OwnerMainState extends State<OwnerMain> {
     );
   }
 }
-
-
 
 
 //소비자 화면
