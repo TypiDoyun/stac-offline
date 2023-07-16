@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:offline/ShopJoin.dart';
-import 'package:offline/SignPage.dart';
+import 'package:offline/Widgets/TextInput.dart';
 
 class UserPage extends StatefulWidget{
   const UserPage({super.key});
@@ -10,6 +10,8 @@ class UserPage extends StatefulWidget{
   State<UserPage> createState() => UserPageState();
 }
 class UserPageState extends State<UserPage> {
+
+  //text conotroller
   final TextEditingController user_number = TextEditingController();
   final TextEditingController user_password = TextEditingController();
 
@@ -26,36 +28,14 @@ class UserPageState extends State<UserPage> {
                 style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900,fontSize: 30),),
                 const SizedBox(height: 30,),
                 //아이디 입력
-                TextField(
-                  style: const TextStyle(fontSize: 15),
-                  textAlign: TextAlign.start,
-                  controller: user_number,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "전화번호",
-                    border: OutlineInputBorder(),
-                    hintText: "전화번호를 입력하세요",
-                    //errorText: "error text"
-                  ),
-                ),
+                TextInput(controller: user_number, hintText: "전화번호", obscureText: false,),
                 const SizedBox(height: 15,), //공백
                 //비밀번호 입력
-                TextField(
-                  style: const TextStyle(fontSize: 15),
-                  textAlign: TextAlign.start,
-                  controller: user_password,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "비밀번호",
-                    border: OutlineInputBorder(),
-                    hintText: "비밀번호를 입력하세요",
-                  ),
-                ),
+                TextInput(controller: user_password, hintText: "비밀번호", obscureText: true),
                 ElevatedButton(
                   child: const Text("로그인"),
                   onPressed: () {
                     print("${user_number.text}\n${user_password.text}");
-                    sendRequest();
                   },
                 ),
                 Row(
@@ -63,15 +43,16 @@ class UserPageState extends State<UserPage> {
                   children: [
                     ElevatedButton(onPressed: () {}, child: const Text("회원가입")),
                     const SizedBox(width: 20,),
-                    ElevatedButton(onPressed: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const ShopJoinPage()),
-                      );
-                    }, child: const Text("매장등록")),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const ShopJoinPage()),
+                        );
+                      },
+                      child: const Text("매장등록"),
+                    ),
                   ]
-
                 )
-
             ]),
         ),),
       ),

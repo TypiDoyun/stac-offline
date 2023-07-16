@@ -23,7 +23,7 @@ const MaterialColor primaryBlack = MaterialColor(
 
 const int _blackPrimaryValue = 0xFF000000;
 
-main() {
+void main() {
   return runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: const UserMain(),

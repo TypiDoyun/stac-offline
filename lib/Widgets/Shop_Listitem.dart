@@ -9,7 +9,7 @@ class ShopListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration( //컨테이너 데코레이션
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: const Color(0xffeeeeee),
 

@@ -45,7 +45,7 @@ class ClothesUploadState extends State<ClothesUpload> {
         ],
       ),
       bottomNavigationBar: SafeArea(
-        child: Container(
+        child: SizedBox(
           height: 60,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(

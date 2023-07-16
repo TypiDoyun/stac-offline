@@ -9,45 +9,107 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
+
+  var item_titleList = [
+    "블랙 자켓",
+    "화이트 셔츠",
+    "남성 블랙 진",
+    "블랙 미니 스커트",
+    "아이보리 남성 니트",
+    "TOMATH 화이트 반팔티",
+    "카키 조거팬츠",
+    "TOMATH 블랙 반팔티",
+];
+  var item_priceList = [
+    "10000",
+    "13000",
+    "20000",
+    "15000",
+    "30000",
+    "20000",
+    "30000",
+    "20000",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-              SliverAppBar(
-                toolbarHeight: 80,
-                title: Search(),
+              const SliverAppBar(
+                toolbarHeight: 60,
+                title: Text("Offline",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 28,
+                  ),
+                ),
                 backgroundColor: Colors.white,
                 pinned: false,
               ),
-            const SliverPersistentHeader(
+            SliverPersistentHeader(
               pinned: true,
               delegate: TabBarDelegate(),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.fromLTRB(30,20,30,30),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // 그리드 열 개수
-                  mainAxisSpacing: 20.0, // 그리드 행 간 간격
+                  mainAxisSpacing: 30.0, // 그리드 행 간 간격
                   crossAxisSpacing: 30.0, // 그리드 열 간 간격
-                  childAspectRatio: 0.8, // 아이템의 가로 세로 비율
+                  childAspectRatio: 0.68, // 아이템의 가로 세로 비율
                 ),
                 delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                    return OutlinedButton(
-                      onPressed: () {},// 아이템 내용
-                      style: OutlinedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(20)
-                              )
-                          )
+                    return ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        backgroundColor: Colors.black.withOpacity(0),
+                        shadowColor: Colors.white.withOpacity(0),
                       ),
-                      child: const Text('Item'),
+                      child: Column(
+                        children: [
+                          Container(height: 150, width: 300,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          const SizedBox(height: 9,),
+                          Align(
+                            alignment: const FractionalOffset(0,0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(item_priceList[index],
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700
+                                  ),
+                                ),
+                                const SizedBox(height: 4,),
+                                Text(item_titleList[index],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
-                  childCount: 20, // 전체 아이템 개수
+                  childCount: item_titleList.length, // 전체 아이템 개수
                 ),
               ),
             )],
@@ -58,7 +120,15 @@ class MainPageState extends State<MainPage> {
 }
 
 class TabBarDelegate extends SliverPersistentHeaderDelegate {
-  const TabBarDelegate();
+  TabBarDelegate();
+  var shop_nameList = [
+    "MOVEMENT",
+    "픽",
+    "탑플레이스",
+    "블루",
+    "DATE",
+    "DAISY"
+  ];
 
   @override
   Widget build(
@@ -66,24 +136,30 @@ class TabBarDelegate extends SliverPersistentHeaderDelegate {
     return Container(
       color: Colors.white,
       child: Center(
-        child: SingleChildScrollView(
+        child:
+        ListView.builder(
           scrollDirection: Axis.horizontal,
-          child: Row(children: [
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 13),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50)
+          itemCount: shop_nameList.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+              width: 80,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)
+                    )
                   )
-                )
+                ),
+                onPressed: () {},
+                child: Text(
+                  shop_nameList[index],
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
               ),
-              onPressed: () {},
-              child: const Text(
-                "shop_name",
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-          ]),
+            );
+          },
         ),
       ),
     );
