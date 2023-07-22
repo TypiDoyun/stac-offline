@@ -12,8 +12,8 @@ class UserPage extends StatefulWidget{
 class UserPageState extends State<UserPage> {
 
   //text conotroller
-  final TextEditingController user_number = TextEditingController();
-  final TextEditingController user_password = TextEditingController();
+  final TextEditingController userId = TextEditingController();
+  final TextEditingController userPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +28,14 @@ class UserPageState extends State<UserPage> {
                 style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900,fontSize: 30),),
                 const SizedBox(height: 30,),
                 //아이디 입력
-                TextInput(controller: user_number, hintText: "전화번호", obscureText: false,),
+                TextInput(controller: userId, hintText: "아이디", obscureText: false,),
                 const SizedBox(height: 15,), //공백
                 //비밀번호 입력
-                TextInput(controller: user_password, hintText: "비밀번호", obscureText: true),
+                TextInput(controller: userPassword, hintText: "비밀번호", obscureText: true),
                 ElevatedButton(
                   child: const Text("로그인"),
                   onPressed: () {
-                    print("${user_number.text}\n${user_password.text}");
+                    print("${userId.text}\n${userPassword.text}");
                   },
                 ),
                 Row(
@@ -59,11 +59,11 @@ class UserPageState extends State<UserPage> {
     );
   }
   void sendRequest() async {
-    String usernumber = user_number.text;
-    String password = user_password.text;
+    String user_id = userId.text;
+    String user_password = userPassword.text;
 
     var url = Uri.parse('http://192.168.2.139:3000/login');
-    var response = await http.put(url,body: {'id': usernumber, 'password': password});
+    var response = await http.put(url,body: {'id': user_id, 'password': user_password});
 
     if (response.statusCode == 200) {
       print('Request sent successfully');

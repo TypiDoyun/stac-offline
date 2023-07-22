@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:offline/Widgets/SearchBar.dart';
+import 'package:offline/MainListItem.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,14 +22,14 @@ class MainPageState extends State<MainPage> {
     "TOMATH 블랙 반팔티",
 ];
   var item_priceList = [
-    "10000",
-    "13000",
-    "20000",
-    "15000",
-    "30000",
-    "20000",
-    "30000",
-    "20000",
+    10000,
+    13000,
+    20000,
+    15000,
+    30000,
+    20000,
+    30000,
+    20000,
   ];
 
   @override
@@ -64,50 +65,7 @@ class MainPageState extends State<MainPage> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                    return ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.black.withOpacity(0),
-                        shadowColor: Colors.white.withOpacity(0),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(height: 150, width: 300,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                          const SizedBox(height: 9,),
-                          Align(
-                            alignment: const FractionalOffset(0,0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(item_priceList[index],
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700
-                                  ),
-                                ),
-                                const SizedBox(height: 4,),
-                                Text(item_titleList[index],
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    return MainItemList(clothes_name: item_titleList[index], clothes_price: item_priceList[index], clothes_images: Image.asset('assets/images/test.png'));
                   },
                   childCount: item_titleList.length, // 전체 아이템 개수
                 ),

@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ClothesUpload extends StatefulWidget {
   const ClothesUpload({super.key});
-
 
   @override
   State<StatefulWidget> createState() => ClothesUploadState();
@@ -11,6 +13,7 @@ class ClothesUpload extends StatefulWidget {
 class ClothesUploadState extends State<ClothesUpload> {
   final TextEditingController clothes_name = TextEditingController();
   late String clothesName;
+
 
 
   @override
@@ -36,7 +39,7 @@ class ClothesUploadState extends State<ClothesUpload> {
               const SizedBox(height: 20,),
               const ClothesTagInput(),
               const SizedBox(height: 20,),
-              const ClothesImagesInput(),
+              ClothesImagesInput(),
               const SizedBox(height: 20,),
               const ClothesCommentInput(),
               const SizedBox(height: 50,),
@@ -130,8 +133,16 @@ class ClothesTagInput extends StatelessWidget {
 }
 
 //옷 사진 등록 박스
-class ClothesImagesInput extends StatelessWidget {
-  const ClothesImagesInput({super.key});
+class ClothesImagesInput extends StatefulWidget {
+  ClothesImagesInput({super.key});
+
+  @override
+  State<ClothesImagesInput> createState() => _ClothesImagesInputState();
+}
+
+class _ClothesImagesInputState extends State<ClothesImagesInput> {
+  final ImagePicker _picker = ImagePicker();
+  final List<XFile?> _pickedImages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +150,7 @@ class ClothesImagesInput extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 24),
       color: Colors.white70,
       height: 140,
-      child: const Column(
+      child: Column(
         children: [
           SizedBox(height: 15,),
           Text("사진 등록",
@@ -149,11 +160,72 @@ class ClothesImagesInput extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),),
           SizedBox(height: 5,),
+          ElevatedButton(onPressed: () { getMultiImage(); },
+            child: const Icon(Icons.add_a_photo),
+          ),
+          Expanded(
+          child: _pickedImages.isNotEmpty
+          ? GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          ),
+          children: _pickedImages
+              .where((element) => element != null)
+              .map((e) => _gridPhotoItem(e!))
+              .toList(),
+          )
+              : const SizedBox(),
+          )
+        ],
+      ),
+
+    );
+
+
+  }
+  void getMultiImage() async {
+    final List<XFile>? images = await _picker.pickMultiImage();
+
+    if (images != null) {
+      setState(() {
+        _pickedImages.addAll(images);
+      });
+    }
+  }
+
+  Widget _gridPhotoItem(XFile e) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.file(
+              File(e.path),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            top: 5,
+            right: 5,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _pickedImages.remove(e);
+                });
+              },
+              child: const Icon(
+                Icons.cancel_rounded,
+                color: Colors.black87,
+              ),
+            ),
+          )
         ],
       ),
     );
   }
 }
+
+
 
 //코멘트 작성 박스
 class ClothesCommentInput extends StatelessWidget {
