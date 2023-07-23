@@ -12,7 +12,6 @@ class ClothesUpload extends StatefulWidget {
 
 class ClothesUploadState extends State<ClothesUpload> {
   final TextEditingController clothes_name = TextEditingController();
-  late String clothesName;
 
 
 

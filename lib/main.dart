@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:offline/ClothesUpload.dart';
 import 'package:offline/MainPage.dart';
-import 'package:offline/MapPage.dart';
 import 'package:offline/UserPage.dart';
 
 //black을 MaterialColor로 변경
@@ -23,7 +25,10 @@ const MaterialColor primaryBlack = MaterialColor(
 
 const int _blackPrimaryValue = 0xFF000000;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v');
+
   return runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: const UserMain(),
@@ -37,6 +42,84 @@ void main() {
     ),
   ));
 }
+
+
+
+//소비자 화면
+class UserMain extends StatefulWidget {
+  const UserMain({super.key});
+
+  @override
+  State<UserMain> createState() => UserMainState();
+}
+
+class UserMainState extends State<UserMain> {
+  int current_index = 0;
+
+
+  //네이게이션바 화면 순서
+  List<dynamic> body_item = [
+    const MainPage(),
+    const MapPage(),
+    const UserPage(),
+  ];
+
+  @override
+  Widget build(BuildContext context)  {
+    return DefaultTabController(
+        length: body_item.length,
+        child: Scaffold(
+          body: SafeArea(
+            child: body_item.elementAt(current_index),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: current_index,
+            onTap: (index) {
+              setState(() {
+                current_index = index;
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.line_weight), label: "메인"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.map_outlined), label: "지도"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline), label: "내정보"),
+            ],
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.grey,
+            type: BottomNavigationBarType.fixed,
+          ),
+        )
+    );
+  }
+}
+
+class MapPage extends StatefulWidget {
+  const MapPage({Key? key}) : super(key: key);
+
+  @override
+  State<MapPage> createState() => MapPageState();
+}
+
+class MapPageState extends State<MapPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  Completer<NaverMapController> _controller = Completer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: NaverMap(),
+    );
+  }
+
+  void _onMapCreated(NaverMapController controller) {
+    if (_controller.isCompleted) _controller = Completer();
+    _controller.complete(controller);
+  }
+}
+
 
 //점주 화면
 class OwnerMain extends StatefulWidget {
@@ -100,7 +183,7 @@ class OwnerMainState extends State<OwnerMain> {
                       title: Text('test $index'),
                     );
                   },
-                  childCount: 10,
+                  childCount: 0,
                 ),
               ),
             ],
@@ -111,54 +194,7 @@ class OwnerMainState extends State<OwnerMain> {
 }
 
 
-//소비자 화면
-class UserMain extends StatefulWidget {
-  const UserMain({super.key});
 
-  @override
-  State<UserMain> createState() => UserMainState();
-}
-
-class UserMainState extends State<UserMain> {
-  int current_index = 0;
-  //네이게이션바 화면 순서
-  List<dynamic> body_item = [
-    const MainPage(),
-    const MapPage(),
-    const UserPage(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: body_item.length,
-        child: Scaffold(
-          body: SafeArea(
-            child: body_item.elementAt(current_index),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: current_index,
-            onTap: (index) {
-              setState(() {
-                current_index = index;
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.line_weight), label: "메인"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.map_outlined), label: "지도"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline), label: "내정보"),
-            ],
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.grey,
-            type: BottomNavigationBarType.fixed,
-          ),
-        )
-    );
-  }
-}
 
 
 

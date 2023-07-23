@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:offline/MainListItem.dart';
+import 'package:offline/Widgets/MainListItem.dart';
 
 
 class MainPage extends StatefulWidget {

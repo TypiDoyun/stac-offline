@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:offline/main.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -9,21 +9,13 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
-          color: Colors.blue,
-          child: const Text("MapPage"),
-        ),
-        bottomNavigationBar: const BottomAppBar(),
+        body: NaverMap()
       );
-  }
-
-  void changeScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const UserMain()),
-    );
   }
 
 }
