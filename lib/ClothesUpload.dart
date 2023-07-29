@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
 
 class ClothesUpload extends StatefulWidget {
   const ClothesUpload({super.key});
@@ -11,7 +11,32 @@ class ClothesUpload extends StatefulWidget {
 }
 
 class ClothesUploadState extends State<ClothesUpload> {
-  final TextEditingController clothes_name = TextEditingController();
+  final formkey = GlobalKey<FormState>();
+
+  final sizeMenus = [
+    "Free",
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2XL",
+    "85",
+    "90",
+    "95",
+    "100",
+    "105",
+    "110"
+  ];
+  String? selectedSize;
+
+  final Map<String, dynamic> clothesInfo = {
+    "name": "",
+    "price": 0,
+    "size": "",
+    "tag": "",
+    "comment": "",
+  };
 
 
 
@@ -21,248 +46,172 @@ class ClothesUploadState extends State<ClothesUpload> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text("옷 전시 준비 중...",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 23,
-              fontWeight: FontWeight.w700,
-            ),
+        title: const Text(
+          "옷 전시 준비 중...",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 23,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
-      body:ListView(
-        children: [
-          Column(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+        child: Form(
+          key: formkey,
+          child: ListView(
             children: [
-              const SizedBox(height: 30,),
-              ClothesNameInput(clothesNameController: clothes_name),
-              const SizedBox(height: 20,),
-              const ClothesTagInput(),
-              const SizedBox(height: 20,),
-              ClothesImagesInput(),
-              const SizedBox(height: 20,),
-              const ClothesCommentInput(),
-              const SizedBox(height: 50,),
+              renderTextFormField(
+                label: '옷 이름',
+                keyboardType: TextInputType.text,
+                onSaved: (val) {
+                  clothesInfo["name"] = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return '정보를 입력하세요!';
+                  }
+                  return null;
+                },
+              ),
+              renderTextFormField(
+                label: '해시태그',
+                keyboardType: TextInputType.text,
+                onSaved: (val) {
+                  clothesInfo["tag"] = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return '정보를 입력하세요!';
+                  }
+                  return null;
+                },
+              ),
+              DropdownButton<String>(
+                hint: const Text("Size"),
+                value: selectedSize,
+                isExpanded: true,
+                items: sizeMenus
+                    .map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e),
+                        ))
+                    .toList(),
+                onChanged: (value) => setState(() => selectedSize = value),
+              ),
+              renderTextFormField(
+                label: '가격',
+                keyboardType: TextInputType.number,
+                onSaved: (val) {
+                  clothesInfo["price"] = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return '정보를 입력하세요!';
+                  }
+                  return null;
+                },
+              ),
+              renderTextFormField(
+                label: '코멘드',
+                keyboardType: TextInputType.text,
+                onSaved: (val) {
+                  clothesInfo["comment"] = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return '정보를 입력하세요!';
+                  }
+                  return null;
+                },
+              ),
             ],
           ),
-        ],
+        ),
       ),
       bottomNavigationBar: SafeArea(
-        child: SizedBox(
-          height: 60,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, //볼더 제거
-              ),
-            ),
-            onPressed: () {
-              print(clothes_name.text);
-              Navigator.pop(context);
-            },
-            child: const Text(
-              "옷 전시하기!",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700,),
+          child: SizedBox(
+        height: 60,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero, //볼더 제거
             ),
           ),
-        )
-      ),
-    );
-  }
-}
-
-//옷 이름 박스
-class ClothesNameInput extends StatelessWidget {
-  final TextEditingController clothesNameController;
-
-  const ClothesNameInput({super.key, required this.clothesNameController});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      color: Colors.white70,
-      height: 140,
-      child: Column(
-        children: [
-          const SizedBox(height: 15,),
-          const Text("옷 이름",
+          onPressed: () {
+            _tryValidation();
+            final isValid = formkey.currentState!.validate();
+            if (isValid) {
+              formkey.currentState!.save();
+            }
+            print(clothesInfo);
+            Get.back(result: clothesInfo);
+          },
+          child: const Text(
+            "옷 전시하기!",
             style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.w700,
-            ),),
-          const SizedBox(height: 5,),
-          TextField(
-            controller: clothesNameController,
-            style: const TextStyle(fontSize: 26),
+            ),
           ),
-        ],
-      ),
+        ),
+      )),
     );
   }
-}
 
-//해시태그 박스
-class ClothesTagInput extends StatelessWidget {
-  const ClothesTagInput({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      color: Colors.white70,
-      height: 140,
-      child: const Column(
-        children: [
-          SizedBox(height: 15,),
-          Text("해시태그",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-            ),),
-          SizedBox(height: 5,),
-          TextField(
-            style: TextStyle(fontSize: 26),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-//옷 사진 등록 박스
-class ClothesImagesInput extends StatefulWidget {
-  ClothesImagesInput({super.key});
-
-  @override
-  State<ClothesImagesInput> createState() => _ClothesImagesInputState();
-}
-
-class _ClothesImagesInputState extends State<ClothesImagesInput> {
-  final ImagePicker _picker = ImagePicker();
-  final List<XFile?> _pickedImages = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      color: Colors.white70,
-      height: 140,
-      child: Column(
-        children: [
-          SizedBox(height: 15,),
-          Text("사진 등록",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-            ),),
-          SizedBox(height: 5,),
-          ElevatedButton(onPressed: () { getMultiImage(); },
-            child: const Icon(Icons.add_a_photo),
-          ),
-          Expanded(
-          child: _pickedImages.isNotEmpty
-          ? GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          ),
-          children: _pickedImages
-              .where((element) => element != null)
-              .map((e) => _gridPhotoItem(e!))
-              .toList(),
-          )
-              : const SizedBox(),
-          )
-        ],
-      ),
-
-    );
-
-
-  }
-  void getMultiImage() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
-
-    if (images != null) {
-      setState(() {
-        _pickedImages.addAll(images);
-      });
+  void _tryValidation() {
+    final isValid = formkey.currentState!.validate();
+    if (isValid) {
+      formkey.currentState!.save();
     }
   }
 
-  Widget _gridPhotoItem(XFile e) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.file(
-              File(e.path),
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            top: 5,
-            right: 5,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _pickedImages.remove(e);
-                });
-              },
-              child: const Icon(
-                Icons.cancel_rounded,
-                color: Colors.black87,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+  void _addItemAndReturn(BuildContext context) {
+    String itemName = clothesInfo["name"];
+    String itemPrice = clothesInfo["price"];
+
+    if (itemName.isNotEmpty && itemPrice.isNotEmpty) {
+      Map<String, dynamic> newClothes = {
+        'name': itemName,
+        'price': int.parse(itemPrice),
+      };
+      Navigator.pop(context, newClothes);
+    }
   }
 }
 
 
-
-//코멘트 작성 박스
-class ClothesCommentInput extends StatelessWidget {
-  const ClothesCommentInput({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      color: Colors.white70,
-      height: 170,
-      child: const Column(
+//입력값 위젯
+renderTextFormField({
+  required String label,
+  required FormFieldSetter onSaved,
+  required FormFieldValidator validator,
+  required TextInputType keyboardType,
+}) {
+  return Column(
+    children: [
+      Row(
         children: [
-          SizedBox(height: 15,),
-          Text("코멘트",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12.0,
               fontWeight: FontWeight.w700,
-            ),),
-          SizedBox(height: 5,),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 14),
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "옷에 대해 간단하게 소개해주세요!",
-                hintStyle: TextStyle(fontSize: 16),
-              ),
-              style: TextStyle(
-                fontSize: 18,
-              ),
-              minLines: 3,
-              maxLines: 5,
             ),
-          )
+          ),
         ],
       ),
-    );
-  }
+      TextFormField(
+        onSaved: onSaved,
+        validator: validator,
+        autovalidateMode: AutovalidateMode.always,
+        keyboardType: keyboardType,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ],
+  );
+
+
 }

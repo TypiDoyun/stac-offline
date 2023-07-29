@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
-import 'package:offline/ShopJoin.dart';
+import 'package:offline/ShopJoinPage.dart';
 import 'package:offline/Widgets/TextInput.dart';
 
 class UserPage extends StatefulWidget{
@@ -29,7 +31,7 @@ class UserPageState extends State<UserPage> {
                 const SizedBox(height: 30,),
                 //아이디 입력
                 TextInput(controller: userId, hintText: "아이디", obscureText: false,),
-                const SizedBox(height: 15,), //공백
+                const SizedBox(height: 15,),
                 //비밀번호 입력
                 TextInput(controller: userPassword, hintText: "비밀번호", obscureText: true),
                 ElevatedButton(
@@ -45,9 +47,7 @@ class UserPageState extends State<UserPage> {
                     const SizedBox(width: 20,),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const ShopJoinPage()),
-                        );
+                        Get.to(() => ShopJoinPage());
                       },
                       child: const Text("매장등록"),
                     ),

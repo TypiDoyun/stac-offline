@@ -1,27 +1,25 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:get/get.dart';
 import 'package:offline/ClothesUpload.dart';
 import 'package:offline/MainPage.dart';
 import 'package:offline/UserPage.dart';
+import 'package:offline/Widgets/Owner_ClothesListItem.dart';
 
 //black을 MaterialColor로 변경
-const MaterialColor primaryBlack = MaterialColor(
-  _blackPrimaryValue,
-  <int, Color> {
-    50 : Color(0xFF000000),
-    100 : Color(0xFF000000),
-    200 : Color(0xFF000000),
-    300 : Color(0xFF000000),
-    400 : Color(0xFF000000),
-    500 : Color(_blackPrimaryValue),
-    600 : Color(0xFF000000),
-    700 : Color(0xFF000000),
-    800 : Color(0xFF000000),
-    900 : Color(0xFF000000),
-  }
-);
+const MaterialColor primaryBlack =
+    MaterialColor(_blackPrimaryValue, <int, Color>{
+  50: Color(0xFF000000),
+  100: Color(0xFF000000),
+  200: Color(0xFF000000),
+  300: Color(0xFF000000),
+  400: Color(0xFF000000),
+  500: Color(_blackPrimaryValue),
+  600: Color(0xFF000000),
+  700: Color(0xFF000000),
+  800: Color(0xFF000000),
+  900: Color(0xFF000000),
+});
 
 const int _blackPrimaryValue = 0xFF000000;
 
@@ -29,21 +27,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v');
 
-  return runApp(MaterialApp(
+  return runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     home: const UserMain(),
     theme: ThemeData(
-      scaffoldBackgroundColor: Colors.white,
-      primarySwatch: primaryBlack,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      )
-    ),
+        scaffoldBackgroundColor: Colors.white,
+        primarySwatch: primaryBlack,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+        )),
   ));
 }
-
-
 
 //소비자 화면
 class UserMain extends StatefulWidget {
@@ -56,7 +51,6 @@ class UserMain extends StatefulWidget {
 class UserMainState extends State<UserMain> {
   int current_index = 0;
 
-
   //네이게이션바 화면 순서
   List<dynamic> body_item = [
     const MainPage(),
@@ -65,7 +59,7 @@ class UserMainState extends State<UserMain> {
   ];
 
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     return DefaultTabController(
         length: body_item.length,
         child: Scaffold(
@@ -91,11 +85,11 @@ class UserMainState extends State<UserMain> {
             unselectedItemColor: Colors.grey,
             type: BottomNavigationBarType.fixed,
           ),
-        )
-    );
+        ));
   }
 }
 
+//지도 화면
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
 
@@ -105,21 +99,14 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  Completer<NaverMapController> _controller = Completer();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: NaverMap(),
     );
   }
-
-  void _onMapCreated(NaverMapController controller) {
-    if (_controller.isCompleted) _controller = Completer();
-    _controller.complete(controller);
-  }
 }
-
 
 //점주 화면
 class OwnerMain extends StatefulWidget {
@@ -128,76 +115,70 @@ class OwnerMain extends StatefulWidget {
   @override
   State<OwnerMain> createState() => OwnerMainState();
 }
+
 class OwnerMainState extends State<OwnerMain> {
+  List<Map<String, dynamic>> clothesList = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              const SliverAppBar(
-                toolbarHeight: 80,
-                title: Text("어서오세요 '가게이름' 사장님!",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w700
-                  ),
-                ),
-                backgroundColor: Colors.white,
-                pinned: false,
+        child: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              toolbarHeight: 80,
+              title: Text(
+                "어서오세요 '가게이름' 사장님!",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 23,
+                    fontWeight: FontWeight.w700),
               ),
-              SliverPersistentHeader(
-                delegate: SampleHeaderDelegate(
-                  widget: SizedBox(
-                    height: 100,
-                    child: ElevatedButton(
+              backgroundColor: Colors.white,
+              pinned: false,
+            ),
+            SliverPersistentHeader(
+              delegate: SampleHeaderDelegate(
+                widget: SizedBox(
+                  height: 100,
+                  child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ClothesUpload()),
-                        );
+                      onPressed: () async {
+                        final val = await Get.to(() => const ClothesUpload());
+                        if (val != null) {
+                          setState(() {
+                            clothesList.add(val);
+                          });
+                        };
                       },
-                      child:
-                        const Text("옷 전시하기",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 24),),
-                    ),
-                  ),
+                      child: const Text(
+                        "옷 전시하기",
+                        style: TextStyle(color: Colors.black, fontSize: 24),
+                      )),
                 ),
-                pinned: true,
               ),
-              SliverFixedExtentList(
-                itemExtent: 100.0,
+              pinned: true,
+            ),
+            SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ListTile(
-                      title: Text('test $index'),
-                    );
-                  },
-                  childCount: 0,
-                ),
-              ),
-            ],
-          ),
+                    childCount: clothesList.length,
+                    (context, index) => OwnerClothesListItem(
+                        clothes_name: clothesList[index]['name'],
+                        clothes_price: clothesList[index]['price'],
+                        clothes_size: clothesList[index]['size'],
+                        clothes_tag: clothesList[index]['tag'],
+                        clothes_comment: clothesList[index]['comment'])))
+          ],
+        ),
       ),
     );
   }
 }
-
-
-
-
-
-
 
 class SampleHeaderDelegate extends SliverPersistentHeaderDelegate {
   SampleHeaderDelegate({required this.widget});
