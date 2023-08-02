@@ -1,58 +1,90 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:offline/userpages/User_SelectedclothesPage.dart';
 
-class MainItemList extends StatelessWidget {
+class UserHomeListItem extends StatelessWidget {
+  UserHomeListItem({
+    Key? key,
+    required this.clothes_name,
+    required this.clothes_price,
+    required this.clothes_imgPath,
+    required this.sale_boolen,
+    required this.sale_value,
+    required this.shop_name,
+  }) : super(key: key);
+
   final String clothes_name;
-  final int clothes_price;
-  final Image clothes_images;
+  final num clothes_price;
+  final String clothes_imgPath;
+  final bool sale_boolen;
+  final int? sale_value;
+  final String shop_name;
 
-  const MainItemList(
-      {Key? key, required this.clothes_name, required this.clothes_price, required this.clothes_images, })
-      : super(key: key);
+  var f = NumberFormat('###,###,###,###,###,###');
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.zero,
-        backgroundColor: Colors.black.withOpacity(0),
-        shadowColor: Colors.white.withOpacity(0),
-      ),
+    return InkWell(
+      onTap: () {
+        Get.to(() => UserSelectedClothesPage());
+      },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(height: 150, width: 300,
-            child: clothes_images,
-            ),
-          const SizedBox(height: 5,),
-          Align(
-            alignment: const FractionalOffset(0,0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(clothes_name,
-                  style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700
-                  ),
-                ),
-                const SizedBox(height: 4,),
-                Text("$clothes_price₩",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
+          AspectRatio(
+            aspectRatio: 1,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Image.asset(
+                clothes_imgPath,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
+          const SizedBox(height: 8),
+          Text(
+            clothes_name,
+            style: const TextStyle(
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            shop_name,
+            style: const TextStyle(color: Colors.black54, fontSize: 12),
+          ),
+          Row(
+            children: [
+              Text(
+                sale_boolen  ? '$sale_value%' : '',
+                style: TextStyle(
+                  color: sale_boolen ? Colors.red : Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                width: sale_boolen ? 3 : 0,
+              ),
+              Text(
+                sale_boolen
+                    ? f.format((clothes_price - (clothes_price * sale_value! / 100)))
+                    : f.format(clothes_price),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ],
-      ));
+      ),
+    );
   }
 }
+

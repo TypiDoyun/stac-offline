@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart' as http;
-import 'package:offline/ShopJoinPage.dart';
+import 'package:offline/ownerpages/ShopJoinPage.dart';
 import 'package:offline/Widgets/TextInput.dart';
 
-class UserPage extends StatefulWidget{
-  const UserPage({super.key});
+class LoginPage extends StatefulWidget{
+  const LoginPage({super.key});
 
   @override
-  State<UserPage> createState() => UserPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
-class UserPageState extends State<UserPage> {
+class _LoginPageState extends State<LoginPage> {
 
-  //text conotroller
   final TextEditingController userId = TextEditingController();
   final TextEditingController userPassword = TextEditingController();
 
@@ -32,8 +29,10 @@ class UserPageState extends State<UserPage> {
                 //아이디 입력
                 TextInput(controller: userId, hintText: "아이디", obscureText: false,),
                 const SizedBox(height: 15,),
+
                 //비밀번호 입력
                 TextInput(controller: userPassword, hintText: "비밀번호", obscureText: true),
+
                 ElevatedButton(
                   child: const Text("로그인"),
                   onPressed: () {
@@ -58,18 +57,20 @@ class UserPageState extends State<UserPage> {
       ),
     );
   }
-  void sendRequest() async {
-    String user_id = userId.text;
-    String user_password = userPassword.text;
 
-    var url = Uri.parse('http://192.168.2.139:3000/login');
-    var response = await http.put(url,body: {'id': user_id, 'password': user_password});
-
-    if (response.statusCode == 200) {
-      print('Request sent successfully');
-      print(response.body);
-    } else {
-      print('Request failed with status: ${response.statusCode}');
-    }
-  }
+  //서버 코드(였던 것)
+  // void sendRequest() async {
+  //   String user_id = userId.text;
+  //   String user_password = userPassword.text;
+  //
+  //   var url = Uri.parse('http://192.168.2.139:3000/login');
+  //   var response = await http.put(url,body: {'id': user_id, 'password': user_password});
+  //
+  //   if (response.statusCode == 200) {
+  //     print('Request sent successfully');
+  //     print(response.body);
+  //   } else {
+  //     print('Request failed with status: ${response.statusCode}');
+  //   }
+  // }
 }

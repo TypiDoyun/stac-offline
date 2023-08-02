@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class OwnerClothesListItem extends StatelessWidget {
   final clothes_name;
@@ -6,20 +8,24 @@ class OwnerClothesListItem extends StatelessWidget {
   final clothes_size;
   final clothes_tag;
   final clothes_comment;
+  final onTapPage;
 
-  const OwnerClothesListItem(
-      {Key? key,
-      required this.clothes_name,
-      required this.clothes_price,
-      required this.clothes_size,
-      required this.clothes_tag,
-      required this.clothes_comment})
-      : super(key: key);
+  const OwnerClothesListItem({
+    Key? key,
+    required this.clothes_name,
+    required this.clothes_price,
+    required this.clothes_size,
+    required this.clothes_tag,
+    required this.clothes_comment,
+    required this.onTapPage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 130,
+    return GestureDetector(
+        onTap: () {
+          Get.to(() => onTapPage);
+        },
         child: Card(
           elevation: 6,
           margin: EdgeInsets.all(10),
@@ -36,7 +42,9 @@ class OwnerClothesListItem extends StatelessWidget {
                   height: 100,
                   width: 100,
                 ),
-                const SizedBox(width: 10,),
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -49,19 +57,22 @@ class OwnerClothesListItem extends StatelessWidget {
                           fontSize: 16,
                         ),
                       ),
-                      Text(clothes_comment,
+                      Text(
+                        clothes_comment,
                         maxLines: 3,
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.w300,
                           fontSize: 12,
-                        ),),
-                      Text(clothes_price,
+                        ),
+                      ),
+                      Text(
+                        clothes_price,
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red
-                      ),),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red),
+                      ),
                     ],
                   ),
                 )

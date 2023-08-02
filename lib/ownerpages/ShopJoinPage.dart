@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:offline/ownerpages/OwnerPage.dart';
 
-import 'ClothesUpload.dart';
+import 'ClothesUploadPage.dart';
 
 class ShopJoinPage extends StatefulWidget {
   const ShopJoinPage({Key? key}) : super(key: key);
@@ -85,10 +84,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
             ),
           ),
           onPressed: () {
-            Get.back();
+            Get.to(() => const OwnerPage());
           },
           child: const Text(
-            "매장 가입하기!",
+            "매장 가입하기.",
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 
-class ClothesUpload extends StatefulWidget {
-  const ClothesUpload({super.key});
+class ClothesUploadPage extends StatefulWidget {
+  const ClothesUploadPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => ClothesUploadState();
+  State<StatefulWidget> createState() => _ClothesUploadPageState();
 }
 
-class ClothesUploadState extends State<ClothesUpload> {
+class _ClothesUploadPageState extends State<ClothesUploadPage> {
   final formkey = GlobalKey<FormState>();
 
   final sizeMenus = [
@@ -163,19 +162,6 @@ class ClothesUploadState extends State<ClothesUpload> {
     final isValid = formkey.currentState!.validate();
     if (isValid) {
       formkey.currentState!.save();
-    }
-  }
-
-  void _addItemAndReturn(BuildContext context) {
-    String itemName = clothesInfo["name"];
-    String itemPrice = clothesInfo["price"];
-
-    if (itemName.isNotEmpty && itemPrice.isNotEmpty) {
-      Map<String, dynamic> newClothes = {
-        'name': itemName,
-        'price': int.parse(itemPrice),
-      };
-      Navigator.pop(context, newClothes);
     }
   }
 }

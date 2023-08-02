@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignPage extends StatelessWidget {
@@ -27,7 +26,6 @@ class SignPage extends StatelessWidget {
                   TextField(),
                   SizedBox(height: 30,),
                   TextField(),
-
                 ],
               )
           ),
