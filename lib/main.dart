@@ -26,16 +26,21 @@ void main() async {
   await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v');
 
   return runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const UserMain(),
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        primarySwatch: primaryBlack,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-        )
+    GestureDetector(
+      onTap: (){
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: const UserMain(),
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          primarySwatch: primaryBlack,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+          )
+        ),
       ),
     )
   );

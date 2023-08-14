@@ -16,6 +16,7 @@ class OwnerPage extends StatefulWidget {
 class _OwnerPageState extends State<OwnerPage> {
   List<Map<String, dynamic>> clothesList = [];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +47,7 @@ class _OwnerPageState extends State<OwnerPage> {
                         ),
                       ),
                       onPressed: () async {
+                        print(time);
                         final val = await Get.to(() => const ClothesUploadPage());
                         if (val != null) {
                           setState(() {

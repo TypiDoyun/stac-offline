@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offline/Widgets/MainListItem.dart';
+import 'package:offline/Widgets/background.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -10,24 +11,14 @@ class UserHomePage extends StatefulWidget {
 
 class _UserHomePageState extends State<UserHomePage> {
 
-  final List<Map<String, dynamic>> clothesInfo = [
-    {"name" : "남여 공용 청바지", "price" : 50000, "image":'assets/images/clothesImage5.jpeg', "sale_boolen": true, "sale_value": 30, "shop_name":"MOVEMENT"},
-    {"name" : "스트릿 블랙레드 후드티", "price" : 40000, "image":'assets/images/clothesImage4.jpeg', "sale_boolen": false, "sale_value": null, "shop_name":"MOVEMENT"},
-    {"name" : "여성 퍼플 기모 후드티", "price" : 35000, "image":'assets/images/clothesImage3.jpeg', "sale_boolen": true, "sale_value": 20, "shop_name":"MOVEMENT"},
-    {"name" : "블랙 트레이닝, 조거팬츠", "price" : 34000, "image":'assets/images/clothesImage2.jpeg', "sale_boolen": true, "sale_value": 10, "shop_name":"MOVEMENT"},
-    {"name" : "그레이 조거팬츠", "price" : 34000, "image":'assets/images/clothesImage1.jpeg', "sale_boolen": false, "sale_value": null, "shop_name":"MOVEMENT"},
-    {"name" : "여성 분홍니트 셔츠", "price" : 36000, "image":'assets/images/clothesImage6.jpeg', "sale_boolen": false, "sale_value": null, "shop_name":"MOVEMENT"},
-    {"name" : "테스트123", "price" : 50000, "image":'assets/images/clothesImage5.jpeg', "sale_boolen": false, "sale_value": null, "shop_name":"MOVEMENT"},
-    {"name" : "테스트123", "price" : 50000, "image":'assets/images/clothesImage5.jpeg', "sale_boolen": true, "sale_value": 50, "shop_name":"MOVEMENT"},
-    {"name" : "테스트123", "price" : 50000, "image":'assets/images/clothesImage5.jpeg', "sale_boolen": true, "sale_value": 30, "shop_name":"MOVEMENT"},
-    {"name" : "테스트123", "price" : 50000, "image":'assets/images/clothesImage5.jpeg', "sale_boolen": true, "sale_value": 20, "shop_name":"MOVEMENT"},
-  ];
+  final List<Map<String, dynamic>> clothesInfo = [];
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body:
+      SafeArea(
         child: CustomScrollView(
           slivers: [
             const SliverAppBar(
@@ -47,30 +38,33 @@ class _UserHomePageState extends State<UserHomePage> {
               pinned: true,
               delegate: TabBarDelegate(),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 그리드 열 개수
-                  mainAxisSpacing: 35.0, // 그리드 행 간 간격
-                  crossAxisSpacing: 28.0, // 그리드 열 간 간격
-                  childAspectRatio: 0.7, // 아이템의 가로 세로 비율
+            if(clothesInfo.isEmpty)
+              const SliverToBoxAdapter(child: Center(child: Text("암것도 없슈..."),) ,)
+            else
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // 그리드 열 개수
+                    mainAxisSpacing: 35.0, // 그리드 행 간 간격
+                    crossAxisSpacing: 28.0, // 그리드 열 간 간격
+                    childAspectRatio: 0.7, // 아이템의 가로 세로 비율
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return UserHomeListItem(
+                        clothes_name: clothesInfo[index]["name"],
+                        clothes_price: clothesInfo[index]["price"],
+                        clothes_imgPath: clothesInfo[index]["image"],
+                        sale_boolen: clothesInfo[index]["sale_boolen"],
+                        sale_value: clothesInfo[index]["sale_value"],
+                        shop_name: clothesInfo[index]["shop_name"],
+                      );
+                    },
+                    childCount: clothesInfo.length, // 전체 아이템 개수
+                  ),
                 ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return UserHomeListItem(
-                      clothes_name: clothesInfo[index]["name"],
-                      clothes_price: clothesInfo[index]["price"],
-                      clothes_imgPath: clothesInfo[index]["image"],
-                      sale_boolen: clothesInfo[index]["sale_boolen"],
-                      sale_value: clothesInfo[index]["sale_value"],
-                      shop_name: clothesInfo[index]["shop_name"],
-                    );
-                  },
-                  childCount: clothesInfo.length, // 전체 아이템 개수
-                ),
-              ),
-            )
+              )
           ],
         ),
       ),

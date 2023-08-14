@@ -5,7 +5,7 @@ import 'package:offline/ownerpages/OwnerPage.dart';
 import 'ClothesUploadPage.dart';
 
 class ShopJoinPage extends StatefulWidget {
-  const ShopJoinPage({Key? key}) : super(key: key);
+  ShopJoinPage({Key? key}) : super(key: key);
 
   @override
   State<ShopJoinPage> createState() => _ShopJoinPageState();
@@ -44,19 +44,19 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
           key: shopJoinformKey,
           child: ListView(
             children: [
-              renderTextFormField(
-                label: '사업자 등록 번호',
-                keyboardType: TextInputType.number,
-                onSaved: (val) {
-                  shopJoinInfo["shop_businessRegistrationNumber"] = val;
-                },
-                validator: (val) {
-                  if (val.length < 1) {
-                    return '정보를 입력하세요!';
-                  }
-                  return null;
-                },
-              ),
+              // renderTextFormField(
+              //   label: '사업자 등록 번호',
+              //   keyboardType: TextInputType.number,
+              //   onSaved: (val) {
+              //     shopJoinInfo["shop_businessRegistrationNumber"] = val;
+              //   },
+              //   validator: (val) {
+              //     if (val.length < 1) {
+              //       return '정보를 입력하세요!';
+              //     }
+              //     return null;
+              //   },
+              // ),
               ElevatedButton(
                   onPressed: () {
                     //사업자 등록 번호 조회 API
@@ -85,6 +85,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
           ),
           onPressed: () {
             Get.to(() => const OwnerPage());
+            // Get.offall(() => const OwnerPage());
           },
           child: const Text(
             "매장 가입하기.",

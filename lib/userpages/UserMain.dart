@@ -33,7 +33,7 @@ class UserMainState extends State<UserMain> {
             currentIndex: select_index,
             onTap: (index) {
               setState(() {
-                select_index =   index;
+                select_index = index;
               });
             },
             items: const [
@@ -67,7 +67,10 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: NaverMap(),
+      body: NaverMap(
+
+      ),
     );
   }
 }
+
