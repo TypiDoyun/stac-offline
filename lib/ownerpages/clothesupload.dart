@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/roundedInputField.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:offline/servercontroller.dart';
 
 
@@ -60,18 +61,20 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     }
   }
 
-  Future<dynamic> patchUserProfileImage(String baseUri) async {
+  Future<dynamic> patchUserProfileImage() async {
     if (_selectedImages.length == 0) return;
-    var formData = dio.FormData.fromMap({'images': _selectedImages});
+    var formData = dio.FormData.fromMap({"name": "what a fucking shit day!", 'images': [ dio.MultipartFile.fromFileSync(_selectedImages[0].path) ]});
+    // dio.MultipartFile.fromFileSync(_selectedImages[0].path, contentType: MediaType("image", "jpg"))
     print("프로필 사진을 서버에 업로드 합니다.");
-    var request = new Dio();
+    var request = Dio();
     try {
-      request.options.contentType = 'multipart/form-data';
-      request.options.maxRedirects.isFinite;
+      // request.options.contentType = 'multipart/form-data';
+      // request.options.maxRedirects.isFinite;
 
       var response = await request.post(
-        '$baseUri/clothes',
+        '$serverUrl/clothes',
         data: formData,
+        options: Options(contentType: 'multipart/form-data')
       );
       print('성공적으로 업로드했습니다');
       return response.data;
@@ -186,8 +189,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
             if (isValid) {
               formkey.currentState!.save();
             }
-            sendClothesDataToServer(clothesInfo);
-            patchUserProfileImage('http://117.110.121.213:3000');
+            // sendClothesDataToServer(clothesInfo);
+            patchUserProfileImage();
             print(clothesInfo);
             Get.back(result: clothesInfo);
           },
