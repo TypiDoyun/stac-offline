@@ -59,20 +59,19 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
       });
     }
   }
-  var formData = dio.FormData.fromMap({'images': [dio.MultipartFile.fromFile(_selectedImages[0].path)]});
-  // var formData = dio.FormData.fromMap({'image': dio.MultipartFile.fromBytes(_selectedImages)});
 
-
-  Future<dynamic> patchUserProfileImage(String baseUri, dynamic input) async {
+  Future<dynamic> patchUserProfileImage(String baseUri) async {
+    if (_selectedImages.length == 0) return;
+    var formData = dio.FormData.fromMap({'images': _selectedImages});
     print("프로필 사진을 서버에 업로드 합니다.");
-    var dio = new Dio();
+    var request = new Dio();
     try {
-      dio.options.contentType = 'multipart/form-data';
-      dio.options.maxRedirects.isFinite;
+      request.options.contentType = 'multipart/form-data';
+      request.options.maxRedirects.isFinite;
 
-      var response = await dio.post(
-        baseUri + '/clothes',
-        data: input,
+      var response = await request.post(
+        '$baseUri/clothes',
+        data: formData,
       );
       print('성공적으로 업로드했습니다');
       return response.data;
@@ -168,7 +167,6 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
               //       height: 200,
               //     );
               //   }).toList(),
-              ),
             ],
           ),
         ),
@@ -189,6 +187,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
               formkey.currentState!.save();
             }
             sendClothesDataToServer(clothesInfo);
+            patchUserProfileImage('http://117.110.121.213:3000');
             print(clothesInfo);
             Get.back(result: clothesInfo);
           },

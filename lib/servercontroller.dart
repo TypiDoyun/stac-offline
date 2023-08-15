@@ -7,7 +7,7 @@ final String serverData = '';
 Future<void> sendClothesDataToServer(Map data) async {
   try {
     final response = await http.post(
-      Uri.parse('$serverUrl/'), // 서버의 엔드포인트 URL로 변경
+      Uri.parse('$serverUrl/clothes'), // 서버의 엔드포인트 URL로 변경
       body: {'name': data['name'],
         // 'size': data['size'],
         // 'comment': data['comment'],
@@ -16,7 +16,7 @@ Future<void> sendClothesDataToServer(Map data) async {
         // 'files': [image],
       },
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print('Data sent successfully!');
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
