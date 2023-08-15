@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:get/get.dart';
 
-import 'userpages/UserMain.dart';
+import 'userpages/usermain.dart';
 
 //black을 MaterialColor로 변경
 const MaterialColor primaryBlack =

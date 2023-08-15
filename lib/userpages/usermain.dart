@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
-import 'LoginPage.dart';
-import 'UserHomePage.dart';
+import 'login.dart';
+import 'userhome.dart';
 
 
 //소비자 화면

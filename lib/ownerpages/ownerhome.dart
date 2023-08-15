@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:offline/ownerpages/ShopJoinPage.dart';
+import 'package:offline/ownerpages/modifyclothesinfo.dart';
 
-import 'ClothesUploadPage.dart';
-import '../Widgets/Owner_ClothesListItem.dart';
+import 'clothesupload.dart';
+import '../Widgets/ownerclotheslistitem.dart';
 
 //점주 화면
 class OwnerPage extends StatefulWidget {
@@ -47,7 +47,6 @@ class _OwnerPageState extends State<OwnerPage> {
                         ),
                       ),
                       onPressed: () async {
-                        print(time);
                         final val = await Get.to(() => const ClothesUploadPage());
                         if (val != null) {
                           setState(() {
@@ -71,7 +70,7 @@ class _OwnerPageState extends State<OwnerPage> {
                         clothes_price: clothesList[index]['price'],
                         clothes_size: clothesList[index]['size'],
                         clothes_tag: clothesList[index]['tag'],
-                        clothes_comment: clothesList[index]['comment'], onTapPage: ShopJoinPage,)))
+                        clothes_comment: clothesList[index]['comment'], onTapPage: ModityClothesInfo(),)))
           ],
         ),
       ),

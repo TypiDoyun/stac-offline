@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
-import 'package:offline/ownerpages/ShopJoinPage.dart';
+import 'package:offline/ownerpages/shopjoin.dart';
 
 import '../Widgets/roundedInputField.dart';
-import 'SignPage.dart';
+import 'signin.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,14 +33,18 @@ class _LoginPageState extends State<LoginPage> {
               hintText: "아이디",
               keyboardType: TextInputType.text,
               onSaved: (val) {},
-              validator: (val) {},
+              validator: (val) {
+                return null;
+              },
               icon: Icons.person,
             ),
             roundedInputField(
               hintText: "비밀번호",
               keyboardType: TextInputType.text,
               onSaved: (val) {},
-              validator: (val) {},
+              validator: (val) {
+                return null;
+              },
               icon: Icons.lock
             ),
             const SizedBox(height: 20,),

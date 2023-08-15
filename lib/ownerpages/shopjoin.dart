@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:offline/ownerpages/OwnerPage.dart';
+import 'package:offline/ownerpages/ownerhome.dart';
 
-import 'ClothesUploadPage.dart';
 
 class ShopJoinPage extends StatefulWidget {
   ShopJoinPage({Key? key}) : super(key: key);

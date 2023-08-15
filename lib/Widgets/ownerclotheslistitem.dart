@@ -8,6 +8,7 @@ class OwnerClothesListItem extends StatelessWidget {
   final clothes_tag;
   final clothes_comment;
   final onTapPage;
+  final clothesImage;
 
   const OwnerClothesListItem({
     Key? key,
@@ -16,7 +17,7 @@ class OwnerClothesListItem extends StatelessWidget {
     required this.clothes_size,
     required this.clothes_tag,
     required this.clothes_comment,
-    required this.onTapPage,
+    required this.onTapPage, this.clothesImage,
   }) : super(key: key);
 
   @override

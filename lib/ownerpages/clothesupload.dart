@@ -1,10 +1,12 @@
-import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/roundedInputField.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offline/servercontroller.dart';
+
 
 class ClothesUploadPage extends StatefulWidget {
   const ClothesUploadPage({super.key});
@@ -39,22 +41,46 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     "size": "",
     "tag": "",
     "comment": "",
-    "saleValue" : 0,
-    "time" : DateTime.now().toIso8601String();
+    "saleValue": 0,
+    "time": DateTime.now().toIso8601String(),
   };
 
-  File? _image;
+  List<XFile> _selectedImages = [];
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImages() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImages = await picker.pickMultiImage(
+      imageQuality: 30,
+    );
 
-    if (pickedImage != null) {
+    if (pickedImages != null) {
       setState(() {
-        _image = File(pickedImage.path);
+        _selectedImages = pickedImages;
       });
     }
   }
+  var formData = dio.FormData.fromMap({'images': [dio.MultipartFile.fromFile(_selectedImages[0].path)]});
+  // var formData = dio.FormData.fromMap({'image': dio.MultipartFile.fromBytes(_selectedImages)});
+
+
+  Future<dynamic> patchUserProfileImage(String baseUri, dynamic input) async {
+    print("프로필 사진을 서버에 업로드 합니다.");
+    var dio = new Dio();
+    try {
+      dio.options.contentType = 'multipart/form-data';
+      dio.options.maxRedirects.isFinite;
+
+      var response = await dio.post(
+        baseUri + '/clothes',
+        data: input,
+      );
+      print('성공적으로 업로드했습니다');
+      return response.data;
+    } catch (e) {
+      print(e);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +102,9 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   onSaved: (val) {
                     clothesInfo["name"] = val;
                   },
-                  validator: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
                   keyboardType: TextInputType.text,
                   icon: Icons.abc),
               DropdownButton(
@@ -97,7 +125,9 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   onSaved: (val) {
                     clothesInfo["tag"] = val;
                   },
-                  validator: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
                   icon: Icons.tag),
               roundedInputField(
                   hintText: "코멘트",
@@ -105,7 +135,9 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   onSaved: (val) {
                     clothesInfo["comment"] = val;
                   },
-                  validator: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
                   icon: Icons.comment),
               roundedInputField(
                   hintText: "가격",
@@ -113,7 +145,9 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   onSaved: (val) {
                     clothesInfo["price"] = val;
                   },
-                  validator: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
                   icon: Icons.price_change),
               roundedInputField(
                   hintText: "세일적용가",
@@ -121,9 +155,20 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   onSaved: (val) {
                     clothesInfo["saleValue"] = val;
                   },
-                  validator: (val) {},
+                  validator: (val) {
+                    return null;
+                  },
                   icon: Icons.discount),
-              ElevatedButton(onPressed: _pickImage, child: Text("이미지 선택")),
+              ElevatedButton(onPressed: _pickImages, child: Text("이미지 선택")),
+              // Column(
+              //   children: _selectedImages.map((image) {
+              //     return Image.asset(
+              //       image.path,
+              //       width: 200,
+              //       height: 200,
+              //     );
+              //   }).toList(),
+              ),
             ],
           ),
         ),
@@ -143,7 +188,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
             if (isValid) {
               formkey.currentState!.save();
             }
-            sendDataToServer(clothesInfo);
+            sendClothesDataToServer(clothesInfo);
             print(clothesInfo);
             Get.back(result: clothesInfo);
           },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:offline/Widgets/MainListItem.dart';
-import 'package:offline/Widgets/background.dart';
+import 'package:offline/Widgets/mainlistitem.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -53,12 +52,12 @@ class _UserHomePageState extends State<UserHomePage> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return UserHomeListItem(
-                        clothes_name: clothesInfo[index]["name"],
-                        clothes_price: clothesInfo[index]["price"],
-                        clothes_imgPath: clothesInfo[index]["image"],
-                        sale_boolen: clothesInfo[index]["sale_boolen"],
-                        sale_value: clothesInfo[index]["sale_value"],
-                        shop_name: clothesInfo[index]["shop_name"],
+                        clothesName: clothesInfo[index]["name"],
+                        clothesPrice: clothesInfo[index]["price"],
+                        clothesImgPath: clothesInfo[index]["image"],
+                        saleBoolen: clothesInfo[index]["sale_boolen"],
+                        saleValue: clothesInfo[index]["sale_value"],
+                        shopName: clothesInfo[index]["shop_name"],
                       );
                     },
                     childCount: clothesInfo.length, // 전체 아이템 개수

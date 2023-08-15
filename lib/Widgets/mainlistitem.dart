@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:offline/userpages/User_SelectedclothesPage.dart';
+import 'package:offline/userpages/userselectedclothes.dart';
 
 class UserHomeListItem extends StatelessWidget {
   UserHomeListItem({
     Key? key,
-    required this.clothes_name,
-    required this.clothes_price,
-    required this.clothes_imgPath,
-    required this.sale_boolen,
-    required this.sale_value,
-    required this.shop_name,
+    required this.clothesName,
+    required this.clothesPrice,
+    required this.clothesImgPath,
+    required this.saleBoolen,
+    this.saleValue,
+    required this.shopName,
   }) : super(key: key);
 
-  final String clothes_name;
-  final num clothes_price;
-  final String clothes_imgPath;
-  final bool sale_boolen;
-  final int? sale_value;
-  final String shop_name;
+  final String clothesName;
+  final num clothesPrice;
+  final String clothesImgPath;
+  final bool saleBoolen;
+  final int? saleValue;
+  final String shopName;
 
   var f = NumberFormat('###,###,###,###,###,###');
 
@@ -27,7 +27,7 @@ class UserHomeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => UserSelectedClothesPage());
+        Get.to(() => const UserSelectedClothesPage());
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,14 +37,14 @@ class UserHomeListItem extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Image.asset(
-                clothes_imgPath,
+                clothesImgPath,
                 fit: BoxFit.cover,
               ),
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            clothes_name,
+            clothesName,
             style: const TextStyle(
                 color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
             maxLines: 1,
@@ -54,27 +54,28 @@ class UserHomeListItem extends StatelessWidget {
             height: 5,
           ),
           Text(
-            shop_name,
+            shopName,
             style: const TextStyle(color: Colors.black54, fontSize: 12),
           ),
           Row(
             children: [
               Text(
-                sale_boolen  ? '$sale_value%' : '',
+                saleBoolen ? '$saleValue%' : '',
                 style: TextStyle(
-                  color: sale_boolen ? Colors.red : Colors.black,
+                  color: saleBoolen ? Colors.red : Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
-                width: sale_boolen ? 3 : 0,
+                width: saleBoolen ? 3 : 0,
               ),
               Text(
-                sale_boolen
-                    ? f.format((clothes_price - (clothes_price * sale_value! / 100)))
-                    : f.format(clothes_price),
-                style: TextStyle(
+                saleBoolen
+                    ? f.format(
+                        (clothesPrice - (clothesPrice * saleValue! / 100)))
+                    : f.format(clothesPrice),
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -87,4 +88,3 @@ class UserHomeListItem extends StatelessWidget {
     );
   }
 }
-
