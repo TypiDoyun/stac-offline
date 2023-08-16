@@ -30,8 +30,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 20,),
             roundedInputField(
+              color: Colors.black12,
               hintText: "아이디",
               keyboardType: TextInputType.text,
+              enabled: true,
               onSaved: (val) {},
               validator: (val) {
                 return null;
@@ -39,8 +41,10 @@ class _LoginPageState extends State<LoginPage> {
               icon: Icons.person,
             ),
             roundedInputField(
+              color: Colors.black12,
               hintText: "비밀번호",
               keyboardType: TextInputType.text,
+              enabled: true,
               onSaved: (val) {},
               validator: (val) {
                 return null;

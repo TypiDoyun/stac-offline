@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OwnerClothesListItem extends StatelessWidget {
-  final clothes_name;
-  final clothes_price;
-  final clothes_size;
-  final clothes_tag;
-  final clothes_comment;
+  final String clothes_name, clothes_tag, clothes_size, clothes_comment;
+  final int clothes_price;
   final onTapPage;
   final clothesImage;
 
@@ -67,7 +64,7 @@ class OwnerClothesListItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        clothes_price,
+                        clothes_price as String,
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

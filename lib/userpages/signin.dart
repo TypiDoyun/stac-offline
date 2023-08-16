@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,90 +40,107 @@ class SignPage extends StatelessWidget {
                     height: 10,
                   ),
                   roundedInputField(
-                      hintText: "성함",
-                      keyboardType: TextInputType.text,
-                      onSaved: (val) {
-                        userInfoInput["userName"] = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      icon: Icons.person_outline),
+                    color: Colors.black12,
+                    hintText: "성함",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    onSaved: (val) {
+                      userInfoInput["userName"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.person_outline
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   roundedInputField(
-                      hintText: "아이디",
-                      keyboardType: TextInputType.text,
-                      onSaved: (val) {
-                        userInfoInput["userId"] = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      icon: Icons.person),
+                    color: Colors.black12,
+                    hintText: "아이디",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    onSaved: (val) {
+                      userInfoInput["userId"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.person
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   roundedInputField(
-                      hintText: "비밀번호",
-                      keyboardType: TextInputType.text,
-                      onSaved: (val) {
-                        userInfoInput["userPassword"] = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      icon: Icons.lock),
+                    color: Colors.black12,
+                    hintText: "비밀번호",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    onSaved: (val) {
+                      userInfoInput["userPassword"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.lock
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   roundedInputField(
-                      hintText: "전화번호",
-                      keyboardType: TextInputType.text,
-                      onSaved: (val) {
-                        userInfoInput["userPhonenumber"] = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      icon: Icons.phone),
+                    color: Colors.black12,
+                    hintText: "전화번호",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    onSaved: (val) {
+                      userInfoInput["userPhonenumber"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.phone
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   roundedInputField(
-                      hintText: "생년월일",
-                      keyboardType: TextInputType.text,
-                      onSaved: (val) {
-                        userInfoInput["userBirth"] = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      icon: Icons.cake),
+                    color: Colors.black12,
+
+                    hintText: "생년월일",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    onSaved: (val) {
+                      userInfoInput["userBirth"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.cake),
                   const SizedBox(
                     height: 10,
                   ),
                   roundedInputField(
-                      hintText: "주소",
-                      keyboardType: TextInputType.text,
-                      onSaved: (val) {
-                        userInfoInput["userLocation"] = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      icon: Icons.location_on),
+                    color: Colors.black12,
+                    hintText: "주소",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    onSaved: (val) {
+                      userInfoInput["userLocation"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.location_on),
                   ElevatedButton(
-                      onPressed: () {
-                        final isValid = signKey.currentState!.validate();
-                        if (isValid) {
-                          signKey.currentState!.save();
-                          Get.back();
-                        }
-                        print(userInfoInput);
-                      },
-                      child: const Text("회원가입 하기")
+                    onPressed: () {
+                      final isValid = signKey.currentState!.validate();
+                      if (isValid) {
+                        signKey.currentState!.save();
+                        Get.back();
+                      }
+                      print(userInfoInput);
+                    },
+                    child: const Text("회원가입 하기")
                   ),
                 ],
               ),

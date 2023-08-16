@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 final String serverUrl = 'http://117.110.121.213:3000';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:offline/Widgets/background.dart';
 
 
 final imagesList = [

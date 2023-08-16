@@ -6,13 +6,21 @@ roundedInputField({
   required FormFieldSetter onSaved,
   required FormFieldValidator validator,
   required IconData icon,
+  required bool enabled,
+  required Color color,
+  TextEditingController? controller,
+  Function(String)? onChanged,
 }) {
   return TextFieldContainer(
+    color: color,
     child: TextFormField(
+      controller: controller,
       onSaved: onSaved,
+      onChanged: onChanged,
       validator: validator,
       autovalidateMode: AutovalidateMode.always,
       keyboardType: keyboardType,
+      enabled: enabled,
       decoration: InputDecoration(
         icon: Icon(icon),
         hintText: hintText,
@@ -24,8 +32,9 @@ roundedInputField({
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
+  final Color color;
 
-  const TextFieldContainer({Key? key, required this.child}) : super(key: key);
+  const TextFieldContainer({Key? key, required this.child, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +44,7 @@ class TextFieldContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: size.width * 0.8,
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: color,
         borderRadius: BorderRadius.circular(29),
       ),
       child: child,

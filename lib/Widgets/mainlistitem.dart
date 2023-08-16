@@ -14,9 +14,8 @@ class UserHomeListItem extends StatelessWidget {
     // required this.shopName,
   }) : super(key: key);
 
-  final String clothesName;
+  final String clothesName, clothesImgPath;
   final int clothesPrice;
-  final String clothesImgPath;
   final int? saleValue;
   final bool saleBoolen;
   // final String shopName;
