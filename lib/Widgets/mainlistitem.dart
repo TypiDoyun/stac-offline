@@ -9,17 +9,17 @@ class UserHomeListItem extends StatelessWidget {
     required this.clothesName,
     required this.clothesPrice,
     required this.clothesImgPath,
-    required this.saleBoolen,
     this.saleValue,
-    required this.shopName,
+    required this.saleBoolen,
+    // required this.shopName,
   }) : super(key: key);
 
   final String clothesName;
-  final num clothesPrice;
+  final int clothesPrice;
   final String clothesImgPath;
-  final bool saleBoolen;
   final int? saleValue;
-  final String shopName;
+  final bool saleBoolen;
+  // final String shopName;
 
   var f = NumberFormat('###,###,###,###,###,###');
 
@@ -54,7 +54,7 @@ class UserHomeListItem extends StatelessWidget {
             height: 5,
           ),
           Text(
-            shopName,
+            "ㅎㅇ",
             style: const TextStyle(color: Colors.black54, fontSize: 12),
           ),
           Row(

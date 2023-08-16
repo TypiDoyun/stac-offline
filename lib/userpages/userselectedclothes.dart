@@ -4,13 +4,18 @@ class UserSelectedClothesPage extends StatefulWidget {
   const UserSelectedClothesPage({Key? key}) : super(key: key);
 
   @override
-  State<UserSelectedClothesPage> createState() => _UserSelectedClothesPageState();
+  State<UserSelectedClothesPage> createState() =>
+      _UserSelectedClothesPageState();
 }
 
 class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
   final PageController _pageController = PageController();
 
-  int _currentPage = 0;
+  final image = [
+    'assets/images/clothesImage1.jpeg',
+    'assets/images/clothesImage2.jpeg',
+    'assets/images/clothesImage3.jpeg'
+  ];
 
   @override
   void dispose() {
@@ -22,45 +27,76 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("옷 페이지"),
+        title: const Text('Product Detail'),
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: MediaQuery.of(context).size.width,
-              color: Colors.grey[300],
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                children: [
-                  Image.network('https://via.placeholder.com/300'),
-                  Image.network('https://via.placeholder.com/400'),
-                  Image.network('https://via.placeholder.com/500'),
-                ],
+            AspectRatio(
+              aspectRatio: 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: PageView.builder(
+                    itemCount: image.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width,
+                          // Make the height same as width for a square
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            image: DecorationImage(
+                              image: AssetImage(image[index]),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
               ),
             ),
-            // Bottom Section: Indicator
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                3, // Total number of pages (change this according to your images)
-                    (index) => Indicator(isActive: index == _currentPage),
+            // Replace with actual image asset path
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Product Title',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '\$100',
+                    style: TextStyle(fontSize: 18, color: Colors.blue),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Product Description...',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      // PG
+                    },
+                    child: const Text('Add to Cart'),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
 
 class Indicator extends StatelessWidget {
   final bool isActive;
+
   const Indicator({required this.isActive});
 
   @override

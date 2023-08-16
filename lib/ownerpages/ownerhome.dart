@@ -14,7 +14,8 @@ class OwnerPage extends StatefulWidget {
 }
 
 class _OwnerPageState extends State<OwnerPage> {
-  List<Map<String, dynamic>> clothesList = [];
+  List<Map<String, dynamic>> clothesList = [
+  ];
 
 
   @override

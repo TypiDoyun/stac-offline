@@ -24,7 +24,7 @@ class OwnerClothesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Get.to(() => onTapPage);
+          Get.to(onTapPage);
         },
         child: Card(
           elevation: 6,

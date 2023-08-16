@@ -9,15 +9,21 @@ class UserHomePage extends StatefulWidget {
 }
 
 class _UserHomePageState extends State<UserHomePage> {
-
-  final List<Map<String, dynamic>> clothesInfo = [];
-
+  final List<Map<String, dynamic>> clothesInfo = [
+    {
+      "name": "옷1만어린어럄디란어럄닝람ㄴ얼민ㅇ추망ㅊ만ㅇ처마ㅣㄴ",
+      "images": "assets/images/clothesImage1.jpeg",
+      "price": 20000,
+      "saleBool": true,
+      "saleValue": 20,
+      "shopName":"ㅎㅇ"
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      SafeArea(
+      body: SafeArea(
         child: CustomScrollView(
           slivers: [
             const SliverAppBar(
@@ -37,8 +43,12 @@ class _UserHomePageState extends State<UserHomePage> {
               pinned: true,
               delegate: TabBarDelegate(),
             ),
-            if(clothesInfo.isEmpty)
-              const SliverToBoxAdapter(child: Center(child: Text("암것도 없슈..."),) ,)
+            if (clothesInfo.isEmpty)
+              const SliverToBoxAdapter(
+                child: Center(
+                  child: Text("암것도 없슈..."),
+                ),
+              )
             else
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
@@ -53,11 +63,11 @@ class _UserHomePageState extends State<UserHomePage> {
                     (BuildContext context, int index) {
                       return UserHomeListItem(
                         clothesName: clothesInfo[index]["name"],
+                        clothesImgPath: clothesInfo[index]["images"],
                         clothesPrice: clothesInfo[index]["price"],
-                        clothesImgPath: clothesInfo[index]["image"],
-                        saleBoolen: clothesInfo[index]["sale_boolen"],
-                        saleValue: clothesInfo[index]["sale_value"],
-                        shopName: clothesInfo[index]["shop_name"],
+                        saleValue: clothesInfo[index]["saleValue"],
+                        saleBoolen: clothesInfo[index]["saleBool"],
+
                       );
                     },
                     childCount: clothesInfo.length, // 전체 아이템 개수
