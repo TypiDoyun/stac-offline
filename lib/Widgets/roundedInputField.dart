@@ -9,6 +9,7 @@ roundedInputField({
   required bool enabled,
   required Color color,
   TextEditingController? controller,
+  bool obscureText = false,
   Function(String)? onChanged,
 }) {
   return TextFieldContainer(
@@ -21,6 +22,7 @@ roundedInputField({
       autovalidateMode: AutovalidateMode.always,
       keyboardType: keyboardType,
       enabled: enabled,
+      obscureText: obscureText,
       decoration: InputDecoration(
         icon: Icon(icon),
         hintText: hintText,

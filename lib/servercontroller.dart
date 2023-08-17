@@ -1,21 +1,24 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
-final String serverUrl = 'http://117.110.121.213:3000';
 final String serverData = '';
+final String serverUrl = 'http://192.168.2.59:3000';
+
 
 Future<void> sendUserInfoDataToServer(Map data) async {
   try {
     final response = await http.post(
-      Uri.parse('$serverUrl/'), // 서버의 엔드포인트 URL로 변경
-      body: {'userName': data['userName'],
+      Uri.parse('$serverUrl/users'), // 서버의 엔드포인트 URL로 변경
+      body: {
+        'userName': data['userName'],
         'userId': data['userId'],
         'userPassword': data['userPassword'],
-        'userPhonenumber': data['userPhonenumber'],
-        'userBirth': data['userBirth'],
-        'userLocation': data['userLocation'],
+        'userPhonenumber': (data['userPhonenumber']).toString(),
+        'userBirth': data['userBirth'].toString(),
       },
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print('Data sent successfully!');
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
@@ -25,6 +28,46 @@ Future<void> sendUserInfoDataToServer(Map data) async {
   }
 }
 
+
+Future<void> sendUserLoginToServer(Map data) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$serverUrl/users/login'), // 서버의 엔드포인트 URL로 변경
+      body: {
+        'userId': data['userId'],
+        'userPassword': data['userPassword'],
+      },
+    );
+    if (response.statusCode == 201) {
+      dynamic data = json.decode(response.body);
+      print('Data sent successfully! ');
+      print("jwt token is ${data["token"]}");
+    } else {
+      print('Failed to send data. Error code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error while sending data: $e');
+  }
+}
+
+Future<void> checkUserId(Map data) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$serverUrl/users/login'), // 서버의 엔드포인트 URL로 변경
+      body: {
+        'userId': data['userId'],
+      },
+    );
+    if (response.statusCode == 201) {
+      dynamic data=  json.decode(response.body);
+      print("jwt token is ${data["token"]}");
+    } else {
+      print('Failed to send data. Error code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error while sending data: $e');
+  }
+}
 
 
 

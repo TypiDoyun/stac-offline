@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
 import 'package:offline/ownerpages/shopjoin.dart';
+import 'package:offline/servercontroller.dart';
 
 import '../Widgets/roundedInputField.dart';
 import 'signin.dart';
@@ -15,6 +16,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final signKey = GlobalKey<FormState>();
+
+  final loginInput = {
+    "userId" : "",
+    "userPassword" : "",
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +38,11 @@ class _LoginPageState extends State<LoginPage> {
             roundedInputField(
               color: Colors.black12,
               hintText: "아이디",
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.visiblePassword,
               enabled: true,
-              onSaved: (val) {},
+              onSaved: (val) {
+                loginInput["userId"] = (val);
+              },
               validator: (val) {
                 return null;
               },
@@ -43,15 +51,25 @@ class _LoginPageState extends State<LoginPage> {
             roundedInputField(
               color: Colors.black12,
               hintText: "비밀번호",
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.visiblePassword,
               enabled: true,
-              onSaved: (val) {},
+              obscureText: true,
+              onSaved: (val) {
+                loginInput["userPassword"] = (val);
+              },
               validator: (val) {
                 return null;
               },
               icon: Icons.lock
             ),
             const SizedBox(height: 20,),
+            ElevatedButton(onPressed: () {
+              final isValid = signKey.currentState!.validate();
+              if (isValid) {
+                signKey.currentState!.save();
+              }
+              sendUserLoginToServer(loginInput);
+            }, child: Text("로그인")),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

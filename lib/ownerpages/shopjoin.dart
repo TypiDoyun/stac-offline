@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/ownerpages/ownerhome.dart';
+import 'package:http/http.dart' as http;
+
+import '../Widgets/roundedInputField.dart';
+
+
 
 
 class ShopJoinPage extends StatefulWidget {
@@ -13,15 +20,7 @@ class ShopJoinPage extends StatefulWidget {
 class _ShopJoinPageState extends State<ShopJoinPage> {
   final shopJoinformKey = GlobalKey<FormState>();
 
-  final Map shopJoinInfo = {
-    "shop_businessRegistrationNumber" : "",
-    "shop_name" : "",
-    "shop_number" : "",
-    "shop_address" : "",
-    "onwer_name" : "",
-    "owner_residentRegistrationNumber" : "",
-  };
-
+  final BusinessRegistration registration = BusinessRegistration("0000000000", "20000101", ["홍길동", "홍길동전"], "(주)테스트", "0000000000000","","","");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,19 +42,19 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
           key: shopJoinformKey,
           child: ListView(
             children: [
-              // renderTextFormField(
-              //   label: '사업자 등록 번호',
-              //   keyboardType: TextInputType.number,
-              //   onSaved: (val) {
-              //     shopJoinInfo["shop_businessRegistrationNumber"] = val;
-              //   },
-              //   validator: (val) {
-              //     if (val.length < 1) {
-              //       return '정보를 입력하세요!';
-              //     }
-              //     return null;
-              //   },
-              // ),
+              roundedInputField(
+                  color: Colors.black12,
+                  hintText: "사업자 등록 번호 입력",
+                  keyboardType: TextInputType.number,
+                  enabled: true,
+                  obscureText: true,
+                  onSaved: (val) {
+                  },
+                  validator: (val) {
+                    return null;
+                  },
+                  icon: Icons.lock
+              ),
               ElevatedButton(
                   onPressed: () {
                     //사업자 등록 번호 조회 API
@@ -63,7 +62,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                     if (isValid) {
                       shopJoinformKey.currentState!.save();
                     }
-                    print(shopJoinInfo["shop_businessRegistrationNumber"]);
+                    checkBusinessRegistration(registration);
                   },
                   child: Text("매장 조회하기",
                     style: TextStyle(
@@ -97,4 +96,66 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
       )),
     );
   }
+}
+
+class BusinessRegistration {
+  String registrationNumber;
+  String registrationDate;
+  List<String> presidents;
+  String businessName;
+  String corpNumber;
+  String businessSector;
+  String businessType;
+  String businessAddress;
+
+  BusinessRegistration(
+      this.registrationNumber,
+      this.registrationDate,
+      this.presidents,
+      this.businessName,
+      this.corpNumber,
+      this.businessSector,
+      this.businessType,
+      this.businessAddress);
+}
+
+final String businessmanServiceKey =
+    "55vkrgaOLK%2F6YNyRpD4WGnGROVFAepA%2BctN2zrY%2FkZasPPUCIWkIHNgfGKhoWnUic8uzh08ZdfwBFwwY9zz%2FJQ%3D%3D";
+final String businessmanUrl =
+    "https://api.odcloud.kr/api/nts-businessman/v1/validate";
+
+Future<bool> checkBusinessRegistration(
+    BusinessRegistration registration) async {
+  print(registration.presidents);
+  final body = json.encode({
+    "businesses": [
+      {
+        "b_no": "0000000000",
+        "start_dt": "20000101",
+        "p_nm": "홍길동",
+        "p_nm2": "홍길동",
+        "b_nm": "(주)테스트",
+        "corp_no": "0000000000000",
+        "b_sector": "",
+        "b_type": "",
+        "b_adr": ""
+      }
+    ]
+  });
+
+  try {
+    final response = await http.post(
+        Uri.parse("$businessmanUrl?serviceKey=$businessmanServiceKey"),
+        body: body);
+    print(response.body);
+    final data = json.decode(response.body);
+    // print(response[0]["b_no"]);
+    // if (response["status_code"] != "OK") return false;
+    // if (response["data"][0]["valid"] == "02") return false;
+    // print("respons: $response");
+  } catch (error) {
+    print('Error while sending data: $error');
+  }
+
+  return true;
 }
