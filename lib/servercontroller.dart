@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 final String serverData = '';
 final String serverUrl = 'http://192.168.2.59:3000';
+bool checkId = false;
 
 
 Future<void> sendUserInfoDataToServer(Map data) async {
@@ -20,6 +21,7 @@ Future<void> sendUserInfoDataToServer(Map data) async {
     );
     if (response.statusCode == 201) {
       print('Data sent successfully!');
+
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
     }
@@ -59,8 +61,7 @@ Future<void> checkUserId(Map data) async {
       },
     );
     if (response.statusCode == 201) {
-      dynamic data=  json.decode(response.body);
-      print("jwt token is ${data["token"]}");
+      checkId = json.decode(response.body);
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
     }
