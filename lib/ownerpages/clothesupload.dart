@@ -5,13 +5,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:offline/Widgets/roundedInputField.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:offline/Widgets/sizebutton.dart';
 import 'package:offline/servercontroller.dart';
-
 
 class ClothesUploadPage extends StatefulWidget {
   const ClothesUploadPage({super.key});
-
 
   @override
   State<StatefulWidget> createState() => _ClothesUploadPageState();
@@ -27,8 +24,9 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     setState(() {
       _textIndex = (_textIndex + 1) % _textOptions.length;
       if (_textOptions[_textIndex] == 'Free') {
-        clothesInfo["size"] = ['Free'];
+        clothesInfo["size"] = 'Free';
       } else if (_textOptions[_textIndex] == '85(XS) ~ 110(2XL)') {
+        clothesInfo["size"] = ['','','','','',''];
         List selectedSizes = [];
         for (int i = 0; i < buttonSelectedStates.length; i++) {
           if (buttonSelectedStates[i]) {
@@ -46,7 +44,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     "95(M)",
     "100(L)",
     "105(XL)",
-    "110(2XL)"
+    "110(2XL)",
   ];
 
   List buttonSelectedStates = List.filled(6, false);
@@ -60,7 +58,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
   final Map<String, dynamic> clothesInfo = {
     "name": "",
     "price": 0,
-    "size": [],
+    "size": 'Free',
     "tag": "",
     "comment": "",
     "saleValue": 0,
@@ -84,7 +82,9 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -96,74 +96,104 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                roundedInputField(
-                  color: Colors.black12,
-                  hintText: "옷 이름",
-                  enabled: true,
-                  onSaved: (val) {
-                    clothesInfo["name"] = val;
-                  },
-                  validator: (val) {
-                    return null;
-                  },
-                  keyboardType: TextInputType.text,
-                  icon: Icons.abc
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Text("버튼을 눌러 사이즈 단위를 선택해주세요!"),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _changeText,
-                      child: Text(
-                        _textOptions[_textIndex],
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    const Text(
-                      " Size",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                Visibility(
-                  visible: _textOptions[_textIndex] == '85(XS) ~ 110(2XL)',
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: const Text("보유중이신 사이즈를 선택해주세요."),
-                      ),
-                      ...List.generate(sizeMenus_num.length, (index) {
-                        return SizeButton(
-                          toggleTouch: () => _toggleButton(index),
-                          containerColor: buttonSelectedStates[index] ? Colors.black : Colors.white,
-                          borderColor: buttonSelectedStates[index] ? Colors.black : Colors.grey,
-                          textColor: buttonSelectedStates[index] ? Colors.white : Colors.black,
-                          text: sizeMenus_num[index],
-                        );
-                      }),
-                    ]
+              const SizedBox(
+              height: 40,
+            ),
+            roundedInputField(
+                color: Colors.black12,
+                hintText: "옷 이름",
+                enabled: true,
+                onSaved: (val) {
+                  clothesInfo["name"] = val;
+                },
+                validator: (val) {
+                  return null;
+                },
+                keyboardType: TextInputType.text,
+                icon: Icons.abc),
+            const SizedBox(
+              height: 30,
+            ),
+            const Text("버튼을 눌러 사이즈 단위를 선택해주세요!"),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _changeText,
+                  child: Text(
+                    _textOptions[_textIndex],
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
-                roundedInputField(
+                const Text(
+                  " Size",
+                  style:
+                  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            Visibility(
+              visible: _textOptions[_textIndex] == '85(XS) ~ 110(2XL)',
+              child: Column(children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: const Text("보유중이신 사이즈를 선택해주세요."),
+                ),
+                ...List.generate(sizeMenus_num.length, (index) {
+                  return InkWell(
+                    onTap: () {
+                      _toggleButton(index);
+                      if (buttonSelectedStates[index]) {
+                        clothesInfo["size"][index] = sizeMenus_num[index];
+                      } else {
+                        clothesInfo["size"][index] = ""; // 또는 null을 할당할 수 있습니다.
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      height: size.width * 0.13,
+                      width: size.width * 0.26,
+                      decoration: BoxDecoration(
+                        color: buttonSelectedStates[index]
+                            ? Colors.black
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                        border: buttonSelectedStates[index]
+                            ? null
+                            : Border.all(color: Colors.black, width: 1),
+                      ),
+                      child: Center(
+                        child: Text(
+                          sizeMenus_num[index],
+                          style: TextStyle(
+                              color: buttonSelectedStates[index]
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
+                    ),
+                    // SizeButton(
+                    // toggleTouch: () => _toggleButton(index),
+                    // containerColor: buttonSelectedStates[index] ? Colors.black : Colors.white,
+                    // borderColor: buttonSelectedStates[index] ? Colors.black : Colors.grey,
+                    // textColor: buttonSelectedStates[index] ? Colors.white : Colors.black,
+                    // text: sizeMenus_num[index],
+                  );
+                }),
+              ]),
+            ),
+              roundedInputField(
                   color: Colors.black12,
                   hintText: "가격",
                   keyboardType: TextInputType.number,
                   enabled: true,
                   onChanged: (val) {
                     setState(() {
-                      num parsedValue = double.tryParse(val) ?? 0; // 문자열을 숫자로 변환 (기본값은 0)
+                      num parsedValue =
+                          double.tryParse(val) ?? 0; // 문자열을 숫자로 변환 (기본값은 0)
                       clothesInfo["price"] = parsedValue;
                     });
                   },
@@ -173,10 +203,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   validator: (val) {
                     return null;
                   },
-                  icon: Icons.price_change
-              ),
-
-                Container(
+                  icon: Icons.price_change),
+              Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 width: size.width * 0.6,
                 decoration: BoxDecoration(
@@ -192,6 +220,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                       onChanged: (value) {
                         setState(() {
                           isCheckboxChecked = value!;
+                          isCheckboxChecked ? null : clothesInfo["saleValue"] = 0;
                         });
                       },
                     ),
@@ -203,13 +232,16 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     roundedInputField(
-                        color: isCheckboxChecked ? Colors.black12 : Colors.black12.withOpacity(0.4),
+                        color: isCheckboxChecked
+                            ? Colors.black12
+                            : Colors.black12.withOpacity(0.4),
                         hintText: "세일 %",
                         keyboardType: TextInputType.number,
                         enabled: isCheckboxChecked,
                         onChanged: (val) {
                           setState(() {
-                            num discountValue = double.tryParse(val) ?? 0; // 문자열을 숫자로 변환 (기본값은 0)
+                            num discountValue = double.tryParse(val) ??
+                                0; // 문자열을 숫자로 변환 (기본값은 0)
                             clothesInfo["saleValue"] = discountValue;
                           });
                         },
@@ -219,19 +251,19 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                         validator: (val) {
                           return null;
                         },
-                        icon: Icons.discount
-                    ),
-                    isCheckboxChecked ? Text(
+                        icon: Icons.discount),
+                    isCheckboxChecked
+                        ? Text(
                       '원가 : ${f.format(clothesInfo["price"])}\n세일가 : ${f.format(
-                          (clothesInfo["price"] - (clothesInfo["price"] * clothesInfo["saleValue"]! / 100)))}', // 저장된 가격 출력, 없을 경우 빈 문자열 출력
+                          (clothesInfo["price"] - (clothesInfo["price"] *
+                              clothesInfo["saleValue"]! / 100)))}',
+                      // 저장된 가격 출력, 없을 경우 빈 문자열 출력
                       style: TextStyle(fontSize: 16),
-                    ) : SizedBox(),
+                    )
+                        : SizedBox(),
                   ],
                 ),
               ),
-
-
-
               roundedInputField(
                   color: Colors.black12,
                   hintText: "태그",
@@ -243,9 +275,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   validator: (val) {
                     return null;
                   },
-                  icon: Icons.tag
-                ),
-                roundedInputField(
+                  icon: Icons.tag),
+              roundedInputField(
                   color: Colors.black12,
                   hintText: "코멘트",
                   enabled: true,
@@ -256,12 +287,12 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   validator: (val) {
                     return null;
                   },
-                  icon: Icons.comment
-                ),
-                ElevatedButton(
-                    onPressed: _pickImages, child: const Text("이미지 선택")
-                ),
-                SizedBox(height: size.width*0.8,)
+                  icon: Icons.comment),
+              ElevatedButton(
+                  onPressed: _pickImages, child: const Text("이미지 선택")),
+              SizedBox(
+                height: size.width * 0.8,
+              )
               ],
             ),
           ),
@@ -273,7 +304,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, //볼더 제거
+                borderRadius: BorderRadius.zero,
               ),
             ),
             onPressed: () {
@@ -307,7 +338,6 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     }
   }
 }
-
 
 List<XFile> _selectedImages = [];
 

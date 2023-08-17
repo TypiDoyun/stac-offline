@@ -17,7 +17,7 @@ class SizeButton extends StatelessWidget {
     Size size = MediaQuery
         .of(context)
         .size;
-    return GestureDetector(
+    return InkWell(
       onTap: toggleTouch,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5),
