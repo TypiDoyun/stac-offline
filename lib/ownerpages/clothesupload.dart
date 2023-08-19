@@ -360,7 +360,7 @@ Future<dynamic> patchUserProfileImage() async {
     // request.options.contentType = 'multipart/form-data';
     // request.options.maxRedirects.isFinite;
 
-    var response = await request.post('$serverUrl/clothes',
+    var response = await request.post('$serverUrl_2/clothes',
         data: formData, options: Options(contentType: 'multipart/form-data'));
     print('성공적으로 업로드했습니다');
     return response.data;

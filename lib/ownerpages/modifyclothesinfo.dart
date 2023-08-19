@@ -19,7 +19,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("한상진"),
+        title: const Text("한상진"),
       ),
       body: PageView.builder(
           itemCount: imagesList.length,

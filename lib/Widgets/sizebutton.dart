@@ -5,11 +5,11 @@ class SizeButton extends StatelessWidget {
       {Key? key, required this.toggleTouch, required this.containerColor, required this.borderColor, required this.textColor, required this.text})
       : super(key: key);
 
-  final toggleTouch;
-  final containerColor;
-  final borderColor;
-  final textColor;
-  final text;
+  final dynamic toggleTouch;
+  final dynamic containerColor;
+  final dynamic borderColor;
+  final dynamic textColor;
+  final dynamic text;
 
 
   @override
@@ -20,7 +20,7 @@ class SizeButton extends StatelessWidget {
     return InkWell(
       onTap: toggleTouch,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
+        margin: const EdgeInsets.symmetric(vertical: 5),
         width: size.width * 0.2,
         height: size.width * 0.1,
         decoration: BoxDecoration(

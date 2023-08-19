@@ -97,7 +97,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
 class Indicator extends StatelessWidget {
   final bool isActive;
 
-  const Indicator({required this.isActive});
+  const Indicator({super.key, required this.isActive});
 
   @override
   Widget build(BuildContext context) {

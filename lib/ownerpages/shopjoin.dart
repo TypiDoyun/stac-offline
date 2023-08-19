@@ -64,7 +64,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                     }
                     checkBusinessRegistration(registration);
                   },
-                  child: Text("매장 조회하기",
+                  child: const Text("매장 조회하기",
                     style: TextStyle(
                     ),
                   )),
@@ -119,9 +119,9 @@ class BusinessRegistration {
       this.businessAddress);
 }
 
-final String businessmanServiceKey =
+const String businessmanServiceKey =
     "55vkrgaOLK%2F6YNyRpD4WGnGROVFAepA%2BctN2zrY%2FkZasPPUCIWkIHNgfGKhoWnUic8uzh08ZdfwBFwwY9zz%2FJQ%3D%3D";
-final String businessmanUrl =
+const String businessmanUrl =
     "https://api.odcloud.kr/api/nts-businessman/v1/validate";
 
 Future<bool> checkBusinessRegistration(

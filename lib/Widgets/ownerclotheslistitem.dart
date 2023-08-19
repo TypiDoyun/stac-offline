@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OwnerClothesListItem extends StatelessWidget {
-  final String clothes_name, clothes_tag, clothes_size, clothes_comment;
-  final int clothes_price;
-  final onTapPage;
-  final clothesImage;
+  final String clothesName, clothesTag, clothesSize, clothesComment;
+  final int clothesPrice;
+  final dynamic onTapPage;
+  final dynamic clothesImage;
 
   const OwnerClothesListItem({
     Key? key,
-    required this.clothes_name,
-    required this.clothes_price,
-    required this.clothes_size,
-    required this.clothes_tag,
-    required this.clothes_comment,
+    required this.clothesName,
+    required this.clothesPrice,
+    required this.clothesSize,
+    required this.clothesTag,
+    required this.clothesComment,
     required this.onTapPage, this.clothesImage,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class OwnerClothesListItem extends StatelessWidget {
         },
         child: Card(
           elevation: 6,
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           shadowColor: Colors.black26,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
@@ -48,24 +48,24 @@ class OwnerClothesListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        clothes_name,
-                        style: TextStyle(
+                        clothesName,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
                       Text(
-                        clothes_comment,
+                        clothesComment,
                         maxLines: 3,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.w300,
                           fontSize: 12,
                         ),
                       ),
                       Text(
-                        clothes_price as String,
-                        style: TextStyle(
+                        clothesPrice as String,
+                        style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.red),

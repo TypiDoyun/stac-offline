@@ -52,9 +52,9 @@ class UserHomeListItem extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          Text(
+          const Text(
             "ㅎㅇ",
-            style: const TextStyle(color: Colors.black54, fontSize: 12),
+            style: TextStyle(color: Colors.black54, fontSize: 12),
           ),
           Row(
             children: [

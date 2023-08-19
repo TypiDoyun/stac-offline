@@ -67,11 +67,11 @@ class _OwnerPageState extends State<OwnerPage> {
                 delegate: SliverChildBuilderDelegate(
                     childCount: clothesList.length,
                         (context, index) => OwnerClothesListItem(
-                        clothes_name: clothesList[index]['name'],
-                        clothes_price: clothesList[index]['price'],
-                        clothes_size: clothesList[index]['size'],
-                        clothes_tag: clothesList[index]['tag'],
-                        clothes_comment: clothesList[index]['comment'], onTapPage: ModityClothesInfo(),)))
+                        clothesName: clothesList[index]['name'],
+                        clothesPrice: clothesList[index]['price'],
+                        clothesSize: clothesList[index]['size'],
+                        clothesTag: clothesList[index]['tag'],
+                        clothesComment: clothesList[index]['comment'], onTapPage: ModityClothesInfo(),)))
           ],
         ),
       ),
