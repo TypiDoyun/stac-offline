@@ -10,14 +10,6 @@ class UserHomePage extends StatefulWidget {
 
 class _UserHomePageState extends State<UserHomePage> {
   final List<Map<String, dynamic>> clothesInfo = [
-    {
-      "name": "옷1만어린어럄디란어럄닝람ㄴ얼민ㅇ추망ㅊ만ㅇ처마ㅣㄴ",
-      "images": "assets/images/clothesImage1.jpeg",
-      "price": 20000,
-      "saleBool": true,
-      "saleValue": 20,
-      "shopName":"ㅎㅇ"
-    },
   ];
 
   @override
@@ -28,12 +20,14 @@ class _UserHomePageState extends State<UserHomePage> {
           slivers: [
             const SliverAppBar(
               toolbarHeight: 60,
-              title: Text(
-                "Offline",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 28,
+              title: Center(
+                child: Text(
+                  "Offline",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 28,
+                  ),
                 ),
               ),
               backgroundColor: Colors.white,
@@ -46,7 +40,7 @@ class _UserHomePageState extends State<UserHomePage> {
             if (clothesInfo.isEmpty)
               const SliverToBoxAdapter(
                 child: Center(
-                  child: Text("암것도 없슈..."),
+                  child: Text("주변에 전시된 옷이 없어요...", style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),),
                 ),
               )
             else

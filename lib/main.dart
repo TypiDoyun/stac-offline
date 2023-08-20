@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:get/get.dart';
+import 'package:offline/servercontroller.dart';
+import 'package:offline/utils/auth/try-refresh-access-token.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import 'userpages/usermain.dart';
 
@@ -21,29 +28,49 @@ const MaterialColor primaryBlack =
 
 const int _blackPrimaryValue = 0xFF000000;
 
+dynamic data = false;
+
 void main() async {
+  await dotenv.load(fileName: "assets/config/.env");
   WidgetsFlutterBinding.ensureInitialized();
   await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v');
+  await tryRefreshAccessToken();
+  await fetchUserData();
+  print(data);
 
-  return runApp(
-    GestureDetector(
-      onTap: (){
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const UserMain(),
-        theme: ThemeData(
+  return runApp(GestureDetector(
+    onTap: () {
+      FocusManager.instance.primaryFocus?.unfocus();
+    },
+    child: GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const UserMain(),
+      theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           primarySwatch: primaryBlack,
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
-          )
-        ),
-      ),
-    )
-  );
+          )),
+    ),
+  ));
 }
 
+Future fetchUserData() async {
+  SharedPreferences prefrs = await SharedPreferences.getInstance();
+  String? accessToken = prefrs.getString("accessToken");
+  try {
+    final response = await http
+        .get(Uri.parse('${dotenv.env["SERVER_URL"]}/user/profile'), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    });
+    print(response.body);
+    data = json.decode(response.body);
+    await prefrs.setString('username', data["username"]);
+  } catch (e) {
+    print("error: 토큰 만료됨");
+  }
 
+}

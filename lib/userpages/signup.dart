@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import '../Widgets/User.dart';
 import '../Widgets/roundedInputField.dart';
 import '../servercontroller.dart';
 
@@ -39,6 +40,12 @@ class _SignUpPageState extends State<SignUpPage> {
         _currentPage--;
       });
     }
+  }
+
+  bool containsOnlyVowelsOrConsonants(String value) {
+    // 정규식을 사용하여 입력값이 자음 또는 모음으로만 이루어져 있는지 확인
+    final regex = RegExp(r'^[aeiou]+$|^[bcdfghjklmnpqrstvwxyz]+$');
+    return regex.hasMatch(value);
   }
 
   void _nextPage() {
@@ -79,7 +86,6 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> checkUserId(String data) async {
-
     try {
       final response = await http.post(
         Uri.parse('$serverUrl_2/auth/exists'), // 서버의 엔드포인트 URL로 변경
@@ -120,11 +126,12 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         SizedBox(
-          height: size.width * 0.8,
+          height: size.width,
           width: size.width,
           child: Form(
             key: signKey,
             child: PageView(
+              // physics: NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: (int page) {
                 setState(() {
@@ -137,16 +144,30 @@ class _SignUpPageState extends State<SignUpPage> {
                     signInputField(
                       controller: userNameCont,
                       focusNode: _focusNode1,
-                      topText: "성함",
+                      topText: "닉네임",
                       color: Colors.white,
-                      hintText: "ex) 홍길동",
+                      hintText: "Nickname",
+                      counterText: '',
                       keyboardType: TextInputType.text,
+                      maxLength: 8,
                       enabled: true,
+                      inputFomatters: [
+                        FilteringTextInputFormatter(RegExp('[a-z A-Zㄱ-ㅎ|가-힣|·|：]'), allow: true)
+                      ],
                       onChanged: (val) {
                         // userInfoInput["userName"] = val;
                       },
                       validator: (val) {
-                        return null;
+                        if (val.isEmpty) {
+                          return "닉네임을 입력해주세요.";
+                        }
+                        if (val.length < 3) {
+                          return "3글자 이상 입력해주세요.";
+                        }
+                        // final regex = RegExp('[a-z A-Z ㄱ-ㅎ|가-힣|·|：]');
+                        // if (regex.hasMatch(val)) {
+                        //   return '자음 또는 모음만 입력할 수 없습니다.';
+                        // }
                       },
                       onFieldSubmitted: test,
                       icon: Icons.person_outline,
@@ -163,16 +184,21 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "ID",
                       keyboardType: TextInputType.visiblePassword,
                       enabled: true,
-                      onChanged: (val) {},
+                      inputFomatters: [
+                        FilteringTextInputFormatter(RegExp('[a-z A-Z 0-9]'), allow: true)
+                      ],
                       validator: (val) {
                         if (val.isEmpty) {
                           return "아이디를 입력해주세요.";
                         }
                         // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
                         RegExp specialCharRegex =
-                            RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]{6,}');
+                            RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]');
                         if (!specialCharRegex.hasMatch(val)) {
-                          return "특수 문자는 입력할 수 없습니다.";
+                          return "특수 문자와 공백은 입력할 수 없습니다.";
+                        }
+                        if (val.length < 6) {
+                          return "최소 6자 이상 입력해야합니다.";
                         }
                         if (specialCharRegexNum.allMatches(val).isEmpty) {
                           return "숫자 1자 이상 입력해야 합니다.";
@@ -240,7 +266,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (specialCharRegexNum.allMatches(val).length < 3) {
                           return "숫자 3자 이상 입력해야 합니다.";
                         }
-
+                        RegExp specialCharRegex1 = RegExp(r'[ ]');
+                        if (specialCharRegex1.hasMatch(val)) {
+                          return "공백은 입력할 수 없습니다.";
+                        }
                         return null; // 유효한 값인 경우 null을 반환
                       },
                       icon: Icons.lock,
@@ -260,7 +289,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (val != userPasswordCont.text) {
                           return "비밀번호를 다시 확인해주세요.";
                         }
-                        return null; // 유효한 값인 경우 null을 반환
+                        return null;
                       },
                       icon: Icons.lock_outline,
                     ),
@@ -276,22 +305,16 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "ex) 01012345678",
                       keyboardType: TextInputType.number,
                       enabled: true,
-                      onChanged: (val) {
-                        // userInfoInput["userPhonenumber"] = val;
-                      },
                       validator: (val) {
                         if (val.isEmpty) {
                           return "전화번호를 입력해주세요.";
                         }
-
-                        // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
                         RegExp specialCharRegex =
                             RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
                         if (specialCharRegex.hasMatch(val)) {
                           return "특수 문자는 입력할 수 없습니다.";
                         }
-
-                        return null; // 유효한 값인 경우 null을 반환
+                        return null;
                       },
                       icon: Icons.phone,
                     ),
@@ -305,9 +328,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "ex) 950106",
                       keyboardType: TextInputType.number,
                       enabled: true,
-                      onChanged: (val) {
-                        // userInfoInput["userBirth"] = val;
-                      },
                       validator: (val) {
                         return null;
                       },
@@ -325,26 +345,22 @@ class _SignUpPageState extends State<SignUpPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_currentPage >= 1) // 첫 페이지일 때는 왼쪽 버튼을 표시하지 않음
+            if (_currentPage >= 1)
               IconButton(
                 onPressed: _previousPage,
                 icon: const Icon(Icons.arrow_back),
               ),
-            IconButton(
-              onPressed: _nextPage,
-              icon: const Icon(Icons.arrow_forward),
-            ),
             if (_currentPage > 1)
               InkWell(
-                onTap: () {
-                  Map userInfo = {
-                    "userName": userNameCont.text,
-                    "userId": userIdCont.text,
-                    "userPassword": userPasswordCont.text,
-                    "userPhonenumber": userPhonenumberCont.text,
-                    "userBirth": userBirthCont.text
-                  };
-                  sendUserInfoDataToServer(userInfo);
+                onTap: () async {
+                  User newUser = User(
+                    id: userNameCont.text,
+                    username: userIdCont.text,
+                    password: userPasswordCont.text,
+                    phoneNumber: userPhonenumberCont.text,
+                    birthday: userBirthCont.text,
+                  );
+                  sendUserInfoDataToServer(newUser);
                 },
                 child: const Text("회원가입"),
               ),
@@ -372,6 +388,8 @@ signInputField({
   Function(String)? onChanged,
   void Function(String)? onFieldSubmitted,
   FocusNode? focusNode,
+  String? counterText,
+  List<TextInputFormatter>? inputFomatters,
 }) {
   return TextFieldContainer(
     color: color,
@@ -400,7 +418,9 @@ signInputField({
           keyboardType: keyboardType,
           enabled: enabled,
           obscureText: obscureText,
+          inputFormatters: inputFomatters,
           decoration: InputDecoration(
+            counterText: counterText,
             icon: Icon(icon),
             hintText: hintText,
             border: InputBorder.none,
@@ -414,3 +434,66 @@ signInputField({
     ),
   );
 }
+
+//네이버 문자인증 API
+// Future getSignature(String serviceId, String timeStamp, String accessKey,
+//     String secretKey) {
+//   var space = " "; // one space
+//   var newLine = "\n"; // new line
+//   var method = "POST"; // method
+//   var url = "/sms/v2/services/$serviceId/messages";
+//
+//   var buffer = new StringBuffer();
+//   buffer.write(method);
+//   buffer.write(space);
+//   buffer.write(url);
+//   buffer.write(newLine);
+//   buffer.write((DateTime
+//       .now()
+//       .millisecondsSinceEpoch).toString());
+//   buffer.write(newLine);
+//   buffer.write(accessKey);
+//   print(buffer.toString());
+//
+//   /// signing key
+//   var key = utf8.encode(secretKey);
+//   var signingKey = new Hmac(sha256, key);
+//
+//   var bytes = utf8.encode(buffer.toString());
+//   var digest = signingKey.convert(bytes);
+//   String signatureKey = base64.encode(digest.bytes);
+//   return signatureKey;
+// }
+//
+// void sendSMS(String phoneNumber) async {
+//   Map data = {
+//     "type": "SMS",
+//     "contentType": "COMM",
+//     "countryCode": "82",
+//     "from": "1234567890",
+//     "content": "ABCD",
+//     "messages": [
+//       {
+//         "to": phoneNumber,
+//         "content": "EFGH",
+//       }
+//     ],
+//   };
+//   var result = await http.post(
+//       "https://sens.apigw.ntruss.com/sms/v2/services/${Uri.encodeComponent(
+//           'SecretKey')}/messages",
+//       headers: <String, String>{
+//         "accept": "application/json",
+//         'content-Type': 'application/json; charset=UTF-8',
+//         'x-ncp-apigw-timestamp': (DateTime
+//             .now()
+//             .millisecondsSinceEpoch).toString(),
+//         'x-ncp-iam-access-key': AccessKey,
+//         'x-ncp-apigw-signature-v2': getSignature(
+//             Uri.encodeComponent(OpenAPIKey - ID), timeStamp,
+//             AccessKey, SecretKey)
+//       },
+//       body: json.encode(data)
+//   );
+//   print(result.body);
+// }
