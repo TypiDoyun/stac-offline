@@ -1,11 +1,6 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:offline/ownerpages/ownerhome.dart';
-import 'package:offline/userpages/usermain.dart';
-import 'package:offline/userpages/userpref.dart';
-import 'Widgets/Clothes.dart';
 import 'Widgets/User.dart';
 
 const String serverData = '';
@@ -30,7 +25,7 @@ Future<void> getUserFromServer(String data) async {
   }
   catch (e) {
     print(e);
-  };
+  }
 }
 
 String _decodeBase64(String str) {
@@ -66,21 +61,21 @@ Map<String, dynamic> parseJwtPayLoad(String token) {
 
   return payloadMap;
 }
-
-Future getClothesInfo(Clothes data) async {
-  try {
-    final response = await http.get(
-      Uri.parse('$serverUrl_2/'),
-      headers: {
-
-      }
-    );
-  // Clothes clothesinfo  = Clothes.fromJson(json.decode(response.body));
-  // print(clothesinfo);
-  } catch (e) {
-    print('error: $e');
-  }
-}
+//
+// Future getClothesInfo(Clothes data) async {
+//   try {
+//     final response = await http.get(
+//       Uri.parse('$serverUrl_2/'),
+//       headers: {
+//
+//       }
+//     );
+//   // Clothes clothesinfo  = Clothes.fromJson(json.decode(response.body));
+//   // print(clothesinfo);
+//   } catch (e) {
+//     print('error: $e');
+//   }
+// }
 
 
 Future<void> sendUserInfoDataToServer(User data) async {

@@ -9,7 +9,7 @@ import '../Widgets/roundedInputField.dart';
 import '../servercontroller.dart';
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -22,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController userPhonenumberCont = TextEditingController();
   final TextEditingController userBirthCont = TextEditingController();
 
-  bool _isLoading = false;
+  bool isLoading = false;
 
   final signKey = GlobalKey<FormState>();
 
@@ -65,24 +65,24 @@ class _SignUpPageState extends State<SignUpPage> {
 
   RegExp specialCharRegexNum = RegExp(r'[0-9]');
 
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode3 = FocusNode();
+  FocusNode focusNode1 = FocusNode();
+  FocusNode focusNode2 = FocusNode();
+  FocusNode focusNode3 = FocusNode();
 
   @override
   void dispose() {
     userNameCont.dispose();
     userIdCont.dispose();
     userPasswordCont.dispose();
-    _focusNode1.dispose();
-    _focusNode2.dispose();
-    _focusNode3.dispose();
+    focusNode1.dispose();
+    focusNode2.dispose();
+    focusNode3.dispose();
     super.dispose();
   }
 
   void test(String value) {
-    _focusNode1.unfocus();
-    FocusScope.of(context).requestFocus(_focusNode2);
+    focusNode1.unfocus();
+    FocusScope.of(context).requestFocus(focusNode2);
   }
 
   Future<void> checkUserId(String data) async {
@@ -143,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     signInputField(
                       controller: userNameCont,
-                      focusNode: _focusNode1,
+                      focusNode: focusNode1,
                       topText: "닉네임",
                       color: Colors.white,
                       hintText: "Nickname",
@@ -152,7 +152,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       maxLength: 8,
                       enabled: true,
                       inputFomatters: [
-                        FilteringTextInputFormatter(RegExp('[a-z A-Zㄱ-ㅎ|가-힣|·|：]'), allow: true)
+                        FilteringTextInputFormatter(
+                            RegExp('[a-z A-Zㄱ-ㅎ|가-힣|·|：]'),
+                            allow: true)
                       ],
                       onChanged: (val) {
                         // userInfoInput["userName"] = val;
@@ -164,10 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (val.length < 3) {
                           return "3글자 이상 입력해주세요.";
                         }
-                        // final regex = RegExp('[a-z A-Z ㄱ-ㅎ|가-힣|·|：]');
-                        // if (regex.hasMatch(val)) {
-                        //   return '자음 또는 모음만 입력할 수 없습니다.';
-                        // }
+                        return null;
                       },
                       onFieldSubmitted: test,
                       icon: Icons.person_outline,
@@ -176,7 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 10,
                     ),
                     signInputField(
-                      focusNode: _focusNode2,
+                      focusNode: focusNode2,
                       maxLength: 12,
                       controller: userIdCont,
                       topText: "아이디",
@@ -185,7 +184,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       keyboardType: TextInputType.visiblePassword,
                       enabled: true,
                       inputFomatters: [
-                        FilteringTextInputFormatter(RegExp('[a-z A-Z 0-9]'), allow: true)
+                        FilteringTextInputFormatter(
+                          RegExp('[a-z A-Z 0-9]'),
+                          allow: true,
+                        )
                       ],
                       validator: (val) {
                         if (val.isEmpty) {
@@ -233,7 +235,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
-                    if (_isLoading)
+                    if (isLoading)
                       const Text("확인중..")
                     else if (checkId != null)
                       checkId!
@@ -246,7 +248,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Column(
                   children: [
                     signInputField(
-                      focusNode: _focusNode3,
+                      focusNode: focusNode3,
                       controller: userPasswordCont,
                       topText: "비밀번호",
                       maxLength: 15,
@@ -255,9 +257,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       keyboardType: TextInputType.visiblePassword,
                       enabled: true,
                       obscureText: true,
-                      onChanged: (val) {
-                        // userInfoInput["userPassword"] = val;
-                      },
                       validator: (val) {
                         if (val.isEmpty) {
                           return "비밀번호을 입력해주세요.";

@@ -17,20 +17,20 @@ class ClothesUploadPage extends StatefulWidget {
 class _ClothesUploadPageState extends State<ClothesUploadPage> {
   final formkey = GlobalKey<FormState>();
 
-  int _textIndex = 0;
-  List<String> _textOptions = ['Free', '85(XS) ~ 110(2XL)'];
+  int textIndex = 0;
+  List<String> textOptions = ['Free', '85(XS) ~ 110(2XL)'];
 
   void _changeText() {
     setState(() {
-      _textIndex = (_textIndex + 1) % _textOptions.length;
-      if (_textOptions[_textIndex] == 'Free') {
+      textIndex = (textIndex + 1) % textOptions.length;
+      if (textOptions[textIndex] == 'Free') {
         clothesInfo["size"] = 'Free';
-      } else if (_textOptions[_textIndex] == '85(XS) ~ 110(2XL)') {
+      } else if (textOptions[textIndex] == '85(XS) ~ 110(2XL)') {
         clothesInfo["size"] = ['', '', '', '', '', ''];
         List selectedSizes = [];
         for (int i = 0; i < buttonSelectedStates.length; i++) {
           if (buttonSelectedStates[i]) {
-            selectedSizes.add(sizeMenus_num[i]);
+            selectedSizes.add(sizeMenusNum[i]);
             clothesInfo["size"][i] = selectedSizes;
           }
         }
@@ -38,7 +38,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     });
   }
 
-  final sizeMenus_num = [
+  final sizeMenusNum = [
     "85(XS)",
     "90(S)",
     "95(M)",
@@ -122,7 +122,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ElevatedButton(
                       onPressed: _changeText,
                       child: Text(
-                        _textOptions[_textIndex],
+                        textOptions[textIndex],
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
@@ -134,18 +134,18 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   ],
                 ),
                 Visibility(
-                  visible: _textOptions[_textIndex] == '85(XS) ~ 110(2XL)',
+                  visible: textOptions[textIndex] == '85(XS) ~ 110(2XL)',
                   child: Column(children: [
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: const Text("보유중이신 사이즈를 선택해주세요."),
                     ),
-                    ...List.generate(sizeMenus_num.length, (index) {
+                    ...List.generate(sizeMenusNum.length, (index) {
                       return InkWell(
                         onTap: () {
                           _toggleButton(index);
                           if (buttonSelectedStates[index]) {
-                            clothesInfo["size"][index] = sizeMenus_num[index];
+                            clothesInfo["size"][index] = sizeMenusNum[index];
                           } else {
                             clothesInfo["size"][index] =
                                 ""; // 또는 null을 할당할 수 있습니다.
@@ -166,7 +166,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                           ),
                           child: Center(
                             child: Text(
-                              sizeMenus_num[index],
+                              sizeMenusNum[index],
                               style: TextStyle(
                                 color: buttonSelectedStates[index]
                                     ? Colors.white
@@ -348,7 +348,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
 List<XFile> _selectedImages = [];
 
 Future<dynamic> patchUserProfileImage() async {
-  if (_selectedImages.length == 0) return;
+  if (_selectedImages.isEmpty) return;
   var formData = dio.FormData.fromMap({
     "name": "what a fucking shit day!",
     'images': [dio.MultipartFile.fromFileSync(_selectedImages[0].path)]

@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:offline/servercontroller.dart';
 import 'package:offline/utils/auth/try-refresh-access-token.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:offline/utils/common/getPosition.dart';
+import 'package:offline/utils/common/try-get-clothes-info.dart';
 
 import 'userpages/usermain.dart';
 
@@ -28,49 +26,32 @@ const MaterialColor primaryBlack =
 
 const int _blackPrimaryValue = 0xFF000000;
 
-dynamic data = false;
-
 void main() async {
-  await dotenv.load(fileName: "assets/config/.env");
-  WidgetsFlutterBinding.ensureInitialized();
-  await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v');
-  await tryRefreshAccessToken();
-  await fetchUserData();
-  print(data);
+  // 앱 실행 시 한번만 실행
+  await dotenv.load(fileName: "assets/config/.env");  // <- IP주소
+  WidgetsFlutterBinding.ensureInitialized(); // <-네이버 지도 API
+  await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v'); // <-네이버 지도 API
+  await tryRefreshAccessToken(); // <-로컬 저장소에 있는 엑세스토큰의 유효기간 확인
+  await getClothesInfo("37.532600", "127.024612");
 
-  return runApp(GestureDetector(
-    onTap: () {
-      FocusManager.instance.primaryFocus?.unfocus();
-    },
-    child: GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const UserMain(),
-      theme: ThemeData(
+  return runApp(
+    GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus(); // <-화면 터치 시 키보드 해제
+      },
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: const UserMain(),
+        theme: ThemeData(  // 디자인 요소
           scaffoldBackgroundColor: Colors.white,
           primarySwatch: primaryBlack,
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
-          )),
+          ),
+        ),
+      ),
     ),
-  ));
+  );
 }
 
-Future fetchUserData() async {
-  SharedPreferences prefrs = await SharedPreferences.getInstance();
-  String? accessToken = prefrs.getString("accessToken");
-  try {
-    final response = await http
-        .get(Uri.parse('${dotenv.env["SERVER_URL"]}/user/profile'), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    });
-    print(response.body);
-    data = json.decode(response.body);
-    await prefrs.setString('username', data["username"]);
-  } catch (e) {
-    print("error: 토큰 만료됨");
-  }
-
-}

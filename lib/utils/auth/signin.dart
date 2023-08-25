@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 Future signIn(String id, String password) async {
-  print("ㅎㅇ");
   SharedPreferences prefrs = await SharedPreferences.getInstance();
   try {
     final response = await http.post(
@@ -25,8 +24,8 @@ Future signIn(String id, String password) async {
 
     await prefrs.setString("accessToken", createdAccessToken);
     await prefrs.setString("refreshToken", createdRefreshToken);
+    return true;
   } catch (e){
     return false;
   }
-  return true;
 }

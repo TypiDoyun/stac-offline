@@ -1,17 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:offline/userpages/login.dart';
 import 'package:offline/userpages/profile.dart';
-import 'package:offline/utils/auth/is-refresh-token-valid.dart';
-import 'package:offline/utils/auth/try-refresh-access-token.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-import 'login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/common/try-get-clothes-info.dart';
 import 'userhome.dart';
-
 
 //소비자 화면
 class UserMain extends StatefulWidget {
@@ -22,70 +21,92 @@ class UserMain extends StatefulWidget {
 }
 
 class UserMainState extends State<UserMain> {
-  dynamic data = null;
-
-  int select_index = 0;
+  int selectIndex = 0;
+  dynamic data;
 
   //네이게이션바 화면 순서
-  List<dynamic> body_item = [
+  List<dynamic> bodyItem = [
     const UserHomePage(),
     const MapPage(),
     const ProfilePage(),
   ];
 
-  bool? isValid;
+  List<dynamic> loginItem = [
+    const UserHomePage(),
+    const MapPage(),
+    const LoginPage(),
+  ];
+
+  dynamic accessToken ;
+  String? username;
+  String? id;
   @override
-  initState() {
+  void initState() {
     super.initState();
     (() async {
-      isValid = await isRefreshTokenValid();
+      SharedPreferences prefrs = await SharedPreferences.getInstance();
+      accessToken = prefrs.getString("accessToken");
+      await fetchUserData();
+      print(id);
     })();
   }
-
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
-        length: body_item.length,
-        child: Scaffold(
-          body: body_item.elementAt(select_index),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: select_index,
-            onTap: (index) async {
-              if (index == 2) { // MYPAGE 아이템이 눌렸을 때
-                if (isValid!) {
-                  print('1: $isValid}');
-                  setState(() {
-                    select_index = index;
-                  });
-                } else {
-                  print('2: $isValid}');
-                  Navigator.pushReplacement( // 로그인 페이지로 이동
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                }
-              } else {
-                print('3: $isValid}');
-                setState(() {
-                  select_index = index;
-                });
-              }
-            },
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: "HOME"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.location_on), label: "MAP"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: "MYPAGE"),
-            ],
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.grey,
-            type: BottomNavigationBarType.fixed,
-          ),
-        )
+      length: bodyItem.length,
+      child: Scaffold(
+        body: accessToken == null ? loginItem.elementAt(selectIndex) : bodyItem.elementAt(selectIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: selectIndex,
+          onTap: (index) {
+            setState(() {
+              selectIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "HOME",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.location_on),
+              label: "MAP",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "MYPAGE",
+            ),
+          ],
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          type: BottomNavigationBarType.fixed,
+        ),
+      ),
     );
+  }
+  Future fetchUserData() async {
+    SharedPreferences prefrs = await SharedPreferences.getInstance();
+    String? accessToken = prefrs.getString("accessToken");
+    if (accessToken == null) {
+      return;
+    }
+    try {
+      final response = await http
+          .get(Uri.parse('${dotenv.env["SERVER_URL"]}/user/profile'), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      });
+      // print(response.body);
+      data = json.decode(response.body);
+      await prefrs.setString('username', data["username"]);
+      await prefrs.setString('id', data["id"]);
+      await prefrs.setString('phoneNumber', data["phoneNumber"]);
+      await prefrs.setString('birthday', data["birthday"]);
+      return;
+    } catch (e) {
+      print("error: 토큰 만료됨");
+    }
   }
 }
 
@@ -98,25 +119,86 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NaverMap(
-        options: const NaverMapViewOptions(
-          initialCameraPosition: NCameraPosition(
-              target: NLatLng(37.532600, 127.024612),
-              zoom: 10,
-              bearing: 0,
-              tilt: 0,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          NaverMap(
+            options: const NaverMapViewOptions(
+              extent: NLatLngBounds(
+                southWest: NLatLng(31.43, 122.37),
+                northEast: NLatLng(44.35, 132.0),
+              ),
+              tiltGesturesEnable: false,
+              initialCameraPosition: NCameraPosition(
+                target: NLatLng(37.532600, 127.024612),
+                zoom: 10,
+                bearing: 0,
+                tilt: 0,
+              ),
+            ),
+            onMapReady: (controller) {
+              print("네이버 맵 로딩됨!");
+            },
           ),
-        ),
-        onMapReady: (controller) {
-          print("네이버 맵 로딩됨!");
-        },
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                height: 50,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.add),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.remove),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: () {},
+                backgroundColor: Colors.white,
+                shape: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.black,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: const Icon(
+                  Icons.refresh,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-

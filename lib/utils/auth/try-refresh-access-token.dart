@@ -20,7 +20,7 @@ tryRefreshAccessToken() async {
   if (expirationTime - 5000 > now) return; //<-여기에서 끝나면 유효한거지?
 
 
-  String? refreshToken = await prefrs.getString('refreshToken');
+  String? refreshToken = prefrs.getString('refreshToken');
   if (refreshToken == null) return;
 
   try {
@@ -29,7 +29,7 @@ tryRefreshAccessToken() async {
       'Accept': 'application/json',
       'Authorization': 'Bearer $refreshToken',
     });
-    print(response.body);
+    // print(response.body);
     dynamic tokens = json.decode(response.body);
     dynamic createdAccessToken = tokens["accessToken"];
     String createdRefreshToken = tokens["refreshToken"];

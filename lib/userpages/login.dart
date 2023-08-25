@@ -1,16 +1,10 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
 import 'package:offline/ownerpages/shopjoin.dart';
 import 'package:offline/userpages/usermain.dart';
 import 'package:offline/utils/auth/signin.dart';
-import 'package:http/http.dart' as http;
-import 'package:offline/utils/auth/try-refresh-access-token.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Widgets/roundedInputField.dart';
 import 'signup.dart';
 
@@ -21,18 +15,18 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+
 class _LoginPageState extends State<LoginPage> {
   final signKey = GlobalKey<FormState>();
-
   final loginInput = {
     "id": "",
     "password": "",
   };
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    bool signInCheck = true;
 
     return Background(
       child: Form(
@@ -94,11 +88,10 @@ class _LoginPageState extends State<LoginPage> {
                   final isValid = signKey.currentState!.validate();
                   if (isValid) {
                     signKey.currentState!.save();
-                    await signIn(loginInput["id"]!, loginInput["password"]!) ? Get.offAll(UserMain()) : Get.snackbar("다시 한번 확인하세요!","아이디 혹은 비밀번호가 잘못됬어요.");
+                    await signIn(loginInput["id"]!, loginInput["password"]!) ? Get.offAll(const UserMain()) : Get.snackbar("다시 한번 확인하세요!","아이디 혹은 비밀번호가 잘못됬어요.");
                     setState(() {
                     });
                   }
-                  // getUserFromServer(userToken);
                 },
                 child: const Text("로그인"),
               ),
@@ -108,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.to(SignUpPage());
+                    Get.to(const SignUpPage());
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
@@ -120,35 +113,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Get.to(ShopJoinPage());
+                    Get.to(const ShopJoinPage());
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: const Text("매장 등록하기"),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    SharedPreferences prefrs = await SharedPreferences.getInstance();
-                    await tryRefreshAccessToken();
-                    String? accessToken = prefrs.getString("accessToken");
-                    if (accessToken == null) return;
-                    try {
-                      final response = await http.get(
-                        Uri.parse('${dotenv.env["SERVER_URL"]}/user/profile'), // 서버의 엔드포인트 URL로 변경
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Accept': 'application/json',
-                          'Authorization': 'Bearer $accessToken',
-                        }
-                      );
-                      dynamic data = json.decode(response.body);
-                      print(data["username"]);
-                    } catch (e) {
-                      print("error: 토큰 만료됨");
-                    }
-                  },
-                  child: Text("데이터 불러오기"),
                 ),
               ],
             )

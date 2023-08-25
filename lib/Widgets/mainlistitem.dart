@@ -18,6 +18,7 @@ class UserHomeListItem extends StatelessWidget {
   final int clothesPrice;
   final int? saleValue;
   final bool saleBoolen;
+
   // final String shopName;
 
   var f = NumberFormat('###,###,###,###,###,###');
@@ -34,27 +35,33 @@ class UserHomeListItem extends StatelessWidget {
           AspectRatio(
             aspectRatio: 1,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(6.0),
               child: Image.asset(
                 clothesImgPath,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            clothesName,
-            style: const TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              clothesName,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                letterSpacing: -0.6,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Text(
-            "ㅎㅇ",
-            style: TextStyle(color: Colors.black54, fontSize: 12),
+          Container(
+            margin: const EdgeInsets.only(bottom: 3),
+            child: const Text(
+              "MOVEMENT",
+              style: TextStyle(color: Colors.black54, fontSize: 12),
+            ),
           ),
           Row(
             children: [
@@ -64,6 +71,7 @@ class UserHomeListItem extends StatelessWidget {
                   color: saleBoolen ? Colors.red : Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: -0.8,
                 ),
               ),
               SizedBox(
@@ -78,6 +86,7 @@ class UserHomeListItem extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: -0.7,
                 ),
               ),
             ],

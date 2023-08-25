@@ -53,7 +53,7 @@ class _OwnerPageState extends State<OwnerPage> {
                           setState(() {
                             clothesList.add(val);
                           });
-                        };
+                        }
                       },
                       child: const Text(
                         "옷 전시하기",
@@ -71,7 +71,7 @@ class _OwnerPageState extends State<OwnerPage> {
                         clothesPrice: clothesList[index]['price'],
                         clothesSize: clothesList[index]['size'],
                         clothesTag: clothesList[index]['tag'],
-                        clothesComment: clothesList[index]['comment'], onTapPage: ModityClothesInfo(),)))
+                        clothesComment: clothesList[index]['comment'], onTapPage: const ModityClothesInfo(),)))
           ],
         ),
       ),

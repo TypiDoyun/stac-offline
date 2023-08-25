@@ -1,9 +1,9 @@
 class User {
-  String username;
-  String id;
-  String password;
-  String phoneNumber;
-  String birthday;
+  String? username;
+  String? id;
+  String? password;
+  String? phoneNumber;
+  String? birthday;
 
   User({ required this.id, required this.username, required this.password, required this.phoneNumber, required this.birthday });
 
