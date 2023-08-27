@@ -299,6 +299,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
 
               // sendClothesDataToServer(clothesInfo);
               patchUserProfileImage();
+              (clothesInfo["size"] as List<String>).removeWhere((element) => element == "");
               print(clothesInfo["name"]);
               print(clothesInfo["price"]);
               print(clothesInfo["size"]);

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:intl/intl.dart';
 
 import '../classes/clothes.dart';
 
 class UserSelectedClothesPage extends StatefulWidget {
-  const UserSelectedClothesPage(Clothes test, {Key? key}) : super(key: key);
+  const UserSelectedClothesPage({Key? key, required this.clothesInfo})
+      : super(key: key);
+  final Clothes clothesInfo;
 
   @override
   State<UserSelectedClothesPage> createState() =>
-      _UserSelectedClothesPageState();
+      _UserSelectedClothesPageState(clothesInfo);
 }
 
 class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
@@ -19,6 +22,12 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
     'assets/images/clothesImage2.jpeg',
     'assets/images/clothesImage3.jpeg'
   ];
+
+  _UserSelectedClothesPageState(this.clothesInfo);
+
+  final Clothes clothesInfo;
+
+  var f = NumberFormat('###,###,###,###,###,###');
 
   @override
   void dispose() {
@@ -31,7 +40,6 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(test.name),
         shadowColor: Colors.white.withOpacity(0),
       ),
       body: Column(
@@ -39,13 +47,14 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AspectRatio(
                     aspectRatio: 1,
                     child: ClipRRect(
                       child: PageView.builder(
-                        itemCount: image.length,
+                        itemCount: clothesInfo.images.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Center(
                             child: Container(
@@ -54,7 +63,8 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                               // Make the height same as width for a square
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage(image[index]),
+                                  image:
+                                      NetworkImage(clothesInfo.images[index]),
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -66,7 +76,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.02,
+                        horizontal: size.width * 0.03,
                         vertical: size.height * 0.01),
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                     decoration: BoxDecoration(
@@ -89,8 +99,12 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                             height: size.width * 0.11,
                             width: size.width * 0.11,
                             decoration: BoxDecoration(
-                              color: Colors.black,
                               borderRadius: BorderRadius.circular(50),
+                              image: DecorationImage(
+                                image:
+                                    NetworkImage(clothesInfo.owner.shop.logo),
+                                fit: BoxFit.cover, // 이미지가 잘리지 않도록 설정
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -98,16 +112,16 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                           ),
                           SizedBox(
                             width: size.width * 0.52,
-                            child: const Column(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "MOVEMENT",
-                                  style: TextStyle(
+                                  clothesInfo.owner.shop.name,
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(
+                                const Text(
                                   "용인시 처인구 김량장동 어쩌구 301-112312",
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.grey),
@@ -149,13 +163,13 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.only(bottom: 15),
-                          child: const Text(
-                            'BIG EVENT [1+1] 남녀공용 테스트용 의류, 그레이 블랙 아이보리 테스트아아',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
+                          child: Text(
+                            clothesInfo.name,
+                            style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w400,
                               height: 1.5,
-                              letterSpacing: -0.8,
+                              letterSpacing: -0.3,
                             ),
                             maxLines: 3,
                           ),
@@ -163,36 +177,45 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                         SizedBox(
                           height: size.height * 0.03,
                         ),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Row(
                               children: [
                                 Text(
-                                  "20%",
+                                  clothesInfo.discountRate == 0
+                                      ? ''
+                                      : '${clothesInfo.discountRate}%',
                                   style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.red,
+                                    color: clothesInfo.discountRate == 0
+                                        ? Colors.black
+                                        : Colors.red,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: -0.8,
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 7,
+                                  width: clothesInfo.discountRate == 0 ? 0 : 3,
                                 ),
                                 Text(
-                                  '24,000원',
-                                  style: TextStyle(
-                                    fontSize: 24,
+                                  clothesInfo.discountRate == 0
+                                      ? '${f.format(clothesInfo.price)}원'
+                                      : '${f.format((clothesInfo.price - (clothesInfo.price * clothesInfo.discountRate / 100)))}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
-                                    letterSpacing: -0.8,
+                                    letterSpacing: -0.7,
                                   ),
                                 ),
                               ],
                             ),
                             Text(
-                              "30,000원",
+                              clothesInfo.discountRate == 0
+                                  ? ""
+                                  : "${f.format(clothesInfo.price)}원",
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 17,
@@ -207,7 +230,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.05,
+                          height: size.height * 0.03,
                         ),
                         Container(
                           margin: const EdgeInsets.all(13),
@@ -225,11 +248,11 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                             border: Border.all(color: Colors.black, width: 1),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                "Free",
+                                clothesInfo.size.join(", "),
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
@@ -240,7 +263,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.05,
+                          height: size.height * 0.07,
                         ),
                         Container(
                           margin: const EdgeInsets.all(15),
@@ -268,8 +291,8 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                               ),
                             ],
                           ),
-                          child: const Text(
-                            "옷 설명을 작성해주세요.옷 설명을 작성해주세요.옷 설명을 작성해주세요.옷 설명을 작성해주세요.옷 설명을 작성해주세요.옷 설명을 작성해주세요.",
+                          child: Text(
+                            "${clothesInfo.comment}",
                             style: TextStyle(fontWeight: FontWeight.w400),
                           ),
                         ),

@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import 'package:offline/userpages/login.dart';
 import 'package:offline/userpages/profile.dart';
@@ -27,9 +29,13 @@ class UserMainState extends State<UserMain> {
   int selectIndex = 0;
   dynamic data;
   List<Clothes>? test;
+  dynamic localLatitude;
+  dynamic localLongitude;
+
+
 
   List<double?> loca = [];
-  Location location = new Location();
+  Location location = Location();
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
 
@@ -49,7 +55,7 @@ class UserMainState extends State<UserMain> {
         return;
       }
     }
-    await location.getLocation().then((res) {
+    await location.getLocation().then((res) async {
       setState(() {
         loca.add(res.latitude);
         loca.add(res.longitude);
@@ -80,9 +86,29 @@ class UserMainState extends State<UserMain> {
   void initState() {
     super.initState();
     (() async {
-      SharedPreferences prefrs = await SharedPreferences.getInstance();
-      accessToken = prefrs.getString("accessToken");
+      print(localLatitude);
       await fetchUserData();
+      await _locateMe();
+      // if (localLatitude == null){
+      //   return Get.dialog(
+      //     (AlertDialog(
+      //       title: const Text("어디 계신가요?"),
+      //       content: Text("위치확인을 허용해주시면 동네 옷들을 보여드릴게요"),
+      //       actions: [
+      //         TextButton(
+      //             child: const Text("아니요"), onPressed: () async {}),
+      //         TextButton(
+      //           child: const Text("네"),
+      //           onPressed: () async {
+      //             Get.back();
+      //             print("ㅎㅇ");
+      //             await _locateMe();
+      //           },
+      //         ),
+      //       ],
+      //     )),
+      //   );
+      // }
     })();
   }
 

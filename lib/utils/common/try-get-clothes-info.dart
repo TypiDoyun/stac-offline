@@ -13,7 +13,6 @@ Future<List<Clothes>> getClothesInfo(double a, b) async {
     // dynamic clothesData = json.encode(response.body);
     List<dynamic> jsonData = json.decode(response.body);
     List<Clothes> test = jsonData.map((clothes) => Clothes.fromJson(clothes)).toList();
-    print("ㅎㅇ");
     return test;
     // clothesData.map((clothes) => Clothes.fromJson(clothes)) as List<Clothes>;
   } catch (e) {

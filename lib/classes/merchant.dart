@@ -3,9 +3,10 @@ import "clothes.dart";
 import "user.dart";
 
 class Merchant extends User {
-  String residentNumber;
+  String residentNumber, address;
   List<double> location;
-  Shop? shop;
+  Shop shop;
+
 
 
   Merchant({
@@ -15,6 +16,7 @@ class Merchant extends User {
     required birthday,
     required this.residentNumber,
     required this.location,
+    required this.address,
     required this.shop,
   }) : super(id: id, username: username, phoneNumber: phoneNumber, birthday: birthday);
 
@@ -26,6 +28,7 @@ class Merchant extends User {
     birthday: json["birthday"],
     residentNumber: json["residentNumber"],
     location: List<double>.from(json["location"].map((item) => item.toDouble())),
-    shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
+    address: json["address"],
+    shop: Shop.fromJson(json["shop"]),
   );
 }

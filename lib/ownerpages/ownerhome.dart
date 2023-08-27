@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/ownerpages/modifyclothesinfo.dart';
+import 'package:offline/utils/common/try-get-clothes-info.dart';
 
 import 'clothesupload.dart';
 import '../Widgets/ownerclotheslistitem.dart';
@@ -14,9 +15,16 @@ class OwnerPage extends StatefulWidget {
 }
 
 class _OwnerPageState extends State<OwnerPage> {
-  List<Map> clothesList = [
-  ];
+  List<Map> clothesList = [];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    (() async {
+      // await getClothesInfo(a, b)
+    }());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +34,6 @@ class _OwnerPageState extends State<OwnerPage> {
           slivers: [
             const SliverAppBar(
               toolbarHeight: 80,
-              title: Text(
-                "어서오세요 '가게이름' 사장님!",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 23,
-                    fontWeight: FontWeight.w700),
-              ),
               backgroundColor: Colors.white,
               pinned: false,
             ),
@@ -48,7 +49,8 @@ class _OwnerPageState extends State<OwnerPage> {
                         ),
                       ),
                       onPressed: () async {
-                        final val = await Get.to(() => const ClothesUploadPage());
+                        final val =
+                            await Get.to(() => const ClothesUploadPage());
                         if (val != null) {
                           setState(() {
                             clothesList.add(val);
@@ -64,14 +66,18 @@ class _OwnerPageState extends State<OwnerPage> {
               pinned: true,
             ),
             SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    childCount: clothesList.length,
-                        (context, index) => OwnerClothesListItem(
-                        clothesName: clothesList[index]['name'],
-                        clothesPrice: clothesList[index]['price'],
-                        clothesSize: clothesList[index]['size'],
-                        clothesTag: clothesList[index]['tag'],
-                        clothesComment: clothesList[index]['comment'], onTapPage: const ModityClothesInfo(),)))
+              delegate: SliverChildBuilderDelegate(
+                childCount: clothesList.length,
+                (context, index) => OwnerClothesListItem(
+                  clothesName: clothesList[index]['name'],
+                  clothesPrice: clothesList[index]['price'],
+                  clothesSize: clothesList[index]['size'],
+                  clothesTag: clothesList[index]['tag'],
+                  clothesComment: clothesList[index]['comment'],
+                  onTapPage: const ModityClothesInfo(),
+                ),
+              ),
+            ),
           ],
         ),
       ),

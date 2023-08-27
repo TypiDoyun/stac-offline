@@ -1,13 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:offline/Widgets/background.dart';
 import 'package:offline/ownerpages/ownerhome.dart';
 import 'package:offline/utils/common/get-owner-info.dart';
 
 import '../Widgets/roundedInputField.dart';
-
-
-
 
 class ShopJoinPage extends StatefulWidget {
   const ShopJoinPage({Key? key}) : super(key: key);
@@ -25,9 +22,9 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
     "birth": "",
   };
 
-  // final BusinessRegistration registration = BusinessRegistration("0000000000", "20000101", ["홍길동", "홍길동전"], "(주)테스트", "0000000000000","","","");
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -45,90 +42,113 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
         child: Form(
           key: shopJoinformKey,
-          child: ListView(
-            children: [
-              roundedInputField(
-                  color: Colors.black12,
-                  hintText: "등록 번호 입력",
-                  keyboardType: TextInputType.number,
-                  enabled: true,
-                  obscureText: true,
-                  onSaved: (val) {
-                    test["number"] = val;
-                  },
-                  validator: (val) {
-                    return null;
-                  },
-                  icon: Icons.lock
-              ),
-              roundedInputField(
-                  color: Colors.black12,
-                  hintText: "대표자 성함 입력",
-                  keyboardType: TextInputType.text,
-                  enabled: true,
-                  obscureText: true,
-                  onSaved: (val) {
-                    test["name"] = val;
-                  },
-                  validator: (val) {
-                    return null;
-                  },
-                  icon: Icons.lock
-              ),
-              roundedInputField(
-                  color: Colors.black12,
-                  hintText: "개업 년월일",
-                  keyboardType: TextInputType.number,
-                  enabled: true,
-                  obscureText: true,
-                  onSaved: (val) {
-                    test["birth"] = val;
-                  },
-                  validator: (val) {
-                    return null;
-                  },
-                  icon: Icons.lock
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    //사업자 등록 번호 조회 API
-                    final isValid = shopJoinformKey.currentState!.validate();
-                    if (isValid) {
-                      shopJoinformKey.currentState!.save();
-                      await getOwnerInfo(test["number"], test["name"], test["birth"]);
-                    }
-                    // checkBusinessRegistration(registration);
-                  },
-                  child: const Text("매장 조회하기",
-                    style: TextStyle(
+          child: Background(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                roundedInputField(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    hintText: "' - '는 생략해주세요.",
+                    keyboardType: TextInputType.number,
+                    enabled: true,
+                    obscureText: true,
+                    onSaved: (val) {
+                      test["number"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.lock),
+                SizedBox(
+                  height: size.width * 0.04,
+                ),
+                roundedInputField(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    hintText: "ex)홍길동",
+                    keyboardType: TextInputType.text,
+                    enabled: true,
+                    obscureText: true,
+                    onSaved: (val) {
+                      test["name"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.lock),
+                SizedBox(
+                  height: size.width * 0.04,
+                ),
+                roundedInputField(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    hintText: "ex)00000000",
+                    keyboardType: TextInputType.number,
+                    enabled: true,
+                    obscureText: true,
+                    onSaved: (val) {
+                      test["birth"] = val;
+                    },
+                    validator: (val) {
+                      return null;
+                    },
+                    icon: Icons.lock),
+                SizedBox(
+                  height: size.width * 0.04,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  height: size.width * 0.15,
+                  width: size.width * 0.5,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
                     ),
-                  )),
-            ],
+                    onPressed: () async {
+                      //사업자 등록 번호 조회 API
+                      final isValid = shopJoinformKey.currentState!.validate();
+                      if (isValid) {
+                        shopJoinformKey.currentState!.save();
+                        await getOwnerInfo(
+                            test["number"], test["name"], test["birth"]);
+                      }
+                      // checkBusinessRegistration(registration);
+                    },
+                    child: const Text(
+                      "매장 조회하기",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
-          child: SizedBox(
-        height: 60,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero, //볼더 제거
+        child: SizedBox(
+          height: 60,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, //볼더 제거
+              ),
             ),
-          ),
-          onPressed: () {
-            Get.to(() => const OwnerPage());
-            // Get.offall(() => const OwnerPage());
-          },
-          child: const Text(
-            "매장 가입하기.",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+            onPressed: () {
+              Get.to(() => const OwnerPage());
+              // Get.offall(() => const OwnerPage());
+            },
+            child: const Text(
+              "매장 가입하기.",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 }

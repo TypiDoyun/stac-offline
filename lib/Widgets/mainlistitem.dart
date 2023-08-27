@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:offline/userpages/userselectedclothes.dart';
 
 class UserHomeListItem extends StatelessWidget {
   UserHomeListItem({
@@ -10,10 +8,10 @@ class UserHomeListItem extends StatelessWidget {
     required this.clothesPrice,
     required this.clothesImgPath,
     required this.discountRate,
-    required this.onTap,
+    required this.onTap, required this.shopName,
   }) : super(key: key);
 
-  final String clothesName, clothesImgPath;
+  final String clothesName, clothesImgPath, shopName;
   final int clothesPrice;
   final int? discountRate;
   final onTap;
@@ -22,11 +20,12 @@ class UserHomeListItem extends StatelessWidget {
 
   var f = NumberFormat('###,###,###,###,###,###');
 
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onTap;
+        onTap();
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +41,39 @@ class UserHomeListItem extends StatelessWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: EdgeInsets.only(top: 8, bottom: 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  discountRate != 0 ? '$discountRate%' : '',
+                  style: TextStyle(
+                    color: discountRate != 0 ? Colors.red : Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.8,
+                  ),
+                ),
+                SizedBox(
+                  width: discountRate != 0 ? 5 : 0,
+                ),
+                Text(
+                  discountRate != 0
+                      ? '${f.format(clothesPrice - (clothesPrice * discountRate! / 100))}원'
+                      : '${f.format(clothesPrice)}원',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.6,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          Container(
             child: Text(
               clothesName,
               style: const TextStyle(
@@ -55,41 +86,14 @@ class UserHomeListItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          SizedBox(height: 5,),
           Container(
-            margin: const EdgeInsets.only(bottom: 3),
-            child: const Text(
-              "MOVEMENT",
-              style: TextStyle(color: Colors.black54, fontSize: 12),
+            child: Text(
+              shopName,
+              style: TextStyle(color: Colors.black54, fontSize: 11, letterSpacing: -0.6,),
             ),
           ),
-          Row(
-            children: [
-              Text(
-                discountRate != null ? '$discountRate%' : '',
-                style: TextStyle(
-                  color: discountRate != null ? Colors.red : Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.8,
-                ),
-              ),
-              SizedBox(
-                width: discountRate != null ? 3 : 0,
-              ),
-              Text(
-                discountRate != null
-                    ? f.format(
-                        (clothesPrice - (clothesPrice * discountRate! / 100)))
-                    : f.format(clothesPrice),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.7,
-                ),
-              ),
-            ],
-          ),
+
         ],
       ),
     );
