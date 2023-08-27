@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/ownerpages/ownerhome.dart';
+import 'package:offline/utils/common/get-owner-info.dart';
 
 import '../Widgets/roundedInputField.dart';
 
@@ -17,6 +18,12 @@ class ShopJoinPage extends StatefulWidget {
 
 class _ShopJoinPageState extends State<ShopJoinPage> {
   final shopJoinformKey = GlobalKey<FormState>();
+
+  Map test = {
+    "number": "",
+    "name": "",
+    "birth": "",
+  };
 
   // final BusinessRegistration registration = BusinessRegistration("0000000000", "20000101", ["홍길동", "홍길동전"], "(주)테스트", "0000000000000","","","");
   @override
@@ -42,11 +49,40 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
             children: [
               roundedInputField(
                   color: Colors.black12,
-                  hintText: "사업자 등록 번호 입력",
+                  hintText: "등록 번호 입력",
                   keyboardType: TextInputType.number,
                   enabled: true,
                   obscureText: true,
                   onSaved: (val) {
+                    test["number"] = val;
+                  },
+                  validator: (val) {
+                    return null;
+                  },
+                  icon: Icons.lock
+              ),
+              roundedInputField(
+                  color: Colors.black12,
+                  hintText: "대표자 성함 입력",
+                  keyboardType: TextInputType.text,
+                  enabled: true,
+                  obscureText: true,
+                  onSaved: (val) {
+                    test["name"] = val;
+                  },
+                  validator: (val) {
+                    return null;
+                  },
+                  icon: Icons.lock
+              ),
+              roundedInputField(
+                  color: Colors.black12,
+                  hintText: "개업 년월일",
+                  keyboardType: TextInputType.number,
+                  enabled: true,
+                  obscureText: true,
+                  onSaved: (val) {
+                    test["birth"] = val;
                   },
                   validator: (val) {
                     return null;
@@ -54,11 +90,12 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                   icon: Icons.lock
               ),
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     //사업자 등록 번호 조회 API
                     final isValid = shopJoinformKey.currentState!.validate();
                     if (isValid) {
                       shopJoinformKey.currentState!.save();
+                      await getOwnerInfo(test["number"], test["name"], test["birth"]);
                     }
                     // checkBusinessRegistration(registration);
                   },

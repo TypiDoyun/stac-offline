@@ -59,9 +59,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     "name": "",
     "price": 0,
     "size": 'Free',
-    "tag": "",
     "comment": "",
-    "saleValue": 0,
+    "discountRate": 0,
     "time": DateTime.now().toIso8601String(),
   };
 
@@ -187,7 +186,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   onChanged: (val) {
                     setState(() {
                       num parsedValue =
-                          double.tryParse(val) ?? 0; // 문자열을 숫자로 변환 (기본값은 0)
+                          double.tryParse(val) ?? 0;
                       clothesInfo["price"] = parsedValue;
                     });
                   },
@@ -219,7 +218,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                             isCheckboxChecked = value!;
                             isCheckboxChecked
                                 ? null
-                                : clothesInfo["saleValue"] = 0;
+                                : clothesInfo["discountRate"] = [];
                           });
                         },
                       ),
@@ -241,13 +240,13 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                             setState(() {
                               num discountValue = double.tryParse(val) ??
                                   0; // 문자열을 숫자로 변환 (기본값은 0)
-                              clothesInfo["saleValue"] = discountValue;
+                              clothesInfo["discountRate"] = discountValue;
                             });
                           },
                           onSaved: (val) {
-                            num parsedValue =
-                                int.tryParse(val) ?? 0; // 문자열을 숫자로 변환 (기본값은 0)
-                            clothesInfo["price"] = parsedValue;
+                            // num parsedValue =
+                            //     int.tryParse(val) ?? 0; // 문자열을 숫자로 변환 (기본값은 0)
+                            // clothesInfo["discountRate"] = parsedValue;
                           },
                           validator: (val) {
                             return null;
@@ -255,26 +254,13 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                           icon: Icons.discount),
                       isCheckboxChecked
                           ? Text(
-                              '원가 : ${f.format(clothesInfo["price"])}\n세일가 : ${f.format((clothesInfo["price"] - (clothesInfo["price"] * clothesInfo["saleValue"]! / 100)))}',
+                              '원가 : ${f.format(clothesInfo["price"])}\n세일가 : ${f.format((clothesInfo["price"] - clothesInfo["discountRate"] * (clothesInfo["price"]! / 100)))}',
                               // 저장된 가격 출력, 없을 경우 빈 문자열 출력
                               style: const TextStyle(fontSize: 16),
                             )
                           : const SizedBox(),
                     ],
                   ),
-                ),
-                roundedInputField(
-                  color: Colors.black12,
-                  hintText: "태그",
-                  keyboardType: TextInputType.text,
-                  enabled: true,
-                  onSaved: (val) {
-                    clothesInfo["tags"] = val;
-                  },
-                  validator: (val) {
-                    return null;
-                  },
-                  icon: Icons.tag,
                 ),
                 roundedInputField(
                   color: Colors.black12,
@@ -308,20 +294,17 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                 borderRadius: BorderRadius.zero,
               ),
             ),
-            onPressed: () {
-              _tryValidation();
-              final isValid = formkey.currentState!.validate();
-              if (isValid) {
-                formkey.currentState!.save();
-              }
+            onPressed: () async {
+              // await _tryValidation();
+
               // sendClothesDataToServer(clothesInfo);
               patchUserProfileImage();
-              print(clothesInfo["name"].runtimeType);
-              print(clothesInfo["price"].runtimeType);
-              print(clothesInfo["comment"].runtimeType);
-              print(clothesInfo["tags"].runtimeType);
-              print(clothesInfo["saleValue"].runtimeType);
-              print(clothesInfo["time"].runtimeType);
+              print(clothesInfo["name"]);
+              print(clothesInfo["price"]);
+              print(clothesInfo["size"]);
+              print(clothesInfo["comment"]);
+              print(clothesInfo["discountRate"]);
+              print(clothesInfo["time"]);
               Get.back(result: clothesInfo);
             },
             child: const Text(

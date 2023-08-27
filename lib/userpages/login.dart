@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
@@ -26,7 +25,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
 
     return Background(
       child: Form(
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             roundedInputField(
-              color: Colors.black12,
+              color: Theme.of(context).colorScheme.tertiary,
               hintText: "아이디",
               keyboardType: TextInputType.visiblePassword,
               enabled: true,
@@ -58,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 10,
             ),
             roundedInputField(
-                color: Colors.black12,
+                color: Theme.of(context).colorScheme.tertiary,
                 hintText: "비밀번호",
                 keyboardType: TextInputType.visiblePassword,
                 enabled: true,
@@ -79,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
               width: size.width * 0.8,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), //볼더 제거
                   ),
@@ -88,12 +90,13 @@ class _LoginPageState extends State<LoginPage> {
                   final isValid = signKey.currentState!.validate();
                   if (isValid) {
                     signKey.currentState!.save();
-                    await signIn(loginInput["id"]!, loginInput["password"]!) ? Get.offAll(const UserMain()) : Get.snackbar("다시 한번 확인하세요!","아이디 혹은 비밀번호가 잘못됬어요.");
-                    setState(() {
-                    });
+                    await signIn(loginInput["id"]!, loginInput["password"]!)
+                        ? Get.offAll(const UserMain())
+                        : Get.snackbar("다시 한번 확인하세요!", "아이디 혹은 비밀번호가 잘못됬어요.");
+                    setState(() {});
                   }
                 },
-                child: const Text("로그인"),
+                child: const Text("로그인", style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),),
               ),
             ),
             Row(
@@ -109,7 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.17,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.17,
                 ),
                 InkWell(
                   onTap: () {

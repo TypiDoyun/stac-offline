@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
+import '../classes/clothes.dart';
+
 class UserSelectedClothesPage extends StatefulWidget {
-  const UserSelectedClothesPage({Key? key}) : super(key: key);
+  const UserSelectedClothesPage(Clothes test, {Key? key}) : super(key: key);
 
   @override
   State<UserSelectedClothesPage> createState() =>
@@ -29,7 +31,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Detail'),
+        title: const Text(test.name),
         shadowColor: Colors.white.withOpacity(0),
       ),
       body: Column(

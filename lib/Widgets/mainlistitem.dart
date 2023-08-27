@@ -9,15 +9,14 @@ class UserHomeListItem extends StatelessWidget {
     required this.clothesName,
     required this.clothesPrice,
     required this.clothesImgPath,
-    this.saleValue,
-    required this.saleBoolen,
-    // required this.shopName,
+    required this.discountRate,
+    required this.onTap,
   }) : super(key: key);
 
   final String clothesName, clothesImgPath;
   final int clothesPrice;
-  final int? saleValue;
-  final bool saleBoolen;
+  final int? discountRate;
+  final onTap;
 
   // final String shopName;
 
@@ -27,7 +26,7 @@ class UserHomeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const UserSelectedClothesPage());
+        onTap;
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +35,7 @@ class UserHomeListItem extends StatelessWidget {
             aspectRatio: 1,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6.0),
-              child: Image.asset(
+              child: Image.network(
                 clothesImgPath,
                 fit: BoxFit.cover,
               ),
@@ -66,21 +65,21 @@ class UserHomeListItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                saleBoolen ? '$saleValue%' : '',
+                discountRate != null ? '$discountRate%' : '',
                 style: TextStyle(
-                  color: saleBoolen ? Colors.red : Colors.black,
+                  color: discountRate != null ? Colors.red : Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.8,
                 ),
               ),
               SizedBox(
-                width: saleBoolen ? 3 : 0,
+                width: discountRate != null ? 3 : 0,
               ),
               Text(
-                saleBoolen
+                discountRate != null
                     ? f.format(
-                        (clothesPrice - (clothesPrice * saleValue! / 100)))
+                        (clothesPrice - (clothesPrice * discountRate! / 100)))
                     : f.format(clothesPrice),
                 style: const TextStyle(
                   color: Colors.black,

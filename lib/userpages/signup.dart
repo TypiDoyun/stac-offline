@@ -112,6 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         shadowColor: Colors.white.withOpacity(0),
       ),

@@ -7,6 +7,8 @@ import 'package:offline/utils/auth/try-refresh-access-token.dart';
 import 'package:offline/utils/common/getPosition.dart';
 import 'package:offline/utils/common/try-get-clothes-info.dart';
 
+import 'classes/clothes.dart';
+import 'theme/light-theme.dart';
 import 'userpages/usermain.dart';
 
 //black을 MaterialColor로 변경
@@ -28,30 +30,19 @@ const int _blackPrimaryValue = 0xFF000000;
 
 void main() async {
   // 앱 실행 시 한번만 실행
-  await dotenv.load(fileName: "assets/config/.env");  // <- IP주소
+  await dotenv.load(fileName: "assets/config/.env"); // <- IP주소
   WidgetsFlutterBinding.ensureInitialized(); // <-네이버 지도 API
   await NaverMapSdk.instance.initialize(clientId: '1iqz7k390v'); // <-네이버 지도 API
   await tryRefreshAccessToken(); // <-로컬 저장소에 있는 엑세스토큰의 유효기간 확인
-  await getClothesInfo("37.532600", "127.024612");
 
-  return runApp(
-    GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus(); // <-화면 터치 시 키보드 해제
-      },
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const UserMain(),
-        theme: ThemeData(  // 디자인 요소
-          scaffoldBackgroundColor: Colors.white,
-          primarySwatch: primaryBlack,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-          ),
-        ),
-      ),
+  return runApp(GestureDetector(
+    onTap: () {
+      FocusManager.instance.primaryFocus?.unfocus(); // <-화면 터치 시 키보드 해제
+    },
+    child: GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const UserMain(),
+      theme: lightTheme,
     ),
-  );
+  ));
 }
-

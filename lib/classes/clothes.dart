@@ -1,13 +1,12 @@
 import "merchant.dart";
 
 class Clothes {
-  String name, comment, price, id;
-  List<String> images;
-  int discountRate, size;
+  String name, comment, size;
+  List<dynamic> images;
+  int discountRate, price;
   Merchant owner;
 
   Clothes({
-    required this.id,
     required this.name,
     required this.images,
     required this.size,
@@ -17,14 +16,17 @@ class Clothes {
     required this.owner,
   });
 
-  factory Clothes.fromJson(Map<String, dynamic> json) => Clothes(
-    id: json["id"],
-    name: json["name"],
-    images: json["images"],
-    size: json["size"],
-    comment: json["comment"],
-    price: json["price"],
-    discountRate: json["discountRate"],
-    owner: Merchant.fromJson(json["owner"]),
-  );
+  factory Clothes.fromJson(Map<String, dynamic> json) {
+    List<String> images = List<String>.from(json["images"]);
+    Clothes clothes = Clothes(
+      name: json["name"],
+      images: images,
+      size: json["size"],
+      comment: json["comment"],
+      price: json["price"],
+      discountRate: json["discountRate"],
+      owner: Merchant.fromJson(json["owner"]),
+    );
+    return clothes;
+  }
 }

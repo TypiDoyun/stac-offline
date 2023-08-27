@@ -4,12 +4,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+
 import 'package:offline/userpages/login.dart';
 import 'package:offline/userpages/profile.dart';
+import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
+import 'package:offline/utils/common/try-get-clothes-info.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/common/try-get-clothes-info.dart';
+import '../classes/clothes.dart';
 import 'userhome.dart';
 
 //소비자 화면
@@ -23,6 +26,37 @@ class UserMain extends StatefulWidget {
 class UserMainState extends State<UserMain> {
   int selectIndex = 0;
   dynamic data;
+  List<Clothes>? test;
+
+  List<double?> loca = [];
+  Location location = new Location();
+  bool? _serviceEnabled;
+  PermissionStatus? _permissionGranted;
+
+  _locateMe() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled!) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled!) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    await location.getLocation().then((res) {
+      setState(() {
+        loca.add(res.latitude);
+        loca.add(res.longitude);
+        print(loca);
+      });
+    });
+  }
 
   //네이게이션바 화면 순서
   List<dynamic> bodyItem = [
@@ -37,9 +71,11 @@ class UserMainState extends State<UserMain> {
     const LoginPage(),
   ];
 
-  dynamic accessToken ;
+  dynamic accessToken;
+
   String? username;
   String? id;
+
   @override
   void initState() {
     super.initState();
@@ -47,15 +83,17 @@ class UserMainState extends State<UserMain> {
       SharedPreferences prefrs = await SharedPreferences.getInstance();
       accessToken = prefrs.getString("accessToken");
       await fetchUserData();
-      print(id);
     })();
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: bodyItem.length,
       child: Scaffold(
-        body: accessToken == null ? loginItem.elementAt(selectIndex) : bodyItem.elementAt(selectIndex),
+        body: accessToken == null
+            ? loginItem.elementAt(selectIndex)
+            : bodyItem.elementAt(selectIndex),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectIndex,
           onTap: (index) {
@@ -84,6 +122,7 @@ class UserMainState extends State<UserMain> {
       ),
     );
   }
+
   Future fetchUserData() async {
     SharedPreferences prefrs = await SharedPreferences.getInstance();
     String? accessToken = prefrs.getString("accessToken");
@@ -97,7 +136,6 @@ class UserMainState extends State<UserMain> {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
       });
-      // print(response.body);
       data = json.decode(response.body);
       await prefrs.setString('username', data["username"]);
       await prefrs.setString('id', data["id"]);
@@ -119,7 +157,6 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,11 +165,7 @@ class MapPageState extends State<MapPage> {
         children: [
           NaverMap(
             options: const NaverMapViewOptions(
-              extent: NLatLngBounds(
-                southWest: NLatLng(31.43, 122.37),
-                northEast: NLatLng(44.35, 132.0),
-              ),
-              tiltGesturesEnable: false,
+              locationButtonEnable: true,
               initialCameraPosition: NCameraPosition(
                 target: NLatLng(37.532600, 127.024612),
                 zoom: 10,
@@ -181,7 +214,9 @@ class MapPageState extends State<MapPage> {
               margin: const EdgeInsets.all(20),
               child: FloatingActionButton(
                 elevation: 0,
-                onPressed: () {},
+                onPressed: () async {
+                  await getClothesInfo(12, 21);
+                },
                 backgroundColor: Colors.white,
                 shape: OutlineInputBorder(
                   borderSide: const BorderSide(
