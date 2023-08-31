@@ -114,6 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         shadowColor: Colors.white.withOpacity(0),
       ),
       body: ListView(children: [
