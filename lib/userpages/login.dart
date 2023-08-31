@@ -134,3 +134,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+class LoginInputWidget extends StatelessWidget {
+  const LoginInputWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 15),
+      width: size.width * 0.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(29),
+      ),
+      child: TextFormField(
+
+      ),
+    );
+  }
+}

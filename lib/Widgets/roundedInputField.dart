@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 roundedInputField({
   required String hintText,
-  required TextInputType keyboardType,
-  required FormFieldSetter onSaved,
   required FormFieldValidator validator,
   required IconData icon,
-  required bool enabled,
   required Color color,
+  bool? enabled,
+  FormFieldSetter? onSaved,
+  TextInputType? keyboardType,
   TextEditingController? controller,
   bool obscureText = false,
   Function(String)? onChanged,
@@ -16,7 +16,6 @@ roundedInputField({
     color: color,
     child: TextFormField(
       controller: controller,
-      onSaved: onSaved,
       onChanged: onChanged,
       validator: validator,
       autovalidateMode: AutovalidateMode.always,
@@ -36,7 +35,12 @@ class TextFieldContainer extends StatelessWidget {
   final Widget child;
   final Color color;
 
-  const TextFieldContainer({Key? key, required this.child, required this.color}) : super(key: key);
+  const TextFieldContainer(
+      {Key? key,
+      required this.child,
+      required this.color,
+      })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

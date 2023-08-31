@@ -1,6 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
+import 'package:offline/Widgets/margintextinputwidget.dart';
+import 'package:offline/ownerpages/ownerhome.dart';
 import 'package:offline/utils/common/get-owner-info.dart';
 
 import '../Widgets/roundedInputField.dart';
@@ -18,9 +21,15 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
 
   final PageController _pageController = PageController(initialPage: 0);
 
-  TextEditingController residentNumber = TextEditingController();
-  TextEditingController merchantname = TextEditingController();
-
+  Map<String, TextEditingController> merchantControllers = {
+    "residentNumber": TextEditingController(),
+    "merchantname": TextEditingController(),
+    "merchantbirthday": TextEditingController(),
+    "id": TextEditingController(),
+    "password": TextEditingController(),
+    "location": TextEditingController(),
+    "phoneNumber": TextEditingController(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -48,87 +57,95 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
             child: PageView(
               controller: _pageController,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                ListView(
                   children: [
-                    roundedInputField(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        hintText: "' - '는 생략해주세요.",
-                        keyboardType: TextInputType.number,
-                        enabled: true,
-                        obscureText: true,
-                        onSaved: (val) {
-                          residentNumber = val;
-                        },
-                        validator: (val) {
-                          return null;
-                        },
-                        icon: Icons.lock),
                     SizedBox(
-                      height: size.width * 0.04,
-                    ),
-                    roundedInputField(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        hintText: "ex)홍길동",
-                        keyboardType: TextInputType.text,
-                        enabled: true,
-                        obscureText: true,
-                        onSaved: (val) {
-                        },
-                        validator: (val) {
-                          return null;
-                        },
-                        icon: Icons.lock),
-                    SizedBox(
-                      height: size.width * 0.04,
-                    ),
-                    roundedInputField(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        hintText: "ex)00000000",
-                        keyboardType: TextInputType.number,
-                        enabled: true,
-                        obscureText: true,
-                        onSaved: (val) {
-                        },
-                        validator: (val) {
-                          return null;
-                        },
-                        icon: Icons.lock),
-                    SizedBox(
-                      height: size.width * 0.04,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      height: size.width * 0.15,
-                      width: size.width * 0.5,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: () async {
-                          //사업자 등록 번호 조회 API
-                          final isValid = shopJoinformKey.currentState!.validate();
-                          if (isValid) {
-                            shopJoinformKey.currentState!.save();
-                            await getOwnerInfo(
-                            );
-                          }
-                          // checkBusinessRegistration(registration);
-                        },
-                        child: const Text(
-                          "매장 조회하기",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          marginTextInputWidget(
+                            topText: "사업자 등록 번호",
+                            controller: merchantControllers["residentNumber"],
+                            color: Theme.of(context).colorScheme.tertiary,
+                            hintText: "' - '는 생략해주세요.",
+                            keyboardType: TextInputType.datetime,
+                            validator: (val) {
+                              return null;
+                            },
+                            icon: Icons.paste,
                           ),
-                        ),
+                          marginTextInputWidget(
+                            topText: "대표자 성함",
+                            controller: merchantControllers["merchantName"],
+                            color: Theme.of(context).colorScheme.tertiary,
+                            hintText: "' - '는 생략해주세요.",
+                            validator: (val) {
+                              return null;
+                            },
+                            icon: Icons.paste,
+                          ),
+                          marginTextInputWidget(
+                            topText: "대표자 생년월일",
+                            color: Theme.of(context).colorScheme.tertiary,
+                            hintText: "ex)00000000",
+                            keyboardType: TextInputType.number,
+                            enabled: true,
+                            obscureText: true,
+                            validator: (val) {
+                              return null;
+                            },
+                            icon: Icons.lock,
+                          ),
+                          SizedBox(
+                            height: size.width * 0.04,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            height: size.width * 0.15,
+                            width: size.width * 0.5,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                              ),
+                              onPressed: () async {
+                                //사업자 등록 번호 조회 API
+                                final isValid =
+                                    shopJoinformKey.currentState!.validate();
+                                if (isValid) {
+                                  shopJoinformKey.currentState!.save();
+                                  // await getOwnerInfo(
+                                  // );
+                                }
+                                // checkBusinessRegistration(registration);
+                              },
+                              child: const Text(
+                                "매장 조회하기",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
                 ),
                 Column(
                   children: [
-                    signInputField(
+                    Container(
+                      child: Column(
+                        children: [
+                          Text("")
+                        ],
+                      )
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    marginTextInputWidget(
                       topText: "비밀번호",
                       maxLength: 15,
                       color: Colors.white,
@@ -152,7 +169,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                       },
                       icon: Icons.lock,
                     ),
-                    signInputField(
+                    marginTextInputWidget(
                       topText: "비밀번호 확인",
                       maxLength: 15,
                       color: Colors.white,
@@ -173,9 +190,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                     ),
                   ],
                 ),
+
               ],
             ),
-          )
+          ),
         ),
       ),
     );

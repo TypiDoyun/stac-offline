@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../Widgets/User.dart';
 import '../Widgets/roundedInputField.dart';
+import '../Widgets/margintextinputwidget.dart';
 import '../servercontroller.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController userNameCont = TextEditingController();
-  final TextEditingController userIdCont = TextEditingController();
+  TextEditingController userIdCont = TextEditingController();
   final TextEditingController userPasswordCont = TextEditingController();
   final TextEditingController userPhonenumberCont = TextEditingController();
   final TextEditingController userBirthCont = TextEditingController();
@@ -26,7 +27,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final signKey = GlobalKey<FormState>();
 
-////
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
@@ -65,25 +65,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   RegExp specialCharRegexNum = RegExp(r'[0-9]');
 
-  FocusNode focusNode1 = FocusNode();
-  FocusNode focusNode2 = FocusNode();
-  FocusNode focusNode3 = FocusNode();
-
-  @override
-  void dispose() {
-    userNameCont.dispose();
-    userIdCont.dispose();
-    userPasswordCont.dispose();
-    focusNode1.dispose();
-    focusNode2.dispose();
-    focusNode3.dispose();
-    super.dispose();
-  }
-
-  void test(String value) {
-    focusNode1.unfocus();
-    FocusScope.of(context).requestFocus(focusNode2);
-  }
 
   Future<void> checkUserId(String data) async {
     try {
@@ -128,7 +109,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         SizedBox(
-          height: size.width,
+          height: size.height * 0.7,
           width: size.width,
           child: Form(
             key: signKey,
@@ -143,48 +124,36 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 Column(
                   children: [
-                    signInputField(
+                    marginTextInputWidget(
                       controller: userNameCont,
-                      focusNode: focusNode1,
                       topText: "닉네임",
                       color: Colors.white,
                       hintText: "Nickname",
                       counterText: '',
-                      keyboardType: TextInputType.text,
                       maxLength: 8,
-                      enabled: true,
                       inputFomatters: [
                         FilteringTextInputFormatter(
                             RegExp('[a-z A-Zㄱ-ㅎ|가-힣|·|：]'),
                             allow: true)
                       ],
-                      onChanged: (val) {
-                        // userInfoInput["userName"] = val;
-                      },
                       validator: (val) {
                         if (val.isEmpty) {
-                          return "닉네임을 입력해주세요.";
+                          return "3~8글자로 입력해주세요";
                         }
                         if (val.length < 3) {
                           return "3글자 이상 입력해주세요.";
                         }
                         return null;
                       },
-                      onFieldSubmitted: test,
                       icon: Icons.person_outline,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    signInputField(
-                      focusNode: focusNode2,
+                    marginTextInputWidget(
                       maxLength: 12,
                       controller: userIdCont,
                       topText: "아이디",
                       color: Colors.white,
                       hintText: "ID",
                       keyboardType: TextInputType.visiblePassword,
-                      enabled: true,
                       inputFomatters: [
                         FilteringTextInputFormatter(
                           RegExp('[a-z A-Z 0-9]'),
@@ -193,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                       validator: (val) {
                         if (val.isEmpty) {
-                          return "아이디를 입력해주세요.";
+                          return "6~12글자로 입력해주세요";
                         }
                         // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
                         RegExp specialCharRegex =
@@ -211,8 +180,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       icon: Icons.person,
                     ),
-                    SizedBox(
-                      height: size.width * 0.08,
+                    const SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       width: size.width * 0.3,
@@ -249,15 +218,13 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Column(
                   children: [
-                    signInputField(
-                      focusNode: focusNode3,
+                    marginTextInputWidget(
                       controller: userPasswordCont,
                       topText: "비밀번호",
                       maxLength: 15,
                       color: Colors.white,
                       hintText: "Password",
                       keyboardType: TextInputType.visiblePassword,
-                      enabled: true,
                       obscureText: true,
                       validator: (val) {
                         if (val.isEmpty) {
@@ -275,13 +242,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       icon: Icons.lock,
                     ),
-                    signInputField(
+                    marginTextInputWidget(
                       topText: "비밀번호 확인",
                       maxLength: 15,
                       color: Colors.white,
                       hintText: "Password",
                       keyboardType: TextInputType.visiblePassword,
-                      enabled: true,
                       obscureText: true,
                       validator: (val) {
                         if (val.isEmpty) {
@@ -298,7 +264,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Column(
                   children: [
-                    signInputField(
+                    marginTextInputWidget(
                       controller: userPhonenumberCont,
                       topText: "전화번호",
                       maxLength: 11,
@@ -322,13 +288,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    signInputField(
+                    marginTextInputWidget(
                       controller: userBirthCont,
                       topText: "생년월일",
                       color: Colors.white,
                       hintText: "ex) 950106",
                       keyboardType: TextInputType.number,
-                      enabled: true,
                       validator: (val) {
                         return null;
                       },
@@ -375,66 +340,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 }
 
-signInputField({
-  required String hintText,
-  required TextInputType keyboardType,
-  required FormFieldValidator validator,
-  required IconData icon,
-  required bool enabled,
-  required Color color,
-  required String topText,
-  TextEditingController? controller,
-  int? maxLength,
-  bool obscureText = false,
-  Function(String)? onChanged,
-  void Function(String)? onFieldSubmitted,
-  FocusNode? focusNode,
-  String? counterText,
-  List<TextInputFormatter>? inputFomatters,
-}) {
-  return TextFieldContainer(
-    color: color,
-    child: Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                topText,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-          ],
-        ),
-        TextFormField(
-          onFieldSubmitted: onFieldSubmitted,
-          focusNode: focusNode,
-          maxLength: maxLength,
-          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          controller: controller,
-          onChanged: onChanged,
-          validator: validator,
-          autovalidateMode: AutovalidateMode.always,
-          keyboardType: keyboardType,
-          enabled: enabled,
-          obscureText: obscureText,
-          inputFormatters: inputFomatters,
-          decoration: InputDecoration(
-            counterText: counterText,
-            icon: Icon(icon),
-            hintText: hintText,
-            border: InputBorder.none,
-            errorStyle: const TextStyle(
-              color: Colors.black38,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+
 
 //네이버 문자인증 API
 // Future getSignature(String serviceId, String timeStamp, String accessKey,
