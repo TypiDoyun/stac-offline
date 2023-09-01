@@ -58,6 +58,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               color: Theme.of(context).colorScheme.tertiary,
                               hintText: "' - '는 생략해주세요.",
                               keyboardType: TextInputType.datetime,
+                              fontSize: size.height * 0.02,
                               validator: (val) {
                                 return null;
                               },
@@ -68,6 +69,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               controller: merchantControllers["merchantName"],
                               color: Theme.of(context).colorScheme.tertiary,
                               hintText: "' - '는 생략해주세요.",
+                              fontSize: size.height * 0.02,
                               validator: (val) {
                                 return null;
                               },
@@ -79,7 +81,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               hintText: "ex)00000000",
                               keyboardType: TextInputType.number,
                               enabled: true,
-                              obscureText: true,
+                              fontSize: size.height * 0.02,
                               validator: (val) {
                                 return null;
                               },
@@ -108,10 +110,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                   }
                                   // checkBusinessRegistration(registration);
                                 },
-                                child: const Text(
+                                child: Text(
                                   "매장 조회하기",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: size.height * 0.02,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -157,7 +159,9 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         margin: const EdgeInsets.symmetric(
                           horizontal: 20,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: size.height * 0.008, horizontal: size.height * 0.015),
+                        padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.008,
+                            horizontal: size.height * 0.015),
                         width: size.width * 0.9,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.tertiary,
@@ -197,7 +201,13 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             shadowColor: Colors.white.withOpacity(0),
                           ),
                           onPressed: () {},
-                          child: const Text("다음", style: ,),
+                          child: Text(
+                            "다음",
+                            style: TextStyle(
+                              fontSize: size.height * 0.025,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -212,6 +222,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
                         obscureText: true,
+                        fontSize: size.height * 0.02,
                         validator: (val) {
                           // if (val.isEmpty) {
                           //   return "비밀번호을 입력해주세요.";
@@ -236,6 +247,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
                         obscureText: true,
+                        fontSize: size.height * 0.02,
                         validator: (val) {
                           // if (val.isEmpty) {
                           //   return "비밀번호를 재입력해주세요.";
@@ -257,6 +269,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
       ),
     );
   }
+
   shopInfoText({required String text, topText}) {
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -264,7 +277,8 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
         vertical: size.height * 0.008,
       ),
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.015,horizontal: size.height * 0.02),
+      padding: EdgeInsets.symmetric(
+          vertical: size.height * 0.015, horizontal: size.height * 0.02),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(size.height * 0.015),
@@ -274,7 +288,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
         children: [
           Text(
             topText,
-            style: TextStyle(fontSize: size.height * 0.015, color: Colors.black38,),
+            style: TextStyle(
+              fontSize: size.height * 0.015,
+              color: Colors.black38,
+            ),
           ),
           const SizedBox(
             height: 6,
@@ -291,8 +308,6 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
     );
   }
 }
-
-
 
 // class BusinessRegistration {
 //   String registrationNumber;

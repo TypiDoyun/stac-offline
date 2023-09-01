@@ -131,6 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "Nickname",
                       counterText: '',
                       maxLength: 8,
+                      fontSize: size.height * 0.02,
                       inputFomatters: [
                         FilteringTextInputFormatter(
                             RegExp('[a-z A-Zㄱ-ㅎ|가-힣|·|：]'),
@@ -154,6 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: Colors.white,
                       hintText: "ID",
                       keyboardType: TextInputType.visiblePassword,
+                      fontSize: size.height * 0.02,
                       inputFomatters: [
                         FilteringTextInputFormatter(
                           RegExp('[a-z A-Z 0-9]'),
@@ -226,6 +228,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "Password",
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
+                      fontSize: size.height * 0.02,
                       validator: (val) {
                         if (val.isEmpty) {
                           return "비밀번호을 입력해주세요.";
@@ -249,6 +252,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "Password",
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
+                      fontSize: size.height * 0.02,
                       validator: (val) {
                         if (val.isEmpty) {
                           return "비밀번호를 재입력해주세요.";
@@ -272,6 +276,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: "ex) 01012345678",
                       keyboardType: TextInputType.number,
                       enabled: true,
+                      fontSize: size.height * 0.02,
                       validator: (val) {
                         if (val.isEmpty) {
                           return "전화번호를 입력해주세요.";
@@ -294,6 +299,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: Colors.white,
                       hintText: "ex) 950106",
                       keyboardType: TextInputType.number,
+                      fontSize: size.height * 0.02,
                       validator: (val) {
                         return null;
                       },
