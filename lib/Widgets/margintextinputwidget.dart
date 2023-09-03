@@ -26,7 +26,6 @@ class marginTextInputWidget extends StatelessWidget {
     required this.icon,
     required this.topText,
     required this.fontSize,
-    required this.obscureText,
     this.keyboardType,
     this.enabled,
     this.controller,

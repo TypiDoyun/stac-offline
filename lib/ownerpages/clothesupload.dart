@@ -83,10 +83,6 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
       body: Form(
         key: formkey,
         child: SingleChildScrollView(

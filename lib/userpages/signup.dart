@@ -65,7 +65,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   RegExp specialCharRegexNum = RegExp(r'[0-9]');
 
-
   Future<void> checkUserId(String data) async {
     try {
       final response = await http.post(
@@ -95,7 +94,10 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
         shadowColor: Colors.white.withOpacity(0),
       ),
       body: ListView(children: [
@@ -227,7 +229,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: Colors.white,
                       hintText: "Password",
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
                       fontSize: size.height * 0.02,
                       validator: (val) {
                         if (val.isEmpty) {
@@ -251,7 +252,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: Colors.white,
                       hintText: "Password",
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
                       fontSize: size.height * 0.02,
                       validator: (val) {
                         if (val.isEmpty) {
@@ -345,8 +345,6 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
-
 
 //네이버 문자인증 API
 // Future getSignature(String serviceId, String timeStamp, String accessKey,

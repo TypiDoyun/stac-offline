@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
 import 'package:offline/Widgets/margintextinputwidget.dart';
 import 'package:offline/ownerpages/ownerhome.dart';
+import 'package:offline/ownerpages/ownermain.dart';
 import 'package:offline/utils/common/get-owner-info.dart';
 
 import '../Widgets/roundedInputField.dart';
@@ -108,6 +109,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                     // await getOwnerInfo(
                                     // );
                                   }
+                                  Get.to(() => OwnerMainPage());
                                   // checkBusinessRegistration(registration);
                                 },
                                 child: Text(
@@ -221,7 +223,6 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
-                        obscureText: true,
                         fontSize: size.height * 0.02,
                         validator: (val) {
                           // if (val.isEmpty) {
@@ -246,7 +247,6 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
-                        obscureText: true,
                         fontSize: size.height * 0.02,
                         validator: (val) {
                           // if (val.isEmpty) {
