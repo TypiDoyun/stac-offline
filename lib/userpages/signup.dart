@@ -126,7 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 Column(
                   children: [
-                    marginTextInputWidget(
+                    MarginTextInputWidget(
                       controller: userNameCont,
                       topText: "닉네임",
                       color: Colors.white,
@@ -150,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       icon: Icons.person_outline,
                     ),
-                    marginTextInputWidget(
+                    MarginTextInputWidget(
                       maxLength: 12,
                       controller: userIdCont,
                       topText: "아이디",
@@ -222,7 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Column(
                   children: [
-                    marginTextInputWidget(
+                    MarginTextInputWidget(
                       controller: userPasswordCont,
                       topText: "비밀번호",
                       maxLength: 15,
@@ -246,7 +246,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       icon: Icons.lock,
                     ),
-                    marginTextInputWidget(
+                    MarginTextInputWidget(
                       topText: "비밀번호 확인",
                       maxLength: 15,
                       color: Colors.white,
@@ -268,7 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Column(
                   children: [
-                    marginTextInputWidget(
+                    MarginTextInputWidget(
                       controller: userPhonenumberCont,
                       topText: "전화번호",
                       maxLength: 11,
@@ -293,7 +293,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    marginTextInputWidget(
+                    MarginTextInputWidget(
                       controller: userBirthCont,
                       topText: "생년월일",
                       color: Colors.white,

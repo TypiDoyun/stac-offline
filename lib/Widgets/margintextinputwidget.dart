@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class marginTextInputWidget extends StatelessWidget {
+class MarginTextInputWidget extends StatelessWidget {
   final String hintText, topText;
   final FormFieldValidator validator;
   final IconData icon;
@@ -18,7 +18,7 @@ class marginTextInputWidget extends StatelessWidget {
   final String? counterText;
   final List<TextInputFormatter>? inputFomatters;
 
-  marginTextInputWidget({
+  MarginTextInputWidget({
     Key? key,
     required this.color,
     required this.hintText,

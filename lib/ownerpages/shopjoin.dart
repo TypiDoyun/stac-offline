@@ -53,7 +53,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            marginTextInputWidget(
+                            MarginTextInputWidget(
                               topText: "사업자 등록 번호",
                               controller: merchantControllers["residentNumber"],
                               color: Theme.of(context).colorScheme.tertiary,
@@ -65,7 +65,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               },
                               icon: Icons.paste,
                             ),
-                            marginTextInputWidget(
+                            MarginTextInputWidget(
                               topText: "대표자 성함",
                               controller: merchantControllers["merchantName"],
                               color: Theme.of(context).colorScheme.tertiary,
@@ -76,7 +76,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               },
                               icon: Icons.paste,
                             ),
-                            marginTextInputWidget(
+                            MarginTextInputWidget(
                               topText: "대표자 생년월일",
                               color: Theme.of(context).colorScheme.tertiary,
                               hintText: "ex)00000000",
@@ -216,7 +216,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                   ),
                   Column(
                     children: [
-                      marginTextInputWidget(
+                      MarginTextInputWidget(
                         topText: "비밀번호",
                         maxLength: 15,
                         color: Colors.white,
@@ -240,7 +240,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         },
                         icon: Icons.lock,
                       ),
-                      marginTextInputWidget(
+                      MarginTextInputWidget(
                         topText: "비밀번호 확인",
                         maxLength: 15,
                         color: Colors.white,
