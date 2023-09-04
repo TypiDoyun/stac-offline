@@ -1,14 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
 import 'package:offline/Widgets/margintextinputwidget.dart';
-import 'package:offline/ownerpages/ownerhome.dart';
 import 'package:offline/ownerpages/ownermain.dart';
-import 'package:offline/utils/common/get-owner-info.dart';
 
-import '../Widgets/roundedInputField.dart';
-import '../userpages/signup.dart';
 
 class ShopJoinPage extends StatefulWidget {
   const ShopJoinPage({Key? key}) : super(key: key);
@@ -36,6 +31,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        foregroundColor: Colors.black,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        shadowColor: Colors.white.withOpacity(0),
+      ),
       body: SafeArea(
         child: Form(
           key: shopJoinformKey,

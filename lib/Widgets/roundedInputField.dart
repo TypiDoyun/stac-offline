@@ -9,31 +9,20 @@ roundedInputField({
   FormFieldSetter? onSaved,
   TextInputType? keyboardType,
   TextEditingController? controller,
-  bool obscureText = false,
+
   Function(String)? onChanged,
 }) {
-  return TextFieldContainer(
-    color: color,
-    child: TextFormField(
-      controller: controller,
-      onChanged: onChanged,
-      validator: validator,
-      autovalidateMode: AutovalidateMode.always,
-      keyboardType: keyboardType,
-      enabled: enabled,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        icon: Icon(icon),
-        hintText: hintText,
-        border: InputBorder.none,
-      ),
-    ),
-  );
+  return
 }
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
   final Color color;
+  final bool obscureText = false;
+  final String hintText;
+  final FormFieldValidator validator;
+  final IconData icon;
+  final
 
   const TextFieldContainer(
       {Key? key,
@@ -47,13 +36,30 @@ class TextFieldContainer extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 1),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.05, vertical: size.height * 0.003),
       width: size.width * 0.8,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(29),
       ),
-      child: child,
+      child: TextFieldContainer(
+        color: color,
+        child: TextFormField(
+          controller: controller,
+          onChanged: onChanged,
+          validator: validator,
+          autovalidateMode: AutovalidateMode.always,
+          keyboardType: keyboardType,
+          enabled: enabled,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+              icon: Icon(icon),
+              hintText: hintText,
+              border: InputBorder.none,
+              hintStyle: TextStyle(fontSize: size.)
+          ),
+        ),
+      ),
     );
   }
 }

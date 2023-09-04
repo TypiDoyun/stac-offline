@@ -95,21 +95,24 @@ class _OwnerPageState extends State<OwnerHomePage> {
                     ),
                     pinned: true,
                   ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      childCount: clothesList.length,
-                      (context, index) => OwnerClothesListItem(
-                        clothesName: clothesList[index]['name'],
-                        clothesPrice: clothesList[index]['price'],
-                        clothesSize: clothesList[index]['size'],
-                        clothesComment: clothesList[index]['comment'],
-                        onTap: () {
-                          Get.to(() => const ModityClothesInfo());
-                        },
-                        onPressedDelete: () async {
-                          await removeClothesInfo();
-                          // setState(() {});
-                        },
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: clothesList.length,
+                        (context, index) => OwnerClothesListItem(
+                          clothesName: clothesList[index]['name'],
+                          clothesPrice: clothesList[index]['price'],
+                          clothesSize: clothesList[index]['size'],
+                          clothesComment: clothesList[index]['comment'],
+                          onTap: () {
+                            Get.to(() => const ModityClothesInfo());
+                          },
+                          onPressedDelete: () async {
+                            await removeClothesInfo();
+                            setState(() {});
+                          },
+                        ),
                       ),
                     ),
                   ),

@@ -6,9 +6,10 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.grey[50],
   ),
   colorScheme: ColorScheme.light(
-    background: Colors.grey[50]!,
-    primary: Color(0xff091326),
-    secondary: Colors.grey[300]!,
-    tertiary: Colors.white,
+    background: Color(0xfffefefe),
+    primary: Colors.black,
+    secondary: Colors.white,
+    tertiary: Color(0xff535353),
+    outline: Colors.black,
   )
 );

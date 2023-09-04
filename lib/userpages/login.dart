@@ -14,7 +14,6 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-
 class _LoginPageState extends State<LoginPage> {
   final signKey = GlobalKey<FormState>();
   final loginInput = {
@@ -22,12 +21,9 @@ class _LoginPageState extends State<LoginPage> {
     "password": "",
   };
 
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
 
     return Background(
       child: Form(
@@ -35,9 +31,10 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "로그인",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
             ),
             const SizedBox(
               height: 20,
@@ -96,7 +93,13 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {});
                   }
                 },
-                child: const Text("로그인", style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),),
+                child: const Text(
+                  "로그인",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Row(
@@ -112,10 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.17,
+                  width: MediaQuery.of(context).size.width * 0.17,
                 ),
                 InkWell(
                   onTap: () {
@@ -148,9 +148,7 @@ class LoginInputWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(29),
       ),
-      child: TextFormField(
-
-      ),
+      child: TextFormField(),
     );
   }
 }
