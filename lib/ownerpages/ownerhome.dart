@@ -41,6 +41,7 @@ class _OwnerPageState extends State<OwnerHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return FutureBuilder<void>(
       future: dataLoading,
       builder: (context, snapshot) {
@@ -68,32 +69,34 @@ class _OwnerPageState extends State<OwnerHomePage> {
             body: SafeArea(
               child: CustomScrollView(
                 slivers: [
-                  const SliverAppBar(
+                  SliverAppBar(
                     backgroundColor: Colors.black,
+                    title: Text(
+                      "Offline",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: size.height * 0.03),
+                    ),
+                    centerTitle: true,
                     pinned: false,
                   ),
                   SliverPersistentHeader(
                     delegate: SampleHeaderDelegate(
-                      widget: SizedBox(
-                        height: 100,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              ),
-                            ),
-                            onPressed: () async {
-                              await Get.to(() => const ClothesUploadPage());
-                            },
-                            child: const Text(
-                              "옷 전시하기",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 24),
-                            )),
-                      ),
-                    ),
-                    pinned: true,
+                        widget: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            color: Theme.of(context).colorScheme.background,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "가게이름",
+                                  style:
+                                      TextStyle(fontSize: size.height * 0.03),
+                                ),
+                                Text("경기도 용인시 처인구 고림동"),
+                              ],
+                            ))),
                   ),
                   SliverPadding(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -106,7 +109,7 @@ class _OwnerPageState extends State<OwnerHomePage> {
                           clothesSize: clothesList[index]['size'],
                           clothesComment: clothesList[index]['comment'],
                           onTap: () {
-                            Get.to(() => const ModityClothesInfo());
+                            Get.to(const ModityClothesInfo());
                           },
                           onPressedDelete: () async {
                             await removeClothesInfo();

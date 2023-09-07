@@ -40,7 +40,7 @@ class MarginTextInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: size.height * 0.005),
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
       width: size.width * 0.8,
       decoration: BoxDecoration(
@@ -55,7 +55,7 @@ class MarginTextInputWidget extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
                   topText,
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: size.height * 0.015),
                 ),
               ),
             ],
@@ -77,10 +77,11 @@ class MarginTextInputWidget extends StatelessWidget {
               counterText: counterText,
               icon: Icon(icon),
               hintText: hintText,
+              hintStyle: TextStyle(fontSize: size.height * 0.017,),
               border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.black38,
-                fontSize: fontSize,
+                fontSize: size.height * 0.014,
               ),
             ),
           ),

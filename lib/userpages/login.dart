@@ -4,6 +4,7 @@ import 'package:offline/Widgets/background.dart';
 import 'package:offline/ownerpages/shopjoin.dart';
 import 'package:offline/userpages/usermain.dart';
 import 'package:offline/utils/auth/signin.dart';
+
 import '../Widgets/roundedInputField.dart';
 import 'signup.dart';
 
@@ -37,10 +38,10 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
             ),
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
-            roundedInputField(
-              color: Theme.of(context).colorScheme.tertiary,
+            TextFieldContainer(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
               hintText: "아이디",
               keyboardType: TextInputType.visiblePassword,
               enabled: true,
@@ -55,8 +56,8 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 10,
             ),
-            roundedInputField(
-                color: Theme.of(context).colorScheme.tertiary,
+            TextFieldContainer(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
                 hintText: "비밀번호",
                 keyboardType: TextInputType.visiblePassword,
                 enabled: true,
@@ -77,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
               width: size.width * 0.8,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), //볼더 제거
                   ),
@@ -93,11 +94,11 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {});
                   }
                 },
-                child: const Text(
+                child: Text(
                   "로그인",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontSize: size.height * 0.02,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: const Text("회원가입하기"),
+                    child: Text("회원가입하기", style: TextStyle(fontSize: size.height * 0.015)),
                   ),
                 ),
                 SizedBox(
@@ -123,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: const Text("매장 등록하기"),
+                    child: Text("매장 등록하기", style: TextStyle(fontSize: size.height * 0.015)),
                   ),
                 ),
               ],

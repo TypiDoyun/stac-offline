@@ -6,7 +6,8 @@ import 'ownerhome.dart';
 
 
 class OwnerMainPage extends StatefulWidget {
-  const OwnerMainPage({Key? key}) : super(key: key);
+  const OwnerMainPage({super.key});
+
 
   @override
   State<OwnerMainPage> createState() => _OwnerMainPageState();
@@ -16,11 +17,10 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
   int selectIndex = 0;
 
   List bodyItem = [
-    OwnerHomePage(),
-    ClothesUploadPage(),
-    OrderReceptionPage(),
+    const OwnerHomePage(),
+    const ClothesUploadPage(),
+    const OrderReceptionPage(),
   ];
-
 
   @override
   Widget build(BuildContext context) {

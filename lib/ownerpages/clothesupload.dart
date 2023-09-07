@@ -92,7 +92,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                 const SizedBox(
                   height: 40,
                 ),
-                roundedInputField(
+                TextFieldContainer(
                     color: Colors.white,
                     hintText: "옷 이름",
                     enabled: true,
@@ -174,7 +174,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     }),
                   ]),
                 ),
-                roundedInputField(
+                TextFieldContainer(
                   color: Colors.white,
                   hintText: "가격",
                   keyboardType: TextInputType.number,
@@ -225,7 +225,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      roundedInputField(
+                      TextFieldContainer(
                           color: isCheckboxChecked
                               ? Colors.black12
                               : Colors.black12.withOpacity(0.4),
@@ -258,7 +258,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ],
                   ),
                 ),
-                roundedInputField(
+                TextFieldContainer(
                   color: Colors.black12,
                   hintText: "코멘트",
                   enabled: true,

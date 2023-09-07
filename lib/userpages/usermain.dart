@@ -56,10 +56,13 @@ class UserMainState extends State<UserMain> {
       }
     }
     await location.getLocation().then((res) async {
+      SharedPreferences prefrs = await SharedPreferences.getInstance();
       setState(() {
         loca.add(res.latitude);
         loca.add(res.longitude);
-        print(loca);
+        prefrs.setDouble("latitude", loca[0]!);
+        prefrs.setDouble("longitude", loca[1]!);
+        print('location: $loca');
       });
     });
   }
@@ -89,31 +92,30 @@ class UserMainState extends State<UserMain> {
       print(localLatitude);
       await fetchUserData();
       await _locateMe();
-      // if (localLatitude == null){
-      //   return Get.dialog(
-      //     (AlertDialog(
-      //       title: const Text("어디 계신가요?"),
-      //       content: Text("위치확인을 허용해주시면 동네 옷들을 보여드릴게요"),
-      //       actions: [
-      //         TextButton(
-      //             child: const Text("아니요"), onPressed: () async {}),
-      //         TextButton(
-      //           child: const Text("네"),
-      //           onPressed: () async {
-      //             Get.back();
-      //             print("ㅎㅇ");
-      //             await _locateMe();
-      //           },
-      //         ),
-      //       ],
-      //     )),
-      //   );
-      // }
+        //   Get.dialog(
+        //   (AlertDialog(
+        //     title: const Text("어디 계신가요?"),
+        //     content: Text("위치확인을 허용해주시면 동네 옷들을 보여드릴게요"),
+        //     actions: [
+        //       TextButton(
+        //           child: const Text("아니요"), onPressed: () async {}),
+        //       TextButton(
+        //         child: const Text("네"),
+        //         onPressed: () async {
+        //           Get.back();
+        //           print("ㅎㅇ");
+        //           // await _locateMe();
+        //         },
+        //       ),
+        //     ],
+        //   )),
+        // );
     })();
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: bodyItem.length,
       child: Scaffold(
@@ -127,7 +129,7 @@ class UserMainState extends State<UserMain> {
               selectIndex = index;
             });
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: "HOME",
@@ -141,8 +143,12 @@ class UserMainState extends State<UserMain> {
               label: "MYPAGE",
             ),
           ],
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,
+          selectedFontSize: size.height * 0.015,
+          selectedIconTheme: IconThemeData(size: size.height * 0.03),
+          unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
+          unselectedFontSize: size.height * 0.015,
+          unselectedIconTheme: IconThemeData(size: size.height * 0.03),
           type: BottomNavigationBarType.fixed,
         ),
       ),
@@ -182,7 +188,27 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => MapPageState();
 }
 
+
+
 class MapPageState extends State<MapPage> {
+
+  List<double?> loca = [];
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    (() async {
+      SharedPreferences prefrs = await SharedPreferences.getInstance();
+      loca[0] = prefrs.getDouble("latitude");
+      loca[1] = prefrs.getDouble("longitude");
+      print("ㅎㅇ");
+      loading = false;
+    }());
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,10 +216,10 @@ class MapPageState extends State<MapPage> {
         alignment: Alignment.center,
         children: [
           NaverMap(
-            options: const NaverMapViewOptions(
+            options: NaverMapViewOptions(
               locationButtonEnable: true,
               initialCameraPosition: NCameraPosition(
-                target: NLatLng(37.532600, 127.024612),
+                target: NLatLng(loca[0]!, loca[1]!),
                 zoom: 10,
                 bearing: 0,
                 tilt: 0,

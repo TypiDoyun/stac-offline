@@ -7,10 +7,9 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SizedBox(
-      height: size.height,
-      width: double.infinity,
-      child: Stack(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: Stack(
         alignment: Alignment.center,
         children: [
           child,
