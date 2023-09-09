@@ -9,12 +9,12 @@ import '../userpages/userselectedclothes.dart';
 import '../utils/common/try-get-clothes-info.dart';
 
 class ShopInfoPage extends StatefulWidget {
-  const ShopInfoPage({Key? key, required this.shopInfo, required this.shopInfos}) : super(key: key);
-  final Clothes shopInfo;
-  final List<Clothes> shopInfos;
+  const ShopInfoPage({Key? key,  this.shopInfo,  this.shopInfos,}) : super(key: key);
+  final Clothes? shopInfo;
+  final List<Clothes>? shopInfos;
 
   @override
-  State<ShopInfoPage> createState() => _ShopInfoPageState(shopInfo, shopInfos);
+  State<ShopInfoPage> createState() => _ShopInfoPageState(shopInfo!, shopInfos!);
 }
 
 class _ShopInfoPageState extends State<ShopInfoPage> {
@@ -29,6 +29,7 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
     // TODO: implement initState
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,7 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               width: size.width*0.6,
                               child: Text(
-                                shopInfo.owner.shop.name,
+                                "ㅎㅇ",
                                 style: const TextStyle(
                                     fontSize: 23, fontWeight: FontWeight.bold),
                                 maxLines: 1,
@@ -130,7 +131,7 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                               ),
                             ),
                             Text(
-                              shopInfo.owner.address,
+                              "ㅎㅇ",
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -180,7 +181,9 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       // if (index < clothesInfo.length) {
-                      return UserHomeListItem(
+                      return
+                        Container();
+                        UserHomeListItem(
                         clothesName: shopInfos[index].name,
                         clothesImgPath: shopInfos[index].images[0],
                         clothesPrice: shopInfos[index].price,

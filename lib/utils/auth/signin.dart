@@ -19,6 +19,7 @@ Future signIn(String id, String password) async {
     dynamic tokens = json.decode(response.body);
     if (tokens["statusCode"] == 401) return false;
 
+    print("여기: ${tokens["accessToken"]}");
     String createdAccessToken = tokens["accessToken"];
     String createdRefreshToken = tokens["refreshToken"];
 
