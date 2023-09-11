@@ -14,6 +14,7 @@ import 'package:offline/userpages/login.dart';
 import 'package:offline/userpages/profile.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
+import 'package:offline/userpages/userselectedclothes.dart';
 import 'package:offline/utils/common/try-get-clothes-info.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,6 @@ class UserMainState extends State<UserMain> {
   List<Clothes>? test;
   dynamic localLatitude;
   dynamic localLongitude;
-
 
   List<double?> loca = [];
   List<double?> locaTest = [];
@@ -67,7 +67,6 @@ class UserMainState extends State<UserMain> {
       SharedPreferences prefrs = await SharedPreferences.getInstance();
       prefrs.setDouble("latitude", loca[0]!);
       prefrs.setDouble("longitude", loca[1]!);
-
     });
 
     // saveLocation() async {
@@ -92,7 +91,6 @@ class UserMainState extends State<UserMain> {
 
   String? username;
   String? id;
-
 
   @override
   void initState() {
@@ -127,9 +125,7 @@ class UserMainState extends State<UserMain> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: bodyItem.length,
       child: Scaffold(
@@ -158,16 +154,10 @@ class UserMainState extends State<UserMain> {
               label: "MYPAGE",
             ),
           ],
-          selectedItemColor: Theme
-              .of(context)
-              .colorScheme
-              .onTertiaryContainer,
+          selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,
           selectedFontSize: size.height * 0.015,
           selectedIconTheme: IconThemeData(size: size.height * 0.03),
-          unselectedItemColor: Theme
-              .of(context)
-              .colorScheme
-              .onSecondary,
+          unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
           unselectedFontSize: size.height * 0.015,
           unselectedIconTheme: IconThemeData(size: size.height * 0.03),
           type: BottomNavigationBarType.fixed,
@@ -201,7 +191,6 @@ class UserMainState extends State<UserMain> {
   }
 }
 
-
 //맵
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -212,10 +201,13 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
   Future<void>? dataLoading;
-  NMarker? marker1, marker2;
-  NLatLng? userLoca;
-  NPoint? userMarkerNPoint = NPoint(0.5,0.5);
+  NMarker? userMaker;
+  NMarker? marker2;
+  NMarker? marker3;
 
+  List<NMarker> markers = [];
+  NLatLng? userLoca;
+  NPoint? userMarkerNPoint = NPoint(0.5, 0.5);
 
   @override
   void initState() {
@@ -232,20 +224,42 @@ class MapPageState extends State<MapPage> {
       setState(() {
         userLoca = NLatLng(latitude, longitude);
 
-        marker1 = NMarker(
-          captionOffset: 10,
-          captionAligns: [NAlign.left],
-          subCaption: NOverlayCaption(text: "현위치 입니다."),
+        userMaker = NMarker(
           isCaptionPerspectiveEnabled: true,
           anchor: userMarkerNPoint!,
-          icon: NOverlayImage.fromAssetImage("assets/images/test.png"),
-
-          size: Size(50, 50),
+          icon: NOverlayImage.fromAssetImage(
+              "assets/images/userLocationIcon.png"),
+          size: Size(30, 30),
           caption: NOverlayCaption(text: "현위치"),
           id: 'test',
           position: NLatLng(latitude, longitude),
         );
-        marker2 = NMarker(id: "test2", position: NLatLng(latitude,longitude),iconTintColor: Colors.red);
+        marker2 = NMarker(
+          id: "test2",
+          position: NLatLng(latitude, longitude + 0.01),
+          iconTintColor: Colors.red,
+        );
+        marker3 = NMarker(
+          id: "test3",
+          position: NLatLng(latitude, longitude + 0.001),
+          iconTintColor: Colors.red,
+        );
+
+        markers = [marker2!, marker3!];
+
+        // 각 마커에 onTapListener 추가
+        for (NMarker marker in markers) {
+          marker.setOnTapListener((overlay) {
+            // 마커를 탭했을 때 실행할 동작을 여기에 작성합니다.
+            // overlay 변수는 탭된 마커를 나타냅니다.
+
+            // 가게 정보를 포함하는 하단 시트를 표시합니다.
+            Get.to(
+              () => ShopInfoPage(),
+              transition: Transition.rightToLeft,
+            );
+          });
+        }
       });
     } else {
       // Handle the case where latitude or longitude is not available in SharedPreferences.
@@ -292,14 +306,11 @@ class MapPageState extends State<MapPage> {
                     ),
                   ),
                   onMapReady: (controller) {
-                    if (marker1 != null) {
-                      controller.addOverlay(marker1!);
-                    }
-                    if (marker2 != null) {
-                      controller.addOverlay(marker2!);
+                    controller.addOverlay(userMaker!);
+                    if (markers.isNotEmpty) {
+                      controller.addOverlayAll(Set<NMarker>.from(markers));
                     }
                     print("네이버 맵 로딩됨!");
-                    marker2?.setOnTapListener((overlay) => Get.to(() => ShopInfoPage(shopInfo: null, shopInfos: null)));
                   },
                 ),
               ],
@@ -310,8 +321,6 @@ class MapPageState extends State<MapPage> {
     );
   }
 }
-
-
 
 //지도 화면
 // class MapPage extends StatefulWidget {

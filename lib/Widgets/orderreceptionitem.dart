@@ -1,101 +1,139 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class OrderReceptionItem extends StatelessWidget {
   final String clothesLocation, username, address;
   final int price;
+  final onTap;
 
-  const OrderReceptionItem({Key? key, required this.clothesLocation, required this.username, required this.address, required this.price}) : super(key: key);
+  const OrderReceptionItem(
+      {Key? key,
+      required this.clothesLocation,
+      required this.username,
+      required this.address,
+      required this.price,
+      this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return InkWell(
+      onTap: onTap,
       child: Container(
-        alignment: Alignment.center,
+        margin: EdgeInsets.symmetric(vertical: size.width * 0.01),
+        height: size.height * 0.15,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
+              height: size.width * 0.3,
+              width: size.width * 0.3,
               color: Colors.black,
-              height: 120,
-              width: 120,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    clothesLocation,
-                    style: TextStyle(fontSize: 13),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '옷 이름',
+                  style: TextStyle(
+                    fontSize: size.height * 0.02,
+                    fontWeight: FontWeight.w600,
                   ),
-                  const SizedBox(
-                    height: 13,
-                  ),
-                  Column(
+                ),
+                Container(
+                  height: size.height * 0.07,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "유저 정보",
-                        style: TextStyle(fontSize: 10),
+                        '20,000',
+                        style: TextStyle(
+                          fontSize: size.height * 0.015,
+                        ),
                       ),
                       Text(
-                        username,
-                        style: TextStyle(fontSize: 10),
+                        'Size: Free',
+                        style: TextStyle(
+                          fontSize: size.height * 0.015,
+                        ),
                       ),
-                      Text(
-                        address,
-                        style: TextStyle(fontSize: 10),
-                      ),
-                      Text(
-                        price.toString(),
-                        style: TextStyle(fontSize: 10),
+                      Container(
+                        width: size.width * 0.5,
+                        child: Text(
+                          'isThreeLine : true 로 주면 subtitle 이 어떻게 변할까',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: size.height * 0.013,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                )
+              ],
             ),
-            Container(
-              height: 100,
-              padding: EdgeInsets.only(top: 5,bottom: 5,right: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.message,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Get.dialog(
+                      (AlertDialog(
+                        title: const Text("정말로 전시를 중지하실껀가요?"),
+                        actions: [
+                          TextButton(
+                              child: const Text("아니요"), onPressed: () async {}),
+                          TextButton(
+                            child: const Text("네"),
+                            onPressed: () => Get.back(),
+                          ),
+                        ],
+                      )),
+                    );
+                  },
+                  icon: Icon(Icons.delete),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Get.dialog(
+                      (AlertDialog(
+                        title: const Text("정말로 전시를 중지하실껀가요?"),
+                        actions: [
+                          TextButton(
+                              child: const Text("아니요"), onPressed: () async {}),
+                          TextButton(
+                            child: const Text("네"),
+                            onPressed: () => Get.back(),
+                          ),
+                        ],
+                      )),
+                    );
+                  },
+                  icon: Icon(Icons.delete),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      "픽업 완료",
+                      style: TextStyle(fontSize: size.height * 0.015),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(Icons.call),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      child: const Text(
-                        "픽업 완료",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              ],
+            )
           ],
-        ),
+        ), //dense: true,
       ),
     );
   }

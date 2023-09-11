@@ -24,9 +24,20 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return DefaultTabController(
       length: bodyItem.length,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          shadowColor: Colors.transparent,
+          title: Text("Offline"),
+          titleTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontSize: size.height * 0.03,
+          ),
+          centerTitle: true,
+        ),
         body: bodyItem.elementAt(selectIndex),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectIndex,

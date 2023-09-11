@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'Widgets/User.dart';
 
@@ -81,7 +82,7 @@ Map<String, dynamic> parseJwtPayLoad(String token) {
 Future<void> sendUserInfoDataToServer(User data) async {
   try {
     final response = await http.post(
-      Uri.parse('$serverUrl_2/auth/signup'), // 서버의 엔드포인트 URL로 변경
+      Uri.parse('${dotenv.env["SERVER_URL"]}/auth/signup'), // 서버의 엔드포인트 URL로 변경
       body: {
         'username': data.username,
         'id': data.id,

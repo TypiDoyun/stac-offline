@@ -1,13 +1,14 @@
 import 'merchant.dart';
 
 class Shop {
-  String name, shopNumber, logo, registrationNumber; 
+  String name, shopNumber, logo, registrationNumber;
 
   Shop({
     required this.name,
     required this.shopNumber,
     required this.logo,
-    required this.registrationNumber
+    required this.registrationNumber,
+
   });
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(

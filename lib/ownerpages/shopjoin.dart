@@ -6,8 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
 import 'package:offline/Widgets/margintextinputwidget.dart';
+import 'package:offline/classes/shop.dart';
 import 'package:offline/ownerpages/ownermain.dart';
 import 'package:http/http.dart' as http;
+import 'package:offline/utils/auth/joinshop.dart';
 
 import '../servercontroller.dart';
 
@@ -83,10 +85,15 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .background,
         elevation: 0.0,
         toolbarHeight: size.height * 0.07,
       ),
@@ -109,7 +116,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             MarginTextInputWidget(
                               topText: "사업자 등록 번호",
                               controller: merchantControllers["residentNumber"],
-                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
                               hintText: "' - '는 생략해주세요.",
                               keyboardType: TextInputType.datetime,
                               fontSize: size.height * 0.02,
@@ -120,8 +130,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             ),
                             MarginTextInputWidget(
                               topText: "대표자 성함",
-                              controller: merchantControllers["merchantName"],
-                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              controller: merchantControllers["merchantname"],
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
                               hintText: "' - '는 생략해주세요.",
                               fontSize: size.height * 0.02,
                               validator: (val) {
@@ -131,7 +144,12 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             ),
                             MarginTextInputWidget(
                               topText: "대표자 생년월일",
-                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              controller:
+                              merchantControllers["merchantbirthday"],
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
                               hintText: "ex)00000000",
                               keyboardType: TextInputType.number,
                               enabled: true,
@@ -141,6 +159,15 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               },
                               icon: Icons.lock,
                             ),
+                            MarginTextInputWidget(color: Theme
+                                .of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                                hintText: "정확하게 입력해주세요.",
+                                validator: (val) {return null;},
+                                icon: Icons.location_on,
+                                topText: "사업지 주소",
+                                fontSize: size.height * 0.2,),
                             SizedBox(
                               height: size.width * 0.04,
                             ),
@@ -151,21 +178,37 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero, //볼더 제거
+                                    borderRadius:
+                                    BorderRadius.circular(50), //볼더 제거
                                   ),
-                                    shadowColor: Colors.white.withOpacity(0),
-                                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                  shadowColor: Colors.white.withOpacity(0),
+                                  backgroundColor: Theme
+                                      .of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
                                 ),
                                 onPressed: () async {
                                   //사업자 등록 번호 조회 API
                                   final isValid =
-                                      shopJoinformKey.currentState!.validate();
+                                  shopJoinformKey.currentState!.validate();
                                   if (isValid) {
                                     shopJoinformKey.currentState!.save();
-                                    // await getOwnerInfo(
-                                    // );
+                                    print(
+                                        merchantControllers["merchantbirthday"]!
+                                            .text);
+                                    await sendShopInfoDataToServer(
+                                      merchantControllers["residentNumber"]!
+                                          .text,
+                                      merchantControllers["merchantname"]!.text,
+                                      merchantControllers["merchantbirthday"]!
+                                          .text,
+                                    ) != null ? print("굿") : Get.snackbar("다시 확인", "해주세요");
+                                    // Shop newShop = Shop(
+                                    //     name: "",
+                                    //     shopNumber: "",
+                                    //     logo: "",
+                                    //     registrationNumber: merchantControllers["residentNumber"]!.text);
                                   }
-                                  // checkBusinessRegistration(registration);
                                 },
                                 child: Text(
                                   "매장 조회하기",
@@ -189,7 +232,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         ),
                         decoration: BoxDecoration(
                           color:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          Theme
+                              .of(context)
+                              .colorScheme
+                              .tertiaryContainer,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         width: size.width * 0.8,
@@ -206,7 +252,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               style: TextStyle(
                                 fontSize: size.height * 0.023,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .secondary,
                               ),
                             ),
                           ],
@@ -225,15 +274,40 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            shopInfoText(
-                                topText: "사업자 등록 번호", text: "123123123"),
-                            shopInfoText(topText: "대표자 성명", text: "신승호"),
-                            shopInfoText(topText: "개업 일자", text: "1231231"),
-                            shopInfoText(topText: "상호", text: "아아아"),
-                            shopInfoText(
-                                topText: "법인 등록 번호", text: "123123123"),
-                            shopInfoText(topText: "주 업태명", text: "안녕하세요"),
-                            shopInfoText(topText: "주 공목명", text: "안녕하세요"),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 15,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  shopInfoText(
+                                      topText: "사업자 등록 번호", text: "123123123"),
+                                  shopInfoText(topText: "대표자 성명", text: "신승호"),
+                                  shopInfoText(
+                                      topText: "사업장 주소",
+                                      text: "경기도 용인시 처인구 고림동"),
+                                  shopInfoText(
+                                      topText: "개업 일자", text: "1231231"),
+                                  shopInfoText(topText: "상호", text: "아아아"),
+                                  shopInfoText(
+                                      topText: "법인 등록 번호", text: "123123123"),
+                                  shopInfoText(topText: "주 업태명", text: "안녕하세요"),
+                                  shopInfoText(topText: "주 공목명", text: "안녕하세요"),
+                                ],
+                              ),
+                            )
+                            //
                           ],
                         ),
                       ),
@@ -243,9 +317,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         width: size.width * 0.8,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context)
+                            backgroundColor:
+                            Theme
+                                .of(context)
                                 .colorScheme
-                                .secondaryContainer,
+                                .tertiaryContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30), //볼더 제거
                             ),
@@ -255,7 +331,10 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           child: Text(
                             "다음",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .secondary,
                               fontSize: size.height * 0.02,
                               fontWeight: FontWeight.bold,
                             ),
@@ -269,7 +348,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                       MarginTextInputWidget(
                         controller: ownerNameCont,
                         topText: "성함",
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                        Theme
+                            .of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
                         hintText: "Nickname",
                         counterText: '',
                         maxLength: 4,
@@ -286,7 +369,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         maxLength: 12,
                         controller: ownerIdCont,
                         topText: "아이디",
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                        Theme
+                            .of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
                         hintText: "ID",
                         keyboardType: TextInputType.visiblePassword,
                         fontSize: size.height * 0.02,
@@ -302,14 +389,16 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           }
                           // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
                           RegExp specialCharRegex =
-                              RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]');
+                          RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]');
                           if (!specialCharRegex.hasMatch(val)) {
                             return "특수 문자와 공백은 입력할 수 없습니다.";
                           }
                           if (val.length < 6) {
                             return "최소 6자 이상 입력해야합니다.";
                           }
-                          if (specialCharRegexNum.allMatches(val).isEmpty) {
+                          if (specialCharRegexNum
+                              .allMatches(val)
+                              .isEmpty) {
                             return "숫자 1자 이상 입력해야 합니다.";
                           }
                           return null;
@@ -323,8 +412,13 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         width: size.width * 0.3,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero, //볼더 제거
+                            backgroundColor:
+                            Theme
+                                .of(context)
+                                .colorScheme
+                                .tertiaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50), //볼더 제거
                             ),
                             shadowColor: Colors.white.withOpacity(0),
                           ),
@@ -344,12 +438,13 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                       ),
                       if (isLoading)
                         const Text("확인중..")
-                      else if (checkId != null)
-                        checkId!
-                            ? const Text("이미 사용중인 아이디 입니다.")
-                            : const Text("사용 가능한 아이디 입니다.")
                       else
-                        const SizedBox(),
+                        if (checkId != null)
+                          checkId!
+                              ? const Text("이미 사용중인 아이디 입니다.")
+                              : const Text("사용 가능한 아이디 입니다.")
+                        else
+                          const SizedBox(),
                     ],
                   ),
                   Column(
@@ -358,7 +453,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         controller: ownerPasswordCont,
                         topText: "비밀번호",
                         maxLength: 15,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                        Theme
+                            .of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
@@ -368,7 +467,9 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             return "비밀번호을 입력해주세요.";
                           }
                           // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
-                          if (specialCharRegexNum.allMatches(val).length < 3) {
+                          if (specialCharRegexNum
+                              .allMatches(val)
+                              .length < 3) {
                             return "숫자 3자 이상 입력해야 합니다.";
                           }
                           RegExp specialCharRegex1 = RegExp(r'[ ]');
@@ -382,7 +483,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                       MarginTextInputWidget(
                         topText: "비밀번호 확인",
                         maxLength: 15,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                        Theme
+                            .of(context)
+                            .colorScheme
+                            .onSecondaryContainer,
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
@@ -400,23 +505,37 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                       ),
                       SizedBox(height: 20),
                       Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        height: size.width * 0.14,
                         width: size.width * 0.8,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondaryContainer,
-                        ),
                         child: ElevatedButton(
-                          onPressed: () {
-                            Get.offAll(const OwnerMainPage());
-                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                            Theme
+                                .of(context)
+                                .colorScheme
+                                .tertiaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30), //볼더 제거
+                            ),
+                            shadowColor: Colors.white.withOpacity(0),
+                          ),
+                          onPressed: () {},
                           child: Text(
                             "가입하기",
-                            style: TextStyle(fontSize: size.height * 0.018, color: Theme.of(context).colorScheme.secondary,),
+                            style: TextStyle(
+                              color: Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .secondary,
+                              fontSize: size.height * 0.02,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -427,16 +546,20 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
   }
 
   shopInfoText({required String text, topText}) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: size.height * 0.002,
       ),
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       padding: EdgeInsets.symmetric(
-          vertical: size.height * 0.015, horizontal: size.height * 0.02),
+          vertical: size.height * 0.01, horizontal: size.height * 0.02),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
         borderRadius: BorderRadius.circular(size.height * 0.015),
       ),
       child: Column(
@@ -445,7 +568,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
           Text(
             topText,
             style: TextStyle(
-              fontSize: size.height * 0.015,
+              fontSize: size.height * 0.012,
               color: Colors.black38,
             ),
           ),
@@ -455,7 +578,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
           Text(
             text,
             style: TextStyle(
-              fontSize: size.height * 0.019,
+              fontSize: size.height * 0.015,
               fontWeight: FontWeight.w600,
             ),
           ),

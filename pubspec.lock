@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      sha256: "21afe4333076c02877d14f4a89df111e658a6d466cbfc802eb705eb91bd5adfd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   async:
     dependency: transitive
     description:
@@ -33,6 +41,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  bootpay:
+    dependency: "direct main"
+    description:
+      name: bootpay
+      sha256: "55fffba79fb128dd605c7657e4b817da783def4a6d90e0174fb09d4ed88c0fa1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.5"
+  bootpay_webview_flutter:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter
+      sha256: de2c193d93b2d797ea837aa1c43c612280ee8eafeb3fd424a45ae21db490f583
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.44"
+  bootpay_webview_flutter_android:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_android
+      sha256: d2cdfc1915e6bf2bf676c9b9a0c756d44f82cc1c1911300ea9b2c35249a216ca
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.10.44"
+  bootpay_webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_platform_interface
+      sha256: "027f3f6511fe485ccb0bdb8afbf565ef1a3945ffb7ecaa4cd357a1b33c10819f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.51"
+  bootpay_webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_wkwebview
+      sha256: "1bc2bd3568a4e78ed25402301b890d3e0c8c40b5a28a43088e88685f6634f775"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.51"
   characters:
     dependency: transitive
     description:
@@ -105,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.2"
+  encrypt:
+    dependency: transitive
+    description:
+      name: encrypt
+      sha256: "4fd4e4fdc21b9d7d4141823e1e6515cd94e7b8d84749504c232999fba25d9bbb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -216,6 +272,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttertoast:
+    dependency: transitive
+    description:
+      name: fluttertoast
+      sha256: "474f7d506230897a3cd28c965ec21c5328ae5605fc9c400cd330e9e9d6ac175c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.2.2"
   geolocator:
     dependency: "direct main"
     description:
@@ -448,6 +512,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  package_info:
+    dependency: transitive
+    description:
+      name: package_info
+      sha256: "6c07d9d82c69e16afeeeeb6866fe43985a20b3b50df243091bfc4a4ad2b03b75"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   path:
     dependency: transitive
     description:

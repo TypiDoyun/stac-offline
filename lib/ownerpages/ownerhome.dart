@@ -39,6 +39,7 @@ class _OwnerPageState extends State<OwnerHomePage> {
     }());
   }
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -69,19 +70,9 @@ class _OwnerPageState extends State<OwnerHomePage> {
             body: SafeArea(
               child: CustomScrollView(
                 slivers: [
-                  SliverAppBar(
-                    backgroundColor: Colors.black,
-                    title: Text(
-                      "Offline",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: size.height * 0.03),
-                    ),
-                    centerTitle: true,
-                    pinned: false,
-                  ),
                   SliverPersistentHeader(
                     delegate: SampleHeaderDelegate(
+
                         widget: Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             color: Theme.of(context).colorScheme.background,

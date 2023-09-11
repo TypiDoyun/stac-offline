@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../Widgets/mainlistitem.dart';
 import '../classes/clothes.dart';
@@ -9,20 +10,20 @@ import '../userpages/userselectedclothes.dart';
 import '../utils/common/try-get-clothes-info.dart';
 
 class ShopInfoPage extends StatefulWidget {
-  const ShopInfoPage({Key? key,  this.shopInfo,  this.shopInfos,}) : super(key: key);
+  const ShopInfoPage({Key? key, this.shopInfo,  this.shopInfos,}) : super(key: key);
   final Clothes? shopInfo;
   final List<Clothes>? shopInfos;
 
   @override
-  State<ShopInfoPage> createState() => _ShopInfoPageState(shopInfo!, shopInfos!);
+  State<ShopInfoPage> createState() => _ShopInfoPageState(shopInfo, shopInfos);
 }
 
 class _ShopInfoPageState extends State<ShopInfoPage> {
 
   _ShopInfoPageState(this.shopInfo, this.shopInfos);
 
-  final Clothes shopInfo;
-  final List<Clothes> shopInfos;
+  final Clothes? shopInfo;
+  final List<Clothes>? shopInfos;
 
   @override
   void initState() {
@@ -31,9 +32,12 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
 
     return Scaffold(
       body: SafeArea(
@@ -145,30 +149,30 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                     ),
                   )),
             ),
-            if (shopInfo.name.isEmpty)
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: size.height * 0.6,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "주변에 전시된 옷이 없어요...",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () async {
-                          },
-                          icon: const Icon(Icons.refresh)),
-                    ],
-                  ),
-                ),
-              )
-            else
+            // if (shopInfo.name.isEmpty)
+            //   SliverToBoxAdapter(
+            //     child: SizedBox(
+            //       height: size.height * 0.6,
+            //       child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           const Text(
+            //             "주변에 전시된 옷이 없어요...",
+            //             style: TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 16,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //           ),
+            //           IconButton(
+            //               onPressed: () async {
+            //               },
+            //               icon: const Icon(Icons.refresh)),
+            //         ],
+            //       ),
+            //     ),
+            //   )
+            // else
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
                 sliver: SliverGrid(
@@ -182,23 +186,23 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                     (BuildContext context, int index) {
                       // if (index < clothesInfo.length) {
                       return
-                        Container();
-                        UserHomeListItem(
-                        clothesName: shopInfos[index].name,
-                        clothesImgPath: shopInfos[index].images[0],
-                        clothesPrice: shopInfos[index].price,
-                        discountRate: shopInfos[index].discountRate,
-                        shopName: shopInfo.owner.shop.name,
-                        onTap: () {
-                          Get.to(() => UserSelectedClothesPage(
-                              clothesInfo: shopInfos[index]));
-                        },
-                      );
+                        Text("ㅎㅇ");
+                      //   UserHomeListItem(
+                      //   clothesName: shopInfos[index].name,
+                      //   clothesImgPath: shopInfos[index].images[0],
+                      //   clothesPrice: shopInfos[index].price,
+                      //   discountRate: shopInfos[index].discountRate,
+                      //   shopName: shopInfo.owner.shop.name,
+                      //   onTap: () {
+                      //     Get.to(() => UserSelectedClothesPage(
+                      //         clothesInfo: shopInfos[index]));
+                      //   },
+                      // );
                       // } else {
                       //   return const Center(child: CircularProgressIndicator());
                       // }
                     },
-                    childCount: shopInfos.length, // 전체 아이템 개수
+                    childCount: 3, // 전체 아이템 개수
                   ),
                 ),
               ),
