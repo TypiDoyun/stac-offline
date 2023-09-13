@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:offline/Widgets/background.dart';
+import 'package:offline/userpages/usermain.dart';
 
 import '../Widgets/User.dart';
 import '../Widgets/TextFieldContainer.dart';
 import '../Widgets/margintextinputwidget.dart';
+import '../ownerpages/ownermain.dart';
 import '../servercontroller.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -95,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -132,7 +136,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       MarginTextInputWidget(
                         controller: userNameCont,
                         topText: "성함",
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Nickname",
                         counterText: '',
                         maxLength: 4,
@@ -152,7 +157,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         maxLength: 12,
                         controller: userIdCont,
                         topText: "아이디",
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "ID",
                         keyboardType: TextInputType.visiblePassword,
                         fontSize: size.height * 0.02,
@@ -189,8 +195,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         width: size.width * 0.3,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero, //볼더 제거
+                            backgroundColor:
+                                Theme.of(context).colorScheme.tertiaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50), //볼더 제거
                             ),
                             shadowColor: Colors.white.withOpacity(0),
                           ),
@@ -224,7 +232,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: userPasswordCont,
                         topText: "비밀번호",
                         maxLength: 15,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         fontSize: size.height * 0.02,
@@ -247,7 +256,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       MarginTextInputWidget(
                         topText: "비밀번호 확인",
                         maxLength: 15,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         fontSize: size.height * 0.02,
@@ -270,7 +280,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: userPhonenumberCont,
                         topText: "전화번호",
                         maxLength: 11,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "ex) 01012345678",
                         keyboardType: TextInputType.number,
                         enabled: true,
@@ -294,7 +305,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       MarginTextInputWidget(
                         controller: userBirthCont,
                         topText: "생년월일",
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "ex) 950106",
                         keyboardType: TextInputType.number,
                         fontSize: size.height * 0.02,
@@ -303,36 +315,58 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                         icon: Icons.cake,
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        height: size.width * 0.14,
+                        width: size.width * 0.8,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.tertiaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30), //볼더 제거
+                            ),
+                            shadowColor: Colors.white.withOpacity(0),
+                          ),
+                          onPressed: () async {
+                            final isValid = signKey.currentState!.validate();
+                            if (isValid) {
+                              User newUser = User(
+                                id: userNameCont.text,
+                                username: userIdCont.text,
+                                password: userPasswordCont.text,
+                                phoneNumber: userPhonenumberCont.text,
+                                birthday: userBirthCont.text,
+                              );
+                              sendUserInfoDataToServer(newUser);
+                              Get.offAll(const UserMain());
+                            }
+                            Get.snackbar("다시 한번 확인해주세요", "잘못 입력된 부분이 있어요.",);
+                          },
+                          child: Text(
+                            "회원가입",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: size.height * 0.02,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (_currentPage >= 1)
-                IconButton(
-                  onPressed: _previousPage,
-                  icon: const Icon(Icons.arrow_back),
-                ),
-              if (_currentPage > 1)
-                InkWell(
-                  onTap: () async {
-                    User newUser = User(
-                      id: userNameCont.text,
-                      username: userIdCont.text,
-                      password: userPasswordCont.text,
-                      phoneNumber: userPhonenumberCont.text,
-                      birthday: userBirthCont.text,
-                    );
-                    sendUserInfoDataToServer(newUser);
-                  },
-                  child: const Text("회원가입"),
-                ),
-            ],
-          ),
+          if (_currentPage >= 1)
+            IconButton(
+              onPressed: _previousPage,
+              icon: const Icon(Icons.arrow_back),
+            ),
           const SizedBox(
             height: 50,
           ),

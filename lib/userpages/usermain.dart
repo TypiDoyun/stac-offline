@@ -6,21 +6,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:image/image.dart';
-import 'package:offline/classes/merchant.dart';
 import 'package:offline/ownerpages/shopinfopage.dart';
 
 import 'package:offline/userpages/login.dart';
 import 'package:offline/userpages/profile.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
-import 'package:offline/userpages/userselectedclothes.dart';
-import 'package:offline/utils/common/try-get-clothes-info.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import '../classes/clothes.dart';
-import '../classes/shop.dart';
-import '../utils/auth/try-refresh-access-token.dart';
 import 'userhome.dart';
 
 //소비자 화면
@@ -140,25 +134,25 @@ class UserMainState extends State<UserMain> {
               selectIndex = index;
             });
           },
-          items: [
-            const BottomNavigationBarItem(
+          items: const [
+            BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: "HOME",
+              label: "HOME" ,
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.location_on),
               label: "MAP",
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: "MYPAGE",
             ),
           ],
           selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,
-          selectedFontSize: size.height * 0.015,
+          selectedFontSize: size.height * 0.013,
           selectedIconTheme: IconThemeData(size: size.height * 0.03),
           unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
-          unselectedFontSize: size.height * 0.015,
+          unselectedFontSize: size.height * 0.011,
           unselectedIconTheme: IconThemeData(size: size.height * 0.03),
           type: BottomNavigationBarType.fixed,
         ),
@@ -207,7 +201,7 @@ class MapPageState extends State<MapPage> {
 
   List<NMarker> markers = [];
   NLatLng? userLoca;
-  NPoint? userMarkerNPoint = NPoint(0.5, 0.5);
+  NPoint? userMarkerNPoint = const NPoint(0.5, 0.5);
 
   @override
   void initState() {
@@ -227,10 +221,10 @@ class MapPageState extends State<MapPage> {
         userMaker = NMarker(
           isCaptionPerspectiveEnabled: true,
           anchor: userMarkerNPoint!,
-          icon: NOverlayImage.fromAssetImage(
+          icon: const NOverlayImage.fromAssetImage(
               "assets/images/userLocationIcon.png"),
-          size: Size(30, 30),
-          caption: NOverlayCaption(text: "현위치"),
+          size: const Size(30, 30),
+          caption: const NOverlayCaption(text: "현위치"),
           id: 'test',
           position: NLatLng(latitude, longitude),
         );
@@ -255,7 +249,7 @@ class MapPageState extends State<MapPage> {
 
             // 가게 정보를 포함하는 하단 시트를 표시합니다.
             Get.to(
-              () => ShopInfoPage(),
+              () => const ShopInfoPage(),
               transition: Transition.rightToLeft,
             );
           });
@@ -299,7 +293,7 @@ class MapPageState extends State<MapPage> {
                   options: NaverMapViewOptions(
                     locationButtonEnable: true,
                     initialCameraPosition: NCameraPosition(
-                      target: userLoca ?? NLatLng(33.33, 127.2164625),
+                      target: userLoca ?? const NLatLng(33.33, 127.2164625),
                       zoom: 15,
                       bearing: 0,
                       tilt: 0,

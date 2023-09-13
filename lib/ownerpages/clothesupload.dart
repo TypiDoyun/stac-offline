@@ -79,6 +79,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
       _selectedImages = pickedImages;
     });
   }
+
   void _removeImage(int index) {
     setState(() {
       _selectedImages.removeAt(index);
@@ -123,11 +124,30 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: _changeText,
-                          child: Text(
-                            textOptions[textIndex],
-                            style: const TextStyle(fontSize: 20),
+                        InkWell(
+                          onTap: _changeText,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context).colorScheme.onSecondary.withOpacity(0.2),
+                                  spreadRadius: 1,
+                                  blurRadius: 15,
+                                ),
+                              ]
+                            ),
+                            child: Text(
+                              textOptions[textIndex],
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
                           ),
                         ),
                         const Text(
@@ -137,6 +157,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                         )
                       ],
                     ),
+                    SizedBox(height: 30,),
                     Visibility(
                       visible: textOptions[textIndex] == '85(XS) ~ 110(2XL)',
                       child: Column(children: [
@@ -149,7 +170,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                             onTap: () {
                               _toggleButton(index);
                               if (buttonSelectedStates[index]) {
-                                clothesInfo["size"][index] = sizeMenusNum[index];
+                                clothesInfo["size"][index] =
+                                    sizeMenusNum[index];
                               } else {
                                 clothesInfo["size"][index] =
                                     ""; // 또는 null을 할당할 수 있습니다.
@@ -283,7 +305,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ),
                     Text(
                       "선택한 이미지",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Container(

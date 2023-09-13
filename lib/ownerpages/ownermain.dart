@@ -59,8 +59,8 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
               label: "DISPLAY",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.location_on),
-              label: "MAP",
+              icon: Icon(Icons.check),
+              label: "SOLD",
             ),
           ],
           selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MainBottomNavigationBar extends StatefulWidget {
   MainBottomNavigationBar({
     Key? key,
-    required this.selectIndex,
+    required this.selectedIndex,
     required this.iconItem1,
     required this.iconItem2,
     required this.iconItem3,
@@ -12,23 +12,25 @@ class MainBottomNavigationBar extends StatefulWidget {
     required this.label3,
   }) : super(key: key);
 
-  int selectIndex;
+  int selectedIndex; // 이름을 selectIndex에서 selectedIndex로 변경
   final Icon iconItem1, iconItem2, iconItem3;
   final String label1, label2, label3;
 
   @override
   State<MainBottomNavigationBar> createState() => _MainBottomNavigationBarState();
 }
+
 class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // selectedIndex를 widget.selectedIndex로 변경
     return BottomNavigationBar(
-      currentIndex: widget.selectIndex,
+      currentIndex: widget.selectedIndex,
       onTap: (index) {
+        // widget.selectedIndex를 업데이트하도록 변경
         setState(() {
-          widget.selectIndex = index;
+          widget.selectedIndex = index;
         });
       },
       items: [
@@ -37,8 +39,8 @@ class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
           label: widget.label1,
         ),
         BottomNavigationBarItem(
-            icon: widget.iconItem2,
-            label: widget.label2,
+          icon: widget.iconItem2,
+          label: widget.label2,
         ),
         BottomNavigationBarItem(
           icon: widget.iconItem3,
@@ -46,11 +48,11 @@ class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
         ),
       ],
       selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,
-      selectedFontSize: size.height * 0.013,
-      selectedIconTheme: IconThemeData(size: size.height * 0.03),
+      selectedFontSize: MediaQuery.of(context).size.height * 0.013,
+      selectedIconTheme: IconThemeData(size: MediaQuery.of(context).size.height * 0.03),
       unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
-      unselectedFontSize: size.height * 0.011,
-      unselectedIconTheme: IconThemeData(size: size.height * 0.03),
+      unselectedFontSize: MediaQuery.of(context).size.height * 0.011,
+      unselectedIconTheme: IconThemeData(size: MediaQuery.of(context).size.height * 0.03),
       type: BottomNavigationBarType.fixed,
     );
   }
