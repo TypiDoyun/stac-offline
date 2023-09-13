@@ -7,7 +7,7 @@ import 'package:offline/userpages/usermain.dart';
 import 'package:offline/utils/auth/signin.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../Widgets/roundedInputField.dart';
+import '../Widgets/TextFieldContainer.dart';
 import 'signup.dart';
 
 import 'package:bootpay/bootpay.dart';
@@ -47,7 +47,8 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 "로그인",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
+                  fontFamily: "NotoSansKR",
+                    fontWeight: FontWeight.w900, fontSize: size.height * 0.02),
               ),
               const SizedBox(
                 height: 30,

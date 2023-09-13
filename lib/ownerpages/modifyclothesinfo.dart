@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/intl.dart';
 
-import '../Widgets/roundedInputField.dart';
+import '../Widgets/TextFieldContainer.dart';
 
 final imagesList = [
   'assets/images/clothesImage1.jpeg',
@@ -158,61 +158,150 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                            TextFieldContainer(
-                              color: Theme.of(context).colorScheme.onSecondaryContainer,
-                              initialValue: clothesInfo["name"],
-                              hintText: '',
-                              validator: (value) {},
-                              icon: Icons.mode,
+                          Container(
+                            margin: EdgeInsets.only(top: size.height * 0.01),
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              borderRadius: BorderRadius.circular(20),
                             ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "옷 이름 수정",
+                                  style:
+                                      TextStyle(fontSize: size.height * 0.015),
+                                ),
+                                TextFormField(
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 1.5,
+                                    letterSpacing: -0.3,
+                                  ),
+                                  maxLines: 3,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "옷 이름",
+                                    icon: Icon(Icons.mode),
+                                  ),
+                                  initialValue: clothesInfo["name"],
+                                  onChanged: (val) {
+                                    clothesInfo["name"] = val;
+                                  },
+                                  validator: (value) {},
+                                ),
+                              ],
+                            ),
+                          ),
                           SizedBox(
                             height: size.height * 0.03,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    clothesInfo["discountRate"] == 0
-                                        ? ''
-                                        : '${clothesInfo["discountRate"]}%',
-                                    style: TextStyle(
-                                      color: clothesInfo["discountRate"] == 0
-                                          ? Colors.black
-                                          : Colors.red,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: -0.8,
-                                    ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 15),
+                                child: Text(
+                                  "가격  - ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: size.height * 0.02,
                                   ),
-                                  SizedBox(
-                                    width: clothesInfo["discountRate"] == 0
-                                        ? 0
-                                        : 3,
-                                  ),
-                                  Text(
-                                    clothesInfo["discountRate"] == 0
-                                        ? '${f.format(clothesInfo["price"])}원'
-                                        : '${f.format((clothesInfo["price"] - (clothesInfo["price"] * clothesInfo["discountRate"] / 100)))}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: -0.7,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                clothesInfo["discountRate"] == 0
-                                    ? ""
-                                    : "${f.format(clothesInfo["price"])}원",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 17,
                                 ),
+                              ),
+                              Container(
+                                width: size.width * 0.7,
+                                child: TextFormField(
+                                  style: TextStyle(
+                                    fontSize: size.height * 0.025,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  validator: (val) {
+                                    val! as int == 0 ? "가격을 다시 확인해주세요" : null;
+                                  },
+                                  initialValue: clothesInfo["price"].toString(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      num parsedValue =
+                                          double.tryParse(val) ?? 0;
+                                      clothesInfo["price"] = parsedValue;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.mode_edit,
+                                      size: size.height * 0.03,
+                                    ),
+                                    hintText: "가격 수정",
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                      fontSize: size.height * 0.015,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 15),
+                                child: Text(
+                                  "세일  - ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: size.height * 0.02,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: size.width * 0.6,
+                                child: TextFormField(
+                                  initialValue:
+                                      clothesInfo["discountRate"].toString(),
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 2,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: size.height * 0.02,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  validator: (val) {
+                                    if (val?.length == 2) {
+                                      return "99% 이상 세일할 순 없어요";
+                                    }
+                                    return null; // 유효한 값인 경우 null 반환
+                                  },
+                                  onChanged: (val) {
+                                    setState(() {
+                                      num discountValue =
+                                          double.tryParse(val) ??
+                                              0; // 문자열을 숫자로 변환 (기본값은 0)
+                                      clothesInfo["discountRate"] =
+                                          discountValue;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    icon: Icon(
+                                      Icons.mode_edit,
+                                      color: Colors.red,
+                                    ),
+                                    hintText: "세일가 수정",
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                      fontSize: size.height * 0.017,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: clothesInfo["discountRate"] == 0 ? 0 : 3,
                               ),
                             ],
                           ),
@@ -222,8 +311,22 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                               color: Colors.black,
                             ),
                           ),
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '원가 : ${f.format(clothesInfo["price"])}\n세일가 : ${f.format((clothesInfo["price"] - clothesInfo["discountRate"] * (clothesInfo["price"]! / 100)))}',
+                                  // 저장된 가격 출력, 없을 경우 빈 문자열 출력
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
                           SizedBox(
-                            height: size.height * 0.03,
+                            height: 10,
                           ),
                           Container(
                             margin: const EdgeInsets.all(13),
@@ -272,7 +375,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                             height: size.height * 0.2,
                             width: size.width,
                             margin: EdgeInsets.only(bottom: size.height * 0.05),
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
@@ -284,26 +387,33 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                 ),
                               ],
                             ),
-                            child: Text(
-                              "${clothesInfo["comment"]}",
-                              style: TextStyle(fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(20),
-                            child: const Text(
-                              "위치",
+                            child: TextFormField(
                               style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
+                                fontSize: size.height * 0.018,
+                                fontWeight: FontWeight.w500,
+                                height: 2,
+                              ),
+                              keyboardType: TextInputType.number,
+                              validator: (val) {
+                              },
+                              initialValue: clothesInfo["comment"],
+                              maxLines: 6,
+                              onChanged: (val) {
+                              },
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.mode_edit,
+                                  size: size.height * 0.03,
+                                ),
+                                hintText: "가격 수정",
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  fontSize: size.height * 0.015,
+                                ),
                               ),
                             ),
                           ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            height: size.height * 0.3,
-                            child: const NaverMap(),
-                          ),
+                          SizedBox(height: 60,),
                         ],
                       ),
                     ),
@@ -311,88 +421,70 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                 ),
               ),
             ),
-            SafeArea(
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                height: size.height * 0.1,
-                width: size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 3,
-                      blurRadius: 8,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black38.withOpacity(0.8),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    spreadRadius: 1,
-                                    blurRadius: 15,
-                                  ),
-                                ]),
-                            child: const Center(
-                              child: Icon(
-                                Icons.phone,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.02,
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    spreadRadius: 1,
-                                    blurRadius: 15,
-                                  ),
-                                ]),
-                            child: const Center(
-                              child: Text(
-                                "결제하기",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ModifyClothesTextFiled extends StatelessWidget {
+  final Color? color;
+  final bool obscureText;
+  final String hintText;
+  final FormFieldValidator validator;
+  final IconData icon;
+  final bool? enabled;
+  final FormFieldSetter? onSaved;
+  final TextInputType? keyboardType;
+  final Function(String)? onChanged;
+  final TextEditingController? controller;
+  final String? initialValue;
+
+  const ModifyClothesTextFiled({
+    Key? key,
+    required this.hintText,
+    required this.validator,
+    required this.icon,
+    this.color,
+    this.enabled,
+    this.onSaved,
+    this.keyboardType,
+    this.controller,
+    this.onChanged,
+    this.obscureText = false,
+    this.initialValue,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 1),
+      padding: EdgeInsets.symmetric(
+          horizontal: size.width * 0.05, vertical: size.height * 0.003),
+      width: size.width,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(29),
+      ),
+      child: TextFormField(
+        initialValue: initialValue,
+        controller: controller,
+        onChanged: onChanged,
+        onSaved: onSaved,
+        validator: validator,
+        autovalidateMode: AutovalidateMode.always,
+        keyboardType: keyboardType,
+        enabled: enabled,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          icon: Icon(icon),
+          hintText: hintText,
+          border: InputBorder.none,
+          hintStyle: TextStyle(
+            fontSize: size.height * 0.015,
+          ),
         ),
       ),
     );

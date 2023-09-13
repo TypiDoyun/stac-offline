@@ -100,7 +100,46 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+     - family: NotoSansKR
+       fonts:
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-Thin.ttf
+           weight: 100
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-ExtraLight.ttf
+           weight: 200
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-light.ttf
+           weight: 300
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-Regular.ttf
+           weight: 400
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-Medium.ttf
+           weight: 500
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-SemiBold.ttf
+           weight: 600
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-Bold.ttf
+           weight: 700
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-ExtraBold.ttf
+           weight: 800
+         - asset: assets/fonts/NotoSansKR/static/NotoSansKR-Black.ttf
+           weight: 900
+
+     - family: GmarketSansKR
+       fonts:
+         - asset: assets/fonts/GmarketKR/GmarketSansTTFLight.ttf
+           weight: 100
+         - asset: assets/fonts/GmarketKR/GmarketSansTTFMedium.ttf
+           weight: 200
+         - asset: assets/fonts/GmarketKR/GmarketSansTTFBold.ttf
+           weight: 300
+
+     - family: LINESeedKR
+       fonts:
+           - asset: assets/fonts/LINESeedKR/LINESeedKR-Th.ttf
+             weight: 100
+           - asset: assets/fonts/LINESeedKR/LINESeedKR-Rg.ttf
+             weight: 200
+           - asset: assets/fonts/LINESeedKR/LINESeedKR-Bd.ttf
+             weight: 300
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

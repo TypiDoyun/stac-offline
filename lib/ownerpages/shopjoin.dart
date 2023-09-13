@@ -240,17 +240,19 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         ),
                         width: size.width * 0.8,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Icon(
                               Icons.info,
                               color: Colors.white,
                             ),
+                            SizedBox(width: size.width * 0.03,),
                             Text(
                               "매장 정보를 확인해주세요",
                               style: TextStyle(
-                                fontSize: size.height * 0.023,
+                                fontFamily: "NotoSansKR",
+                                fontSize: size.height * 0.02,
                                 fontWeight: FontWeight.bold,
                                 color: Theme
                                     .of(context)
@@ -331,6 +333,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           child: Text(
                             "다음",
                             style: TextStyle(
+                              fontFamily: "NotoSansKR",
                               color: Theme
                                   .of(context)
                                   .colorScheme
@@ -520,7 +523,9 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             ),
                             shadowColor: Colors.white.withOpacity(0),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.offAll(OwnerMainPage());
+                          },
                           child: Text(
                             "가입하기",
                             style: TextStyle(
