@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:offline/ownerpages/clothesupload.dart';
 import 'package:offline/ownerpages/ownerorderreception.dart';
+import 'package:offline/userpages/usermain.dart';
 
 import 'ownerhome.dart';
 
@@ -36,10 +38,13 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
             fontFamily: "GmarketSansKR",
             color: Theme.of(context).colorScheme.secondary,
             fontSize: size.height * 0.03,
-            letterSpacing: -1,
+            letterSpacing: size.width * -0.0033,
             fontWeight: FontWeight.w700,
           ),
           centerTitle: true,
+          actions: [
+            IconButton(onPressed: () {Get.offAll(UserMain());}, icon: Icon(Icons.logout),color: Colors.white,),
+          ],
         ),
         body: bodyItem.elementAt(selectIndex),
         bottomNavigationBar: BottomNavigationBar(

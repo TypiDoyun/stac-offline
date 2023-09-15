@@ -60,6 +60,7 @@ class _SignUpPageState extends State<SignUpPage> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+
       setState(() {
         _currentPage++;
       });
