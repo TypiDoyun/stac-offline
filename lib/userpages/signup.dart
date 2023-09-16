@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:offline/Widgets/background.dart';
 import 'package:offline/userpages/usermain.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../Widgets/User.dart';
 import '../Widgets/TextFieldContainer.dart';
@@ -23,14 +24,13 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-
   final Map<String, TextEditingController> userInfoController = {
-    "name" : TextEditingController(),
-    "id" : TextEditingController(),
-    "password" : TextEditingController(),
-    "checkPassword" : TextEditingController(),
-    "phoneNumber" : TextEditingController(),
-    "birthday" : TextEditingController(),
+    "name": TextEditingController(),
+    "id": TextEditingController(),
+    "password": TextEditingController(),
+    "checkPassword": TextEditingController(),
+    "phoneNumber": TextEditingController(),
+    "birthday": TextEditingController(),
   };
   bool isLoading = false;
 
@@ -114,12 +114,30 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Background(
         child: ListView(children: [
           Container(
-            margin: EdgeInsets.symmetric(vertical: size.width * 0.08),
+            margin: EdgeInsets.symmetric(vertical: size.width * 0.02),
+            height: size.height * 0.1,
             child: Center(
-              child: Text(
-                "회원가입",
-                style: TextStyle(
-                    fontSize: size.height * 0.02, fontWeight: FontWeight.bold),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "회원가입",
+                    style: TextStyle(
+                        fontSize: size.height * 0.02,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SmoothPageIndicator(
+                    controller: _pageController,
+                    count: 3,
+                    effect: SwapEffect(
+                      activeDotColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      dotColor: Theme.of(context).colorScheme.onSecondary,
+                      dotHeight: size.width * 0.02,
+                      dotWidth: size.width * 0.02,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -129,13 +147,13 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Form(
               key: signKey,
               child: PageView(
-                // physics: NeverScrollableScrollPhysics(),
                 controller: _pageController,
                 onPageChanged: (int page) {
                   setState(() {
                     _currentPage = page;
                   });
-                },physics: NeverScrollableScrollPhysics(),
+                },
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   Column(
                     children: [
@@ -321,9 +339,11 @@ class _SignUpPageState extends State<SignUpPage> {
                           if (val.isEmpty) {
                             return "전화번호를 입력해주세요.";
                           }
-                          if (userInfoController["phoneNumber"]!.text.length != 11){
+                          if (userInfoController["phoneNumber"]!.text.length !=
+                              11) {
                             return "제대로 입력해주세요";
-                          };
+                          }
+                          ;
                           RegExp specialCharRegex =
                               RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
                           if (specialCharRegex.hasMatch(val)) {
@@ -346,9 +366,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         keyboardType: TextInputType.number,
                         fontSize: size.height * 0.02,
                         validator: (val) {
-                          if (userInfoController["birthday"]!.text.length != 6){
+                          if (userInfoController["birthday"]!.text.length !=
+                              6) {
                             return "생년월일을 입력해주세요";
-                          };
+                          }
+                          ;
                         },
                         icon: Icons.cake,
                       ),
@@ -371,13 +393,15 @@ class _SignUpPageState extends State<SignUpPage> {
                           onPressed: () async {
                             final isValid = signKey.currentState!.validate();
                             print(isValid);
-                            print("여기: ${userInfoController["birthday"]!.text}");
+                            print(
+                                "여기: ${userInfoController["birthday"]!.text}");
                             if (isValid) {
                               User newUser = User(
                                 id: userInfoController["id"]!.text,
                                 username: userInfoController["name"]!.text,
                                 password: userInfoController["password"]!.text,
-                                phoneNumber: userInfoController["phoneNumber"]!.text,
+                                phoneNumber:
+                                    userInfoController["phoneNumber"]!.text,
                                 birthday: userInfoController["birthday"]!.text,
                               );
                               sendUserInfoDataToServer(newUser);
@@ -387,7 +411,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 "잘못 입력된 부분이 있어요.",
                               );
                             }
-
                           },
                           child: Text(
                             "회원가입",

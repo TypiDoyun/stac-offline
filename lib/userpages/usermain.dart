@@ -195,6 +195,14 @@ class UserMainState extends State<UserMain> {
   }
 }
 
+class ShopInfo {
+  final String id;
+  final double latitude;
+  final double longitude;
+
+  ShopInfo({required this.id, required this.latitude, required this.longitude});
+}
+
 //맵
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -205,9 +213,16 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
   Future<void>? dataLoading;
+
+
   NMarker? userMaker;
-  NMarker? marker2;
-  NMarker? marker3;
+
+  List<ShopInfo> shopInfos = [
+    ShopInfo(id: 'shop1', latitude: 37.1253841, longitude: 127.2159064),
+    ShopInfo(id: 'shop2', latitude: 37.1253251, longitude: 127.2164626),
+    ShopInfo(id: 'shop3', latitude: 37.1253461, longitude: 127.2184676),
+    // Add more shop info here...
+  ];
 
   List<NMarker> markers = [];
   NLatLng? userLoca;
@@ -224,6 +239,7 @@ class MapPageState extends State<MapPage> {
     double? latitude = prefs.getDouble("latitude");
     double? longitude = prefs.getDouble("longitude");
 
+
     if (latitude != null && longitude != null) {
       setState(() {
         userLoca = NLatLng(latitude, longitude);
@@ -238,18 +254,13 @@ class MapPageState extends State<MapPage> {
           id: 'test',
           position: NLatLng(latitude, longitude),
         );
-        marker2 = NMarker(
-          id: "test2",
-          position: NLatLng(latitude, longitude + 0.01),
-          iconTintColor: Colors.red,
-        );
-        marker3 = NMarker(
-          id: "test3",
-          position: NLatLng(latitude, longitude + 0.001),
-          iconTintColor: Colors.red,
-        );
-
-        markers = [marker2!, marker3!];
+        markers = shopInfos.map((shopInfo) {
+          return NMarker(
+            id: shopInfo.id,
+            position: NLatLng(shopInfo.latitude, shopInfo.longitude),
+            iconTintColor: Colors.red,
+          );
+        }).toList();
 
         // 각 마커에 onTapListener 추가
         for (NMarker marker in markers) {
@@ -258,9 +269,11 @@ class MapPageState extends State<MapPage> {
             // overlay 변수는 탭된 마커를 나타냅니다.
 
             // 가게 정보를 포함하는 하단 시트를 표시합니다.
+            print(longitude);
+            print("여기: ${latitude}");
             Get.to(
-              () => const ShopInfoPage(),
-              transition: Transition.rightToLeft,
+                  () => const ShopInfoPage(),
+              transition: Transition.downToUp,
             );
           });
         }
@@ -325,163 +338,3 @@ class MapPageState extends State<MapPage> {
     );
   }
 }
-
-//지도 화면
-// class MapPage extends StatefulWidget {
-//   const MapPage({Key? key}) : super(key: key);
-//
-//   @override
-//   State<MapPage> createState() => MapPageState();
-// }
-//
-//
-// class MapPageState extends State<MapPage> {
-//
-//   Future<void>? dataLoading;
-//   랴ㅜㅁㄱ
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     (() async {
-//       List<double?> location = await getLocation();
-//
-//       if (location[0] != null && location[1] != null) {
-//         final marker = NMarker(
-//           icon: const NOverlayImage.fromAssetImage('assets/images/test.png'),
-//           id: 'test',
-//           position: NLatLng(location[0]!, location[1]!),
-//         );
-//
-//         // Use the marker as needed.
-//       } else {
-//         // Handle the case where latitude or longitude is not available.
-//       }
-//     }());
-//     setState(() {});
-//   }
-//
-//   Future<List<double?>> getLocation() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     double? latitude = prefs.getDouble("latitude");
-//     double? longitude = prefs.getDouble("longitude");
-//
-//     if (latitude != null && longitude != null) {
-//       return [latitude, longitude];
-//     } else {
-//       // Handle the case where latitude or longitude is not available in SharedPreferences.
-//       return [null, null];
-//     }
-//   }
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//
-//     return FutureBuilder<void>(
-//       future: dataLoading,
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           // 데이터가 아직 오지 않은 상태면 로딩 표시
-//           return const Center(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text("연결 중입니다."),
-//                 SizedBox(
-//                   height: 20,
-//                 ),
-//                 CircularProgressIndicator(
-//                   strokeAlign: BorderSide.strokeAlignCenter,
-//                 ),
-//               ],
-//             ),
-//           );
-//         } else if (snapshot.hasError) {
-//           return Center(child: Text('Error: ${snapshot.error}'));
-//         } else {
-//           // 데이터가 오면 UI를 구성
-//           return Scaffold(
-//             body: Stack(
-//               alignment: Alignment.center,
-//               children: [
-//                 NaverMap(
-//                   options: const NaverMapViewOptions(
-//                     locationButtonEnable: true,
-//                     initialCameraPosition: NCameraPosition(
-//                       target: NLatLng(33, 127.2164625),
-//                       zoom: 10,
-//                       bearing: 0,
-//                       tilt: 0,
-//                     ),
-//
-//                   ),
-//                   onMapReady: (controller) {
-//                     controller.addOverlay(marker);
-//                     print("네이버 맵 로딩됨!");
-//                   },
-//                 ),
-//                 // SafeArea(
-//                 //   child: Align(
-//                 //     alignment: Alignment.topLeft,
-//                 //     child: Container(
-//                 //       margin: const EdgeInsets.all(20),
-//                 //       height: 50,
-//                 //       width: 120,
-//                 //       decoration: BoxDecoration(
-//                 //         borderRadius: BorderRadius.circular(40),
-//                 //         border: Border.all(
-//                 //           color: Colors.black,
-//                 //           width: 1,
-//                 //         ),
-//                 //         color: Colors.white,
-//                 //       ),
-//                 //       child: Row(
-//                 //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 //         children: [
-//                 //           IconButton(
-//                 //             onPressed: () {},
-//                 //             icon: const Icon(Icons.add),
-//                 //           ),
-//                 //           IconButton(
-//                 //             onPressed: () {},
-//                 //             icon: const Icon(Icons.remove),
-//                 //           ),
-//                 //         ],
-//                 //       ),
-//                 //     ),
-//                 //   ),
-//                 // ),
-//                 // Align(
-//                 //   alignment: Alignment.bottomRight,
-//                 //   child: Container(
-//                 //     margin: const EdgeInsets.all(20),
-//                 //     child: FloatingActionButton(
-//                 //       elevation: 0,
-//                 //       onPressed: () async {
-//                 //         // await getClothesInfo(12, 21);
-//                 //       },
-//                 //       backgroundColor: Colors.white,
-//                 //       shape: OutlineInputBorder(
-//                 //         borderSide: const BorderSide(
-//                 //           color: Colors.black,
-//                 //           width: 1.0,
-//                 //         ),
-//                 //         borderRadius: BorderRadius.circular(50),
-//                 //       ),
-//                 //       child: const Icon(
-//                 //         Icons.refresh,
-//                 //         color: Colors.black,
-//                 //       ),
-//                 //     ),
-//                 //   ),
-//                 // ),
-//               ],
-//             ),
-//           );
-//         }
-//       },
-//     );
-//   }
-// }

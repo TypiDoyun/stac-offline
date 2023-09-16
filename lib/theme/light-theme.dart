@@ -14,10 +14,11 @@ ThemeData lightTheme = ThemeData(
     secondary: Colors.white,
     secondaryContainer: Colors.black,
     onSecondary: Color(0xff898989),
-    onSecondaryContainer: Color(0xffEFEFEF),
+    onSecondaryContainer: Color(0xffF5F5F5),
     tertiary: Colors.white,
     tertiaryContainer: Color(0xff232323),
     onTertiaryContainer: Colors.black,
     outline: Colors.black,
   )
 );
+

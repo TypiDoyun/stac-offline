@@ -1,5 +1,4 @@
 import "shop.dart";
-import "clothes.dart";
 import "user.dart";
 
 class Merchant extends User {
