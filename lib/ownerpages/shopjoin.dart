@@ -26,16 +26,19 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
-  Map<String, TextEditingController> merchantControllers = {
+  Map<String, TextEditingController> shopJoinController = {
     "residentNumber": TextEditingController(),
+    "shopname": TextEditingController(),
     "merchantname": TextEditingController(),
-    "merchantbirthday": TextEditingController(),
+    "shopbirthday": TextEditingController(),
     "id": TextEditingController(),
     "password": TextEditingController(),
-    "location": TextEditingController(),
     "phoneNumber": TextEditingController(),
   };
+  String shopAddress = "";
 
+  TextEditingController addressController = TextEditingController();
+  List list = [];
   bool isLoading = false;
 
   Future<void> checkUserId(String data) async {
@@ -63,7 +66,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
   }
 
   void _nextPage() {
-    if (_currentPage < 2) {
+    if (_currentPage < _currentPage + 1) {
       // 총 페이지 수에 따라 조정
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -77,24 +80,13 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
 
   RegExp specialCharRegexNum = RegExp(r'[0-9]');
 
-  final TextEditingController ownerNameCont = TextEditingController();
-  final TextEditingController ownerIdCont = TextEditingController();
-  final TextEditingController ownerPasswordCont = TextEditingController();
-  final TextEditingController ownerPhonenumberCont = TextEditingController();
-  final TextEditingController ownerBirthCont = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .background,
-        elevation: 0.0,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        elevation: 0,
         toolbarHeight: size.height * 0.07,
       ),
       extendBodyBehindAppBar: true,
@@ -115,12 +107,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           children: [
                             MarginTextInputWidget(
                               topText: "사업자 등록 번호",
-                              controller: merchantControllers["residentNumber"],
-                              color: Theme
-                                  .of(context)
+                              controller: shopJoinController["residentNumber"],
+                              color: Theme.of(context)
                                   .colorScheme
                                   .onSecondaryContainer,
-                              hintText: "' - '는 생략해주세요.",
+                              hintText: "' - '는 생략해주세요",
                               keyboardType: TextInputType.datetime,
                               fontSize: size.height * 0.02,
                               validator: (val) {
@@ -129,13 +120,25 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               icon: Icons.paste,
                             ),
                             MarginTextInputWidget(
-                              topText: "대표자 성함",
-                              controller: merchantControllers["merchantname"],
-                              color: Theme
-                                  .of(context)
+                              controller: shopJoinController["shopname"],
+                              color: Theme.of(context)
                                   .colorScheme
                                   .onSecondaryContainer,
-                              hintText: "' - '는 생략해주세요.",
+                              hintText: "예시) 꽃동네 옷가게",
+                              validator: (val) {
+                                return null;
+                              },
+                              topText: "가게 이름",
+                              fontSize: size.height * 0.2,
+                              icon: Icons.paste,
+                            ),
+                            MarginTextInputWidget(
+                              topText: "대표자 성함",
+                              controller: shopJoinController["merchantname"],
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              hintText: "예시) 홍길동",
                               fontSize: size.height * 0.02,
                               validator: (val) {
                                 return null;
@@ -143,14 +146,12 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               icon: Icons.paste,
                             ),
                             MarginTextInputWidget(
-                              topText: "대표자 생년월일",
-                              controller:
-                              merchantControllers["merchantbirthday"],
-                              color: Theme
-                                  .of(context)
+                              topText: "개업 일자",
+                              controller: shopJoinController["shopbirthday"],
+                              color: Theme.of(context)
                                   .colorScheme
                                   .onSecondaryContainer,
-                              hintText: "ex)00000000",
+                              hintText: "예시) 20230924",
                               keyboardType: TextInputType.number,
                               enabled: true,
                               fontSize: size.height * 0.02,
@@ -159,15 +160,6 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               },
                               icon: Icons.lock,
                             ),
-                            MarginTextInputWidget(color: Theme
-                                .of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
-                                hintText: "정확하게 입력해주세요.",
-                                validator: (val) {return null;},
-                                icon: Icons.location_on,
-                                topText: "사업지 주소",
-                                fontSize: size.height * 0.2,),
                             SizedBox(
                               height: size.width * 0.04,
                             ),
@@ -179,39 +171,40 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    BorderRadius.circular(50), //볼더 제거
+                                        BorderRadius.circular(50), //볼더 제거
                                   ),
                                   shadowColor: Colors.white.withOpacity(0),
-                                  backgroundColor: Theme
-                                      .of(context)
+                                  backgroundColor: Theme.of(context)
                                       .colorScheme
                                       .tertiaryContainer,
                                 ),
                                 onPressed: () async {
                                   //사업자 등록 번호 조회 API
                                   final isValid =
-                                  shopJoinformKey.currentState!.validate();
+                                      shopJoinformKey.currentState!.validate();
                                   if (isValid) {
                                     shopJoinformKey.currentState!.save();
                                     print(
-                                        merchantControllers["merchantbirthday"]!
-                                            .text);
+                                        shopJoinController["residentNumber"]!.text);
                                     await sendShopInfoDataToServer(
-                                      merchantControllers["residentNumber"]!
+                                      shopJoinController["residentNumber"]!
                                           .text,
-                                      merchantControllers["merchantname"]!.text,
-                                      merchantControllers["merchantbirthday"]!
+                                      shopJoinController["merchantname"]!.text,
+                                      shopJoinController["shopbirthday"]!
                                           .text,
-                                    ) != null ? print("굿") : Get.snackbar("다시 확인", "해주세요");
+                                    ) ? _nextPage() : Get.snackbar("다시 확인", "해주세요");
                                     // Shop newShop = Shop(
                                     //     name: "",
                                     //     shopNumber: "",
                                     //     logo: "",
-                                    //     registrationNumber: merchantControllers["residentNumber"]!.text);
+                                    //     registrationNumber: shopJoinController["residentNumber"]!.text);
+                                  }
+                                  else {
+                                    Get.snackbar("다시 확인", "해주세요");
                                   }
                                 },
                                 child: Text(
-                                  "매장 조회하기",
+                                  "다음",
                                   style: TextStyle(
                                     fontSize: size.height * 0.02,
                                     color: Colors.white,
@@ -226,16 +219,134 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                   ),
                   Column(
                     children: [
+                      MarginTextInputWidget(
+                        controller: addressController,
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                        hintText: "정확하게 입력해주세요",
+                        validator: (val) {},
+                        icon: Icons.location_on,
+                        topText: "도로명 주소 검색",
+                        fontSize: size.height * 0.015,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Map<String, String> params = {
+                            'confmKey':
+                                'devU01TX0FVVEgyMDIzMDkxNjEyNDc0MjExNDEwODM=',
+                            'currentPage': '1',
+                            'countPerPage': '10',
+                            'keyword': addressController.text,
+                            'resultType': 'json',
+                          };
+                          http.post(
+                              //주소
+                              Uri.parse(
+                                  'https://business.juso.go.kr/addrlink/addrLinkApi.do'),
+                              body: params,
+                              headers: {
+                                'content-type':
+                                    'application/x-www-form-urlencoded',
+                              }
+                              //요청 본문
+                              ).then((response) {
+                            var json = jsonDecode(response.body);
+                            setState(() {
+                              list = json['results']['juso'];
+                            });
+                          }).catchError((error) {});
+                        },
+                        icon: Icon(Icons.search),
+                      ),
+                      Expanded(
+                        child: Container(
+                          width: size.width * 0.8,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Get.defaultDialog(
+                                    titlePadding: EdgeInsets.only(
+                                        top: size.height * 0.02),
+                                    title: "매장 주소가 확실한가요?",
+                                    titleStyle:
+                                        TextStyle(fontSize: size.height * 0.02),
+                                    content: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: Column(
+                                        children: [
+                                          Divider(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiaryContainer,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Text(
+                                              list[index]['roadAddr'],
+                                              style: TextStyle(
+                                                fontSize: size.height * 0.016,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    textCancel: "아니요",
+                                    cancelTextColor: Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
+                                    textConfirm: "네",
+                                    onConfirm: () {
+                                      shopAddress = list[index]['roadAddr'];
+                                      Get.back();
+                                      print("2");
+                                      _nextPage();
+                                    },
+                                    confirmTextColor:
+                                        Theme.of(context).colorScheme.tertiary,
+                                    buttonColor: Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
+                                  );
+                                },
+                                child: Container(
+                                    margin: EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(),
+                                    child: Text("${list[index]['roadAddr']}")),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider();
+                            },
+                            itemCount: list.length,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.05,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
                       Container(
                         padding: EdgeInsets.symmetric(
                           vertical: size.height * 0.019,
                         ),
                         decoration: BoxDecoration(
                           color:
-                          Theme
-                              .of(context)
-                              .colorScheme
-                              .tertiaryContainer,
+                              Theme.of(context).colorScheme.tertiaryContainer,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         width: size.width * 0.8,
@@ -247,17 +358,16 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               Icons.info,
                               color: Colors.white,
                             ),
-                            SizedBox(width: size.width * 0.03,),
+                            SizedBox(
+                              width: size.width * 0.03,
+                            ),
                             Text(
                               "매장 정보를 확인해주세요",
                               style: TextStyle(
                                 fontFamily: "NotoSansKR",
                                 fontSize: size.height * 0.02,
                                 fontWeight: FontWeight.bold,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ],
@@ -279,8 +389,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Theme
-                                    .of(context)
+                                color: Theme.of(context)
                                     .colorScheme
                                     .primaryContainer,
                                 boxShadow: [
@@ -293,19 +402,15 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                               ),
                               child: Column(
                                 children: [
+                                  shopInfoText(topText: "가게 이름", text: shopJoinController["shopname"]!.text),
                                   shopInfoText(
-                                      topText: "사업자 등록 번호", text: "123123123"),
-                                  shopInfoText(topText: "대표자 성명", text: "신승호"),
+                                      topText: "사업자 등록 번호", text: shopJoinController["residentNumber"]!.text),
+                                  shopInfoText(topText: "대표자 성명", text: shopJoinController["merchantname"]!.text),
                                   shopInfoText(
                                       topText: "사업장 주소",
-                                      text: "경기도 용인시 처인구 고림동"),
+                                      text: shopAddress),
                                   shopInfoText(
-                                      topText: "개업 일자", text: "1231231"),
-                                  shopInfoText(topText: "상호", text: "아아아"),
-                                  shopInfoText(
-                                      topText: "법인 등록 번호", text: "123123123"),
-                                  shopInfoText(topText: "주 업태명", text: "안녕하세요"),
-                                  shopInfoText(topText: "주 공목명", text: "안녕하세요"),
+                                      topText: "개업 일자", text: shopJoinController["shopbirthday"]!.text),
                                 ],
                               ),
                             )
@@ -320,24 +425,20 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                            Theme
-                                .of(context)
-                                .colorScheme
-                                .tertiaryContainer,
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30), //볼더 제거
                             ),
                             shadowColor: Colors.white.withOpacity(0),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            _nextPage();
+                          },
                           child: Text(
                             "다음",
                             style: TextStyle(
                               fontFamily: "NotoSansKR",
-                              color: Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .secondary,
+                              color: Theme.of(context).colorScheme.secondary,
                               fontSize: size.height * 0.02,
                               fontWeight: FontWeight.bold,
                             ),
@@ -349,34 +450,11 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                   Column(
                     children: [
                       MarginTextInputWidget(
-                        controller: ownerNameCont,
-                        topText: "성함",
-                        color:
-                        Theme
-                            .of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
-                        hintText: "Nickname",
-                        counterText: '',
-                        maxLength: 4,
-                        fontSize: size.height * 0.015,
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            return "성함을 입력해주세요";
-                          }
-                          return null;
-                        },
-                        icon: Icons.person_outline,
-                      ),
-                      MarginTextInputWidget(
                         maxLength: 12,
-                        controller: ownerIdCont,
+                        controller: shopJoinController["id"],
                         topText: "아이디",
                         color:
-                        Theme
-                            .of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "ID",
                         keyboardType: TextInputType.visiblePassword,
                         fontSize: size.height * 0.02,
@@ -392,16 +470,14 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           }
                           // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
                           RegExp specialCharRegex =
-                          RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]');
+                              RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]');
                           if (!specialCharRegex.hasMatch(val)) {
                             return "특수 문자와 공백은 입력할 수 없습니다.";
                           }
                           if (val.length < 6) {
                             return "최소 6자 이상 입력해야합니다.";
                           }
-                          if (specialCharRegexNum
-                              .allMatches(val)
-                              .isEmpty) {
+                          if (specialCharRegexNum.allMatches(val).isEmpty) {
                             return "숫자 1자 이상 입력해야 합니다.";
                           }
                           return null;
@@ -416,17 +492,14 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                            Theme
-                                .of(context)
-                                .colorScheme
-                                .tertiaryContainer,
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50), //볼더 제거
                             ),
                             shadowColor: Colors.white.withOpacity(0),
                           ),
                           onPressed: () async {
-                            await checkUserId(ownerIdCont.text);
+                            await checkUserId(shopJoinController["id"]!.text);
                             print(checkId);
                             if (!checkId!) {
                               _nextPage();
@@ -441,26 +514,22 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                       ),
                       if (isLoading)
                         const Text("확인중..")
+                      else if (checkId != null)
+                        checkId!
+                            ? const Text("이미 사용중인 아이디 입니다.")
+                            : const Text("사용 가능한 아이디 입니다.")
                       else
-                        if (checkId != null)
-                          checkId!
-                              ? const Text("이미 사용중인 아이디 입니다.")
-                              : const Text("사용 가능한 아이디 입니다.")
-                        else
-                          const SizedBox(),
+                        const SizedBox(),
                     ],
                   ),
                   Column(
                     children: [
                       MarginTextInputWidget(
-                        controller: ownerPasswordCont,
+                        controller: shopJoinController["password"],
                         topText: "비밀번호",
                         maxLength: 15,
                         color:
-                        Theme
-                            .of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
@@ -470,9 +539,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                             return "비밀번호을 입력해주세요.";
                           }
                           // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
-                          if (specialCharRegexNum
-                              .allMatches(val)
-                              .length < 3) {
+                          if (specialCharRegexNum.allMatches(val).length < 3) {
                             return "숫자 3자 이상 입력해야 합니다.";
                           }
                           RegExp specialCharRegex1 = RegExp(r'[ ]');
@@ -487,10 +554,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         topText: "비밀번호 확인",
                         maxLength: 15,
                         color:
-                        Theme
-                            .of(context)
-                            .colorScheme
-                            .onSecondaryContainer,
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Password",
                         keyboardType: TextInputType.visiblePassword,
                         enabled: true,
@@ -499,7 +563,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           if (val.isEmpty) {
                             return "비밀번호를 재입력해주세요.";
                           }
-                          if (val != ownerPasswordCont.text) {
+                          if (val != shopJoinController["password"]!.text) {
                             return "비밀번호를 다시 확인해주세요.";
                           }
                           return null;
@@ -514,10 +578,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                            Theme
-                                .of(context)
-                                .colorScheme
-                                .tertiaryContainer,
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30), //볼더 제거
                             ),
@@ -529,10 +590,7 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                           child: Text(
                             "가입하기",
                             style: TextStyle(
-                              color: Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .secondary,
+                              color: Theme.of(context).colorScheme.secondary,
                               fontSize: size.height * 0.02,
                               fontWeight: FontWeight.bold,
                             ),
@@ -551,17 +609,12 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
   }
 
   shopInfoText({required String text, topText}) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: size.height * 0.002,
       ),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(
           vertical: size.height * 0.01, horizontal: size.height * 0.02),
       decoration: BoxDecoration(

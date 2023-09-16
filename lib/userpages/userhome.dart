@@ -16,8 +16,9 @@ import '../ownerpages/shopinfopage.dart';
 import '../utils/common/try-get-clothes-info.dart';
 
 class UserHomePage extends StatefulWidget {
-  // final Clothes test;
-  const UserHomePage({super.key});
+  const UserHomePage({
+    super.key,
+  });
 
   @override
   State<UserHomePage> createState() => _UserHomePageState();
@@ -40,11 +41,15 @@ class _UserHomePageState extends State<UserHomePage> {
     },
   ];
 
-  List<Clothes> test = [];
+  List<Clothes> aroundClothes = [];
   Clothes? shopInfo;
 
-  Future refresh(double latitude, longitude) async {
-    test = await getClothesInfo(latitude, longitude);
+  double latitude = 0, longitude = 0;
+
+  Future refresh() async {
+    SharedPreferences prefrs = await SharedPreferences.getInstance();
+    aroundClothes = await getClothesInfo(
+        prefrs.getDouble("latitude")!, prefrs.getDouble("longitude"));
     setState(() {});
   }
 
@@ -85,15 +90,13 @@ class _UserHomePageState extends State<UserHomePage> {
   //   });
   // }
   Future<void>? dataLoading;
-  dynamic localLatitude;
-  dynamic localLongitude;
 
   @override
   void initState() {
     super.initState();
     (() async {
-      dataLoading = await refresh(33.4621910539136, 126.328972924341);
-    }());
+      dataLoading = await refresh();
+    });
   }
 
   @override
@@ -121,203 +124,196 @@ class _UserHomePageState extends State<UserHomePage> {
           );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          // 데이터가 오면 UI를 구성
-          return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            body: SafeArea(
-              child: test.isNotEmpty
-                  ? CustomScrollView(
-                      // controller: controller,
-                      slivers: [
-                        SliverAppBar(
-                          backgroundColor:
-                              Theme.of(context).appBarTheme.backgroundColor,
-                          centerTitle: true,
-                          title: const Text(
-                            "Offline",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 28,
-                            ),
+        } // 데이터가 오면 UI를 구성
+        return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          body: SafeArea(
+            child: aroundClothes.isNotEmpty
+                ? CustomScrollView(
+                    // controller: controller,
+                    slivers: [
+                      SliverAppBar(
+                        backgroundColor:
+                            Theme.of(context).appBarTheme.backgroundColor,
+                        centerTitle: true,
+                        title: const Text(
+                          "Offline",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 28,
                           ),
                         ),
-                        SliverToBoxAdapter(
+                      ),
+                      SliverToBoxAdapter(
+                        child: Container(
+                          height: 2.0, // 선의 높이를 조절합니다.
+                          color: Colors.black, // 선의 색상을 설정합니다.
+                        ),
+                      ),
+                      SliverPersistentHeader(
+                        delegate: TabBarDelegate(
+                          maxHeight: 30,
+                          minHeight: 30,
                           child: Container(
-                            height: 2.0, // 선의 높이를 조절합니다.
-                            color: Colors.black, // 선의 색상을 설정합니다.
-                          ),
-                        ),
-                        SliverPersistentHeader(
-                          delegate: TabBarDelegate(
-                            maxHeight: 30,
-                            minHeight: 30,
-                            child: Container(
-                              color: Theme.of(context).colorScheme.background,
-                              alignment: Alignment.bottomLeft,
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                              ),
-                              child: Text(
-                                "경기도 용인시 처인구 고림동",
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
-                              ),
+                            color: Theme.of(context).colorScheme.background,
+                            alignment: Alignment.bottomLeft,
+                            padding: const EdgeInsets.only(
+                              left: 20,
                             ),
-                          ),
-                          pinned: true,
-                        ),
-                        // SliverPersistentHeader(
-                        //   delegate: TabBarDelegate(
-                        //     maxHeight: 35,
-                        //     minHeight: 35,
-                        //     child: Container(
-                        //       alignment: Alignment.bottomLeft,
-                        //       margin:
-                        //           const EdgeInsets.only(left: 20, bottom: 10),
-                        //       child: const Text(
-                        //         "주변에 있는 옷가게들이에요.",
-                        //         style: TextStyle(
-                        //             fontSize: 17, fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // SliverPersistentHeader(
-                        //   pinned: true,
-                        //   delegate: TabBarDelegate(
-                        //     maxHeight: size.width * 0.16,
-                        //     minHeight: size.width * 0.16,
-                        //     child: Container(
-                        //       decoration: BoxDecoration(
-                        //         color: Theme.of(context).colorScheme.background,
-                        //       ),
-                        //       child: ListView.builder(
-                        //         scrollDirection: Axis.horizontal,
-                        //         itemCount: 2,
-                        //         itemBuilder: (context, index) {
-                        //           return InkWell(
-                        //             onTap: () async {
-                        //               Get.to(() => ShopInfoPage(
-                        //                   shopInfo: test[index],
-                        //                   shopInfos: test));
-                        //             },
-                        //               child: Container(
-                        //                 alignment: Alignment.center,
-                        //                 margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                        //                 child: Column(
-                        //                   mainAxisAlignment: MainAxisAlignment.center,
-                        //                   children: [
-                        //                     Container(color: Colors.grey, height: 20, width: 20,),
-                        //                     Text(
-                        //                       "엄청난 옷을 파는 옷가게.",
-                        //                       style: TextStyle(
-                        //                         color: Theme.of(context)
-                        //                             .colorScheme
-                        //                             .primary,
-                        //                         fontSize: size.height * 0.015,
-                        //                       ),
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //           );
-                        //         },
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        SliverPersistentHeader(
-                          delegate: TabBarDelegate(
-                            maxHeight: 40,
-                            minHeight: 40,
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                left: 20,
-                              ),
-                              child: const Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "주변에 전시 된 옷들이에요",
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                            child: Text(
+                              "경기도 용인시 처인구 고림동",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
                               ),
                             ),
                           ),
                         ),
-                        SliverPadding(
-                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 30),
-                          sliver: SliverGrid(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // 그리드 열 개수
-                              mainAxisSpacing: 5, // 그리드 행 간 간격
-                              crossAxisSpacing: 10.0, // 그리드 열 간 간격
-                              childAspectRatio: (size.width / 2 - 20) /
-                                  (size.width * 0.75), // 아이템의 가로 세로 비율
+                        pinned: true,
+                      ),
+                      // SliverPersistentHeader(
+                      //   delegate: TabBarDelegate(
+                      //     maxHeight: 35,
+                      //     minHeight: 35,
+                      //     child: Container(
+                      //       alignment: Alignment.bottomLeft,
+                      //       margin:
+                      //           const EdgeInsets.only(left: 20, bottom: 10),
+                      //       child: const Text(
+                      //         "주변에 있는 옷가게들이에요.",
+                      //         style: TextStyle(
+                      //             fontSize: 17, fontWeight: FontWeight.bold),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SliverPersistentHeader(
+                      //   pinned: true,
+                      //   delegate: TabBarDelegate(
+                      //     maxHeight: size.width * 0.16,
+                      //     minHeight: size.width * 0.16,
+                      //     child: Container(
+                      //       decoration: BoxDecoration(
+                      //         color: Theme.of(context).colorScheme.background,
+                      //       ),
+                      //       child: ListView.builder(
+                      //         scrollDirection: Axis.horizontal,
+                      //         itemCount: 2,
+                      //         itemBuilder: (context, index) {
+                      //           return InkWell(
+                      //             onTap: () async {
+                      //               Get.to(() => ShopInfoPage(
+                      //                   shopInfo: test[index],
+                      //                   shopInfos: test));
+                      //             },
+                      //               child: Container(
+                      //                 alignment: Alignment.center,
+                      //                 margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                      //                 child: Column(
+                      //                   mainAxisAlignment: MainAxisAlignment.center,
+                      //                   children: [
+                      //                     Container(color: Colors.grey, height: 20, width: 20,),
+                      //                     Text(
+                      //                       "엄청난 옷을 파는 옷가게.",
+                      //                       style: TextStyle(
+                      //                         color: Theme.of(context)
+                      //                             .colorScheme
+                      //                             .primary,
+                      //                         fontSize: size.height * 0.015,
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //           );
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      SliverPersistentHeader(
+                        delegate: TabBarDelegate(
+                          maxHeight: 40,
+                          minHeight: 40,
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              left: 20,
                             ),
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                // if (index < clothesInfo.length) {
-                                return UserHomeListItem(
-                                  clothesName: test[index].name,
-                                  clothesImgPath: test[index].images[0],
-                                  clothesPrice: test[index].price,
-                                  discountRate: test[index].discountRate,
-                                  shopName: test[index].owner.shop.name,
-                                  onTap: () {
-                                    Get.to(() => UserSelectedClothesPage(
-                                        clothesInfo: test[index]));
-                                  },
-                                );
-                                // } else {
-                                //   return const Center(child: CircularProgressIndicator());
-                                // }
-                              },
-                              childCount: test.length, // 전체 아이템 개수
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: size.height * 0.6,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "주변에 전시된 옷이 없어요...",
+                                Text(
+                                  "주변에 전시 된 옷들이에요",
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                IconButton(
-                                    onPressed: () async {
-                                      await refresh(
-                                          33.4621910539136, 126.328972924341);
-                                    },
-                                    icon: const Icon(Icons.refresh)),
                               ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-            ),
-          ); // 실제 위젯 반환
-        }
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 30),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // 그리드 열 개수
+                            mainAxisSpacing: 5, // 그리드 행 간 간격
+                            crossAxisSpacing: 10.0, // 그리드 열 간 간격
+                            childAspectRatio: (size.width / 2 - 20) /
+                                (size.width * 0.75), // 아이템의 가로 세로 비율
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              // if (index < clothesInfo.length) {
+                              return UserHomeListItem(
+                                clothesName: aroundClothes[index].name,
+                                clothesImgPath: aroundClothes[index].images[0],
+                                clothesPrice: aroundClothes[index].price,
+                                discountRate: aroundClothes[index].discountRate,
+                                shopName: aroundClothes[index].owner.shop.name,
+                                onTap: () {
+                                  Get.to(() => UserSelectedClothesPage(
+                                      clothesInfo: aroundClothes[index]));
+                                },
+                              );
+                              // } else {
+                              //   return const Center(child: CircularProgressIndicator());
+                              // }
+                            },
+                            childCount: aroundClothes.length, // 전체 아이템 개수
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+              alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "주변에 전시된 옷이 없어요...",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: size.height * 0.017,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            await refresh();
+                            setState(() {
+                            });
+                          },
+                          icon: const Icon(Icons.refresh)),
+                    ],
+                  ),
+                ),
+          ),
+        ); // 실제 위젯 반환
       },
     );
   }

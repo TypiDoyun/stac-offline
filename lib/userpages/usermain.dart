@@ -28,9 +28,8 @@ class UserMain extends StatefulWidget {
 class UserMainState extends State<UserMain> {
   int selectIndex = 0;
   dynamic data;
-  List<Clothes>? test;
-  dynamic localLatitude;
-  dynamic localLongitude;
+  double localLatitude = 0;
+  double localLongitude = 0;
 
   List<double?> loca = [];
   List<double?> locaTest = [];
@@ -38,7 +37,7 @@ class UserMainState extends State<UserMain> {
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
 
-  _locateMe() async {
+  Future _locateMe() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled!) {
       _serviceEnabled = await location.requestService();
@@ -57,15 +56,13 @@ class UserMainState extends State<UserMain> {
     await location.getLocation().then((res) async {
       loca.add(res.latitude);
       loca.add(res.longitude);
-      print(loca);
-      SharedPreferences prefrs = await SharedPreferences.getInstance();
-      prefrs.setDouble("latitude", loca[0]!);
-      prefrs.setDouble("longitude", loca[1]!);
-    });
+      localLatitude = loca[0]!;
+      localLongitude = loca[1]!;
 
-    // saveLocation() async {
-    //
-    // }
+      SharedPreferences prefrs = await SharedPreferences.getInstance();
+      await prefrs.setDouble("latitude", localLatitude);
+      await prefrs.setDouble("longitude", localLongitude);
+    });
   }
 
   //네이게이션바 화면 순서
@@ -96,6 +93,7 @@ class UserMainState extends State<UserMain> {
       accessToken = prefrs.getString("accessToken");
       await fetchUserData(prefrs.getString("accessToken"));
       await _locateMe();
+
       //   Get.dialog(
       //   (AlertDialog(
       //     title: const Text("어디 계신가요?"),
@@ -123,6 +121,19 @@ class UserMainState extends State<UserMain> {
     return DefaultTabController(
       length: bodyItem.length,
       child: Scaffold(
+        appBar:AppBar(
+          backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+          shadowColor: Colors.transparent,
+          title: const Text("Offline"),
+          titleTextStyle: TextStyle(
+            fontFamily: "GmarketSansKR",
+            color: Theme.of(context).colorScheme.secondary,
+            fontSize: size.height * 0.03,
+            letterSpacing: size.width * -0.004,
+            fontWeight: FontWeight.normal,
+          ),
+          centerTitle: true,
+        ),
         body: accessToken == null
             ? loginItem.elementAt(selectIndex)
             : bodyItem.elementAt(selectIndex),
@@ -130,14 +141,13 @@ class UserMainState extends State<UserMain> {
           currentIndex: selectIndex,
           onTap: (index) {
             setState(() {
-              print(index);
               selectIndex = index;
             });
           },
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: "HOME" ,
+              label: "HOME",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.location_on),
@@ -148,7 +158,7 @@ class UserMainState extends State<UserMain> {
               label: "MYPAGE",
             ),
           ],
-          selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,
+          selectedItemColor: Theme.of(context).colorScheme.tertiaryContainer,
           selectedFontSize: size.height * 0.013,
           selectedIconTheme: IconThemeData(size: size.height * 0.03),
           unselectedItemColor: Theme.of(context).colorScheme.onSecondary,

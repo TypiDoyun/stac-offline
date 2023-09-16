@@ -6,10 +6,8 @@ import 'package:offline/userpages/usermain.dart';
 
 import 'ownerhome.dart';
 
-
 class OwnerMainPage extends StatefulWidget {
   const OwnerMainPage({super.key});
-
 
   @override
   State<OwnerMainPage> createState() => _OwnerMainPageState();
@@ -31,19 +29,25 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
       length: bodyItem.length,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
           shadowColor: Colors.transparent,
-          title: Text("Offline"),
+          title: const Text("Offline"),
           titleTextStyle: TextStyle(
             fontFamily: "GmarketSansKR",
             color: Theme.of(context).colorScheme.secondary,
             fontSize: size.height * 0.03,
-            letterSpacing: size.width * -0.0033,
-            fontWeight: FontWeight.w700,
+            letterSpacing: size.width * -0.004,
+            fontWeight: FontWeight.normal,
           ),
           centerTitle: true,
           actions: [
-            IconButton(onPressed: () {Get.offAll(UserMain());}, icon: Icon(Icons.logout),color: Colors.white,),
+            IconButton(
+              onPressed: () {
+                Get.offAll(const UserMain());
+              },
+              icon: const Icon(Icons.logout),
+              color: Colors.white,
+            ),
           ],
         ),
         body: bodyItem.elementAt(selectIndex),
@@ -56,15 +60,21 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
           },
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.store),
+              icon: Icon(
+                Icons.store,
+              ),
               label: "HOME",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline_rounded),
+              icon: Icon(
+                Icons.add_circle_outline_rounded,
+              ),
               label: "DISPLAY",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.check),
+              icon: Icon(
+                Icons.check,
+              ),
               label: "SOLD",
             ),
           ],

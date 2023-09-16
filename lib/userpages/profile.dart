@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
@@ -19,74 +18,90 @@ class _ProfilePageState extends State<ProfilePage> {
 
   dynamic data;
 
+  User? user;
+
   @override
-  initState() {
+  void initState() {
     super.initState();
-    (() async {
-      SharedPreferences prefrs = await SharedPreferences.getInstance();
-      User user = User(
-        id: prefrs.getString("id"),
-        username: prefrs.getString("username"),
-        password: prefrs.getString("password"),
-        phoneNumber: prefrs.getString("phoneNumer"),
-        birthday: prefrs.getString("birthday"),
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      user = User(
+        id: prefs.getString("id"),
+        username: prefs.getString("username"),
+        password: prefs.getString("password"),
+        phoneNumber: prefs.getString("phoneNumber"),
+        // Corrected typo
+        birthday: prefs.getString("birthday"),
       );
-      print(user);
-    }());
+    });
+    print('여기: ${user!.username}');
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        shadowColor: Colors.white.withOpacity(0),
-      ),
       body: Background(
         child: Column(
           children: [
-            const Text(
-              "회원 정보",
-              style: TextStyle(fontSize: 25),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: size.height * 0.02),
+              child: Text(
+                "회원 정보",
+                style: TextStyle(
+                    fontSize: size.height * 0.02,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "NotoSansKR"),
+              ),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: size.width * 0.1),
-              child: const Text(
-                "어서오세요 님. Offline입니다.",
-                style: TextStyle(fontSize: 20),
+              child: Text(
+                user != null
+                    ? "어서오세요 ${user!.username}님. Offline입니다."
+                    : "로딩 중...", // Handle user being null during loading
+                style: TextStyle(
+                    fontSize: size.height * 0.015, fontFamily: "NotoSansKR"),
               ),
             ),
-            Card(
-              child: Container(
-                alignment: Alignment.topCenter,
-                height: size.width * 0.24,
-                child: SizedBox(
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.25,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "ㅎㅇ",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: size.width * 0.02,
-                          ),
-                          const Text(
-                            "ㅎㅇ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.02),
+                alignment: Alignment.centerLeft,
+                height: size.height * 0.3,
+                width: size.width * 0.8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 15,
+                    ),
+                  ],
                 ),
-              ),
-            ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text("아이디", style: TextStyle(fontSize: size.height * 0.016),),
+                    ),
+                    Container(
+                      child: Text("성함", style: TextStyle(fontSize: size.height * 0.016),),
+                    ),
+                    Container(
+                      child: Text("생년월일", style: TextStyle(fontSize: size.height * 0.016),),
+                    ),
+                    Container(
+                      child: Text("주소", style: TextStyle(fontSize: size.height * 0.016),),
+                    ),
+                  ],
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -94,7 +109,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {
                     Get.dialog(
                       (AlertDialog(
-                        title: const Text("정말로 로그아웃 하시겠습니까?"),
+                        title: Text(
+                          "정말로 로그아웃 하시겠습니까?",
+                        ),
                         actions: [
                           TextButton(
                             child: const Text("아니요"),
@@ -112,13 +129,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       )),
                     );
                   },
-                  child: const Text("로그아웃"),
+                  child: Text(
+                    "로그아웃",
+                    style: TextStyle(fontSize: size.height * 0.015),
+                  ),
                 ),
                 InkWell(
                   onTap: () {
                     Get.dialog(
                       (AlertDialog(
-                        title: const Text("정말로 회원을 탈퇴하시겠습니까?"),
+                        title: const Text(
+                          "정말로 회원을 탈퇴하시겠습니까?",
+                        ),
                         actions: [
                           TextButton(
                               child: const Text("아니요"), onPressed: () async {}),
@@ -132,7 +154,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 20),
-                    child: const Text("회원 탈퇴"),
+                    child: Text(
+                      "회원 탈퇴",
+                      style: TextStyle(fontSize: size.height * 0.015),
+                    ),
                   ),
                 ),
               ],

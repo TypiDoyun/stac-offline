@@ -11,7 +11,7 @@ Future sendShopInfoDataToServer(String registrationNumber, representative, openi
       // 서버의 엔드포인트 URL로 변경
     );
     if (response.statusCode == 200) {
-      print('Data sent successfully!');
+      print('Data sent successfully! ${response.body}');
       return response.body == "true" ? true : false;
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
