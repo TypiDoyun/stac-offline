@@ -53,23 +53,24 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Text(
                 "회원 정보",
                 style: TextStyle(
-                    fontSize: size.height * 0.02,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "NotoSansKR"),
+                  fontSize: size.height * 0.02,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "NotoSansKR",
+                ),
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: size.width * 0.1),
+              margin: EdgeInsets.symmetric(vertical: size.width * 0.07),
               child: Text(
                 user != null
                     ? "어서오세요 ${user!.username}님. Offline입니다."
                     : "로딩 중...", // Handle user being null during loading
                 style: TextStyle(
-                    fontSize: size.height * 0.015, fontFamily: "NotoSansKR"),
+                    fontSize: size.height * 0.015, fontFamily: "NotoSansKR", fontWeight: FontWeight.bold),
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.02),
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.02),
                 alignment: Alignment.centerLeft,
                 height: size.height * 0.3,
                 width: size.width * 0.8,
@@ -84,21 +85,71 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ],
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: Text("아이디", style: TextStyle(fontSize: size.height * 0.016),),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            "아이디",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            "성함",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            "생년월일",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            "주소",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Text("성함", style: TextStyle(fontSize: size.height * 0.016),),
-                    ),
-                    Container(
-                      child: Text("생년월일", style: TextStyle(fontSize: size.height * 0.016),),
-                    ),
-                    Container(
-                      child: Text("주소", style: TextStyle(fontSize: size.height * 0.016),),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          child: Text(
+                            user != null ?
+                            user!.id! : "로딩중",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            user != null ?
+                            user!.username! : "로딩중",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            user != null ?
+                            user!.birthday! : "로딩중",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            "",
+                            style: TextStyle(fontSize: size.height * 0.016),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 )),

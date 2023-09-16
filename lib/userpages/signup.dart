@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
@@ -22,12 +23,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final TextEditingController userNameCont = TextEditingController();
-  final TextEditingController userIdCont = TextEditingController();
-  final TextEditingController userPasswordCont = TextEditingController();
-  final TextEditingController userPhonenumberCont = TextEditingController();
-  final TextEditingController userBirthCont = TextEditingController();
 
+  final Map<String, TextEditingController> userInfoController = {
+    "name" : TextEditingController(),
+    "id" : TextEditingController(),
+    "password" : TextEditingController(),
+    "checkPassword" : TextEditingController(),
+    "phoneNumber" : TextEditingController(),
+    "birthday" : TextEditingController(),
+  };
   bool isLoading = false;
 
   final signKey = GlobalKey<FormState>();
@@ -71,20 +75,21 @@ class _SignUpPageState extends State<SignUpPage> {
 
   RegExp specialCharRegexNum = RegExp(r'[0-9]');
 
-  Future<void> checkUserId(String data) async {
+  bool? checkId;
+
+  Future checkUserId(String data) async {
     try {
       final response = await http.post(
-        Uri.parse('/auth/exists'), // 서버의 엔드포인트 URL로 변경
+        Uri.parse('${dotenv.env["SERVER_URL"]}/auth/exists'),
+        // 서버의 엔드포인트 URL로 변경
         body: {
           'id': data,
         },
       );
 
       if (response.statusCode == 201) {
-        setState(() {
-          print("good");
-          checkId = json.decode(response.body);
-        });
+        print("good");
+        checkId = json.decode(response.body);
       } else {
         print('Failed to send data. Error code: ${response.statusCode}');
         print('Failed to send data. Error code: ${response.body}');
@@ -130,17 +135,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   setState(() {
                     _currentPage = page;
                   });
-                },
+                },physics: NeverScrollableScrollPhysics(),
                 children: [
                   Column(
                     children: [
                       MarginTextInputWidget(
-                        controller: userNameCont,
+                        controller: userInfoController["name"],
                         topText: "성함",
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Nickname",
-                        counterText: '',
                         maxLength: 4,
                         fontSize: size.height * 0.015,
                         validator: (val) {
@@ -156,7 +160,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       MarginTextInputWidget(
                         maxLength: 12,
-                        controller: userIdCont,
+                        controller: userInfoController["id"],
                         topText: "아이디",
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer,
@@ -204,7 +208,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             shadowColor: Colors.white.withOpacity(0),
                           ),
                           onPressed: () async {
-                            await checkUserId(userIdCont.text);
+                            await checkUserId(userInfoController["id"]!.text);
                             print(checkId);
                             if (!checkId!) {
                               _nextPage();
@@ -230,9 +234,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   Column(
                     children: [
                       MarginTextInputWidget(
-                        controller: userPasswordCont,
+                        controller: userInfoController["password"],
                         topText: "비밀번호",
                         maxLength: 15,
+                        obscureText: true,
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Password",
@@ -256,7 +261,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       MarginTextInputWidget(
                         topText: "비밀번호 확인",
+                        controller: userInfoController["checkPassword"],
                         maxLength: 15,
+                        obscureText: true,
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "Password",
@@ -266,19 +273,42 @@ class _SignUpPageState extends State<SignUpPage> {
                           if (val.isEmpty) {
                             return "비밀번호를 재입력해주세요.";
                           }
-                          if (val != userPasswordCont.text) {
+                          if (val != userInfoController["password"]!.text) {
                             return "비밀번호를 다시 확인해주세요.";
                           }
                           return null;
                         },
                         icon: Icons.lock_outline,
                       ),
+                      SizedBox(
+                        width: size.width * 0.3,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.tertiaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50), //볼더 제거
+                            ),
+                            shadowColor: Colors.white.withOpacity(0),
+                          ),
+                          onPressed: () async {
+                            final isValid = signKey.currentState!.validate();
+                            if (isValid) {
+                              _nextPage();
+                            }
+                          },
+                          child: const Text(
+                            "다음",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Column(
                     children: [
                       MarginTextInputWidget(
-                        controller: userPhonenumberCont,
+                        controller: userInfoController["phoneNumber"],
                         topText: "전화번호",
                         maxLength: 11,
                         color:
@@ -291,6 +321,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           if (val.isEmpty) {
                             return "전화번호를 입력해주세요.";
                           }
+                          if (userInfoController["phoneNumber"]!.text.length != 11){
+                            return "제대로 입력해주세요";
+                          };
                           RegExp specialCharRegex =
                               RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
                           if (specialCharRegex.hasMatch(val)) {
@@ -304,15 +337,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         height: 10,
                       ),
                       MarginTextInputWidget(
-                        controller: userBirthCont,
+                        controller: userInfoController["birthday"],
                         topText: "생년월일",
+                        maxLength: 6,
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer,
                         hintText: "ex) 950106",
                         keyboardType: TextInputType.number,
                         fontSize: size.height * 0.02,
                         validator: (val) {
-                          return null;
+                          if (userInfoController["birthday"]!.text.length != 6){
+                            return "생년월일을 입력해주세요";
+                          };
                         },
                         icon: Icons.cake,
                       ),
@@ -334,18 +370,24 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           onPressed: () async {
                             final isValid = signKey.currentState!.validate();
+                            print(isValid);
+                            print("여기: ${userInfoController["birthday"]!.text}");
                             if (isValid) {
                               User newUser = User(
-                                id: userNameCont.text,
-                                username: userIdCont.text,
-                                password: userPasswordCont.text,
-                                phoneNumber: userPhonenumberCont.text,
-                                birthday: userBirthCont.text,
+                                id: userInfoController["id"]!.text,
+                                username: userInfoController["name"]!.text,
+                                password: userInfoController["password"]!.text,
+                                phoneNumber: userInfoController["phoneNumber"]!.text,
+                                birthday: userInfoController["birthday"]!.text,
                               );
                               sendUserInfoDataToServer(newUser);
-                              Get.offAll(const UserMain());
+                            } else {
+                              Get.snackbar(
+                                "다시 한번 확인해주세요",
+                                "잘못 입력된 부분이 있어요.",
+                              );
                             }
-                            Get.snackbar("다시 한번 확인해주세요", "잘못 입력된 부분이 있어요.",);
+
                           },
                           child: Text(
                             "회원가입",

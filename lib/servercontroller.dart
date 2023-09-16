@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:offline/userpages/usermain.dart';
 import 'Widgets/User.dart';
 
 const String serverData = '';
@@ -9,7 +11,6 @@ const String serverUrl_1 = 'http://11.187.12.81:3000';
 const String serverUrl_2 = 'http://117.110.121.213:3000';
 
 bool? checkId;
-
 Future<void> getUserFromServer(String data) async {
   try {
     final response = await http.get(
@@ -93,7 +94,7 @@ Future<void> sendUserInfoDataToServer(User data) async {
     );
     if (response.statusCode == 201) {
       print('Data sent successfully!');
-
+      Get.offAll(UserMain());
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
       print('Failed to send data. Error code: ${json.encode(response.body)}');

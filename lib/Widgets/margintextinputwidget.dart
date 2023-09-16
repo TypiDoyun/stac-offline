@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MarginTextInputWidget extends StatelessWidget {
-  final String hintText, topText;
-  final FormFieldValidator validator;
-  final IconData icon;
-  final Color color;
-  final double fontSize;
-  final bool obscureText = false;
-  final TextInputType? keyboardType;
-  final int? maxLength;
-  final bool? enabled;
-  final TextEditingController? controller;
-  final Function(String)? onChanged;
-  void Function(String)? onFieldSubmitted;
-  final FocusNode? focusNode;
-  final String? counterText;
-  final List<TextInputFormatter>? inputFomatters;
+  String hintText, topText;
+  FormFieldValidator validator;
+  IconData icon;
+  Color color;
+  double fontSize;
+  bool obscureText;
+  TextInputType? keyboardType;
+  int? maxLength;
+  bool? enabled;
+  TextEditingController? controller;
+  Function(String)? onChanged;
+  Function(String)? onFieldSubmitted;
+  FocusNode? focusNode;
+  List<TextInputFormatter>? inputFomatters;
 
   MarginTextInputWidget({
     Key? key,
@@ -31,9 +30,9 @@ class MarginTextInputWidget extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.focusNode,
-    this.counterText,
     this.inputFomatters,
     this.maxLength,
+    this.obscureText = false,
   }) : super(key: key);
 
   @override
@@ -52,10 +51,10 @@ class MarginTextInputWidget extends StatelessWidget {
           Row(
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
+                margin: EdgeInsets.symmetric(vertical: size.height * 0.007),
                 child: Text(
                   topText,
-                  style: TextStyle(fontSize: size.height * 0.015),
+                  style: TextStyle(fontSize: size.height * 0.013),
                 ),
               ),
             ],
@@ -74,10 +73,12 @@ class MarginTextInputWidget extends StatelessWidget {
             obscureText: obscureText,
             inputFormatters: inputFomatters,
             decoration: InputDecoration(
-              counterText: counterText,
+              counterText: "",
               icon: Icon(icon),
               hintText: hintText,
-              hintStyle: TextStyle(fontSize: size.height * 0.017,),
+              hintStyle: TextStyle(
+                fontSize: size.height * 0.017,
+              ),
               border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.black38,

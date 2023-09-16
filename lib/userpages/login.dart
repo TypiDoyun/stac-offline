@@ -17,7 +17,6 @@ import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -47,8 +46,9 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 "로그인",
                 style: TextStyle(
-                  fontFamily: "NotoSansKR",
-                    fontWeight: FontWeight.w900, fontSize: size.height * 0.02),
+                    fontFamily: "NotoSansKR",
+                    fontWeight: FontWeight.w900,
+                    fontSize: size.height * 0.02),
               ),
               const SizedBox(
                 height: 30,
@@ -103,8 +103,11 @@ class _LoginPageState extends State<LoginPage> {
                     if (isValid) {
                       signKey.currentState!.save();
                       await signIn(loginInput["id"]!, loginInput["password"]!)
-                          ? Get.offAll(const UserMain(), transition: Transition.fade,)
-                          : Get.snackbar("다시 한번 확인하세요!", "아이디 혹은 비밀번호가 잘못됬어요.");
+                          ? Get.offAll(
+                              const UserMain(),
+                              transition: Transition.fade,
+                            )
+                          : Get.snackbar("다시 한번 확인하세요!", "아이디 혹은 비밀번호가 잘못되었어요.", backgroundColor: Colors.white, borderColor: Colors.black, borderWidth: 1);
                       setState(() {});
                     }
                   },
@@ -138,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   InkWell(
                     onTap: () {
+
                       Get.to(
                         const ShopJoinPage(),
                         transition: Transition.rightToLeft,
@@ -176,4 +180,3 @@ class LoginInputWidget extends StatelessWidget {
     );
   }
 }
-

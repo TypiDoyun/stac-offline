@@ -10,7 +10,11 @@ import '../userpages/userselectedclothes.dart';
 import '../utils/common/try-get-clothes-info.dart';
 
 class ShopInfoPage extends StatefulWidget {
-  const ShopInfoPage({Key? key, this.shopInfo,  this.shopInfos,}) : super(key: key);
+  const ShopInfoPage({
+    Key? key,
+    this.shopInfo,
+    this.shopInfos,
+  }) : super(key: key);
   final Clothes? shopInfo;
   final List<Clothes>? shopInfos;
 
@@ -19,7 +23,6 @@ class ShopInfoPage extends StatefulWidget {
 }
 
 class _ShopInfoPageState extends State<ShopInfoPage> {
-
   _ShopInfoPageState(this.shopInfo, this.shopInfos);
 
   final Clothes? shopInfo;
@@ -31,13 +34,9 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
     super.initState();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
 
     return Scaffold(
       body: SafeArea(
@@ -113,8 +112,7 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: NetworkImage(
-                                  'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif'),
+                              image: AssetImage('assets/images/test.png'),
                               fit: BoxFit.cover, // 이미지가 잘리지 않도록 설정
                             ),
                           ),
@@ -125,9 +123,9 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                           children: [
                             Container(
                               margin: const EdgeInsets.symmetric(vertical: 10),
-                              width: size.width*0.6,
+                              width: size.width * 0.6,
                               child: Text(
-                                "ㅎㅇ",
+                                "가게이름",
                                 style: const TextStyle(
                                     fontSize: 23, fontWeight: FontWeight.bold),
                                 maxLines: 1,
@@ -135,7 +133,7 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                               ),
                             ),
                             Text(
-                              "ㅎㅇ",
+                              "경기도 용인시 처인구 고림동",
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -173,39 +171,41 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
             //     ),
             //   )
             // else
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 그리드 열 개수
-                    mainAxisSpacing: 35.0, // 그리드 행 간 간격
-                    crossAxisSpacing: 28.0, // 그리드 열 간 간격
-                    childAspectRatio: size.height * 0.0007, // 아이템의 가로 세로 비율
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      // if (index < clothesInfo.length) {
-                      return
-                        Text("ㅎㅇ");
-                      //   UserHomeListItem(
-                      //   clothesName: shopInfos[index].name,
-                      //   clothesImgPath: shopInfos[index].images[0],
-                      //   clothesPrice: shopInfos[index].price,
-                      //   discountRate: shopInfos[index].discountRate,
-                      //   shopName: shopInfo.owner.shop.name,
-                      //   onTap: () {
-                      //     Get.to(() => UserSelectedClothesPage(
-                      //         clothesInfo: shopInfos[index]));
-                      //   },
-                      // );
-                      // } else {
-                      //   return const Center(child: CircularProgressIndicator());
-                      // }
-                    },
-                    childCount: 3, // 전체 아이템 개수
-                  ),
-                ),
-              ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
+              sliver: shopInfos?.length == null
+                  ? SliverToBoxAdapter(
+                      child: Center(
+                        child: Text("본 매장에서 전시한 옷이 없어요..."),
+                      ),
+                    )
+                  : SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 그리드 열 개수
+                        mainAxisSpacing: 35.0, // 그리드 행 간 간격
+                        crossAxisSpacing: 28.0, // 그리드 열 간 간격
+                        childAspectRatio: size.height * 0.0007, // 아이템의 가로 세로 비율
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          // if (index < clothesInfo.length) {
+
+                          return UserHomeListItem(
+                            clothesName: shopInfos![index].name,
+                            clothesImgPath: shopInfos![index].images[0],
+                            clothesPrice: shopInfos![index].price,
+                            discountRate: shopInfos![index].discountRate,
+                            shopName: shopInfo!.owner.shop.name,
+                            onTap: () {
+                              Get.to(() => UserSelectedClothesPage(
+                                  clothesInfo: shopInfos![index]));
+                            },
+                          );
+                        },
+                        childCount: 5, // 전체 아이템 개수
+                      ),
+                    ),
+            ),
           ],
         ),
       ),
