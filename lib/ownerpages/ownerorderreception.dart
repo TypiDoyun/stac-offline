@@ -54,7 +54,7 @@ class _OrderReceptionPageState extends State<OrderReceptionPage> {
               clothesLocation: clothesInfo[index]["clothesLocation"],
               username: clothesInfo[index]["username"],
               address: clothesInfo[index]["address"],
-              price: clothesInfo[index]["price"],
+              price: clothesInfo[index]["price"], onTap: () {},
             );
           },
         ),

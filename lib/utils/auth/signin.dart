@@ -17,15 +17,18 @@ Future signIn(String id, String password) async {
       },
     );
     dynamic tokens = json.decode(response.body);
-    if (tokens["statusCode"] == 401) return false;
+    print(tokens);
+    if (tokens["statusCode"] == 400 || tokens["statusCode"] == 403) return "error";
 
-    print("여기: ${tokens["accessToken"]}");
     String createdAccessToken = tokens["accessToken"];
     String createdRefreshToken = tokens["refreshToken"];
+    bool isMerchant = tokens["isMerchant"];
 
     await prefrs.setString("accessToken", createdAccessToken);
+    print(createdRefreshToken);
     await prefrs.setString("refreshToken", createdRefreshToken);
-    return true;
+    await prefrs.setBool("isMerchant", isMerchant);
+    return isMerchant;
   } catch (e){
     return false;
   }

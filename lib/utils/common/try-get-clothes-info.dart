@@ -18,5 +18,4 @@ Future<List<Clothes>> getClothesInfo(double a, b) async {
   } catch (e) {
     rethrow;
   }
-  throw Future.error("ㅎㅇ");
 }

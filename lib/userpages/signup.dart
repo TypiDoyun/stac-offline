@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:offline/Widgets/background.dart';
-import 'package:offline/userpages/usermain.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../Widgets/User.dart';
-import '../Widgets/TextFieldContainer.dart';
 import '../Widgets/margintextinputwidget.dart';
-import '../ownerpages/ownermain.dart';
 import '../servercontroller.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -153,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     _currentPage = page;
                   });
                 },
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   Column(
                     children: [
@@ -170,7 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             return "성함을 입력해주세요";
                           }
                           if (containsOnlyVowelsOrConsonants(val)) {
-                            return "다시 한번 확인해주세요.";
+                            return "다시 한번 확인해주세요";
                           }
                           return null;
                         },
@@ -199,13 +195,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           RegExp specialCharRegex =
                               RegExp(r'[^!@#\$%^&*(),.?":{}|<> ]');
                           if (!specialCharRegex.hasMatch(val)) {
-                            return "특수 문자와 공백은 입력할 수 없습니다.";
+                            return "특수 문자와 공백은 입력할 수 없습니다";
                           }
                           if (val.length < 6) {
-                            return "최소 6자 이상 입력해야합니다.";
+                            return "최소 6자 이상 입력해야합니다";
                           }
                           if (specialCharRegexNum.allMatches(val).isEmpty) {
-                            return "숫자 1자 이상 입력해야 합니다.";
+                            return "숫자 1자 이상 입력해야 합니다";
                           }
                           return null;
                         },
@@ -226,6 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             shadowColor: Colors.white.withOpacity(0),
                           ),
                           onPressed: () async {
+                            print(userInfoController["id"]!.text);
                             await checkUserId(userInfoController["id"]!.text);
                             print(checkId);
                             if (!checkId!) {
@@ -243,8 +240,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         const Text("확인중..")
                       else if (checkId != null)
                         checkId!
-                            ? const Text("이미 사용중인 아이디 입니다.")
-                            : const Text("사용 가능한 아이디 입니다.")
+                            ? const Text("이미 사용중인 아이디 입니다")
+                            : const Text("사용 가능한 아이디 입니다")
                       else
                         const SizedBox(),
                     ],
@@ -263,15 +260,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontSize: size.height * 0.02,
                         validator: (val) {
                           if (val.isEmpty) {
-                            return "비밀번호을 입력해주세요.";
+                            return "비밀번호을 입력해주세요";
                           }
                           // 특수 문자나 띄어쓰기가 포함되어 있는지 검증
                           if (specialCharRegexNum.allMatches(val).length < 3) {
-                            return "숫자 3자 이상 입력해야 합니다.";
+                            return "숫자 3자 이상 입력해야 합니다";
                           }
                           RegExp specialCharRegex1 = RegExp(r'[ ]');
                           if (specialCharRegex1.hasMatch(val)) {
-                            return "공백은 입력할 수 없습니다.";
+                            return "공백은 입력할 수 없습니다";
                           }
                           return null; // 유효한 값인 경우 null을 반환
                         },
@@ -289,10 +286,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontSize: size.height * 0.02,
                         validator: (val) {
                           if (val.isEmpty) {
-                            return "비밀번호를 재입력해주세요.";
+                            return "비밀번호를 재입력해주세요";
                           }
                           if (val != userInfoController["password"]!.text) {
-                            return "비밀번호를 다시 확인해주세요.";
+                            return "비밀번호를 다시 확인해주세요";
                           }
                           return null;
                         },
@@ -336,18 +333,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         enabled: true,
                         fontSize: size.height * 0.02,
                         validator: (val) {
-                          if (val.isEmpty) {
-                            return "전화번호를 입력해주세요.";
-                          }
-                          if (userInfoController["phoneNumber"]!.text.length !=
+                          if (val.isEmpty && userInfoController["phoneNumber"]!.text.length !=
                               11) {
-                            return "제대로 입력해주세요";
+                            return "전화번호를 입력해주세요";
                           }
-                          ;
                           RegExp specialCharRegex =
                               RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
                           if (specialCharRegex.hasMatch(val)) {
-                            return "특수 문자는 입력할 수 없습니다.";
+                            return "특수 문자는 입력할 수 없습니다";
                           }
                           return null;
                         },
@@ -370,7 +363,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               6) {
                             return "생년월일을 입력해주세요";
                           }
-                          ;
+                          return null;
                         },
                         icon: Icons.cake,
                       ),
@@ -408,7 +401,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             } else {
                               Get.snackbar(
                                 "다시 한번 확인해주세요",
-                                "잘못 입력된 부분이 있어요.",
+                                "잘못 입력된 부분이 있어요",
+                                backgroundColor: Theme.of(context).colorScheme.secondary,
+                                borderWidth: 1,
+                                borderColor: Theme.of(context).colorScheme.tertiaryContainer
                               );
                             }
                           },

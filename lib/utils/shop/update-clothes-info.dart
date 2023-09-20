@@ -1,10 +1,10 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../classes/clothes.dart';
 
-Future<List<Clothes>> removeClothesInfo() async {
+Future<List<Clothes>> updateClothesInfo() async {
   try {
     final response = await http
         .get(Uri.parse('${dotenv.env["SERVER_URL"]}/clothes/location?latitude=&longitude='));
@@ -16,5 +16,4 @@ Future<List<Clothes>> removeClothesInfo() async {
   } catch (e) {
     rethrow;
   }
-  throw Future.error("ㅎㅇ");
 }

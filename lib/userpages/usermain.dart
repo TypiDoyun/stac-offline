@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:offline/ownerpages/shopinfopage.dart';
 
 import 'package:offline/userpages/login.dart';
@@ -14,7 +13,7 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
-import '../classes/clothes.dart';
+import '../utils/common/fetch-user-data.dart';
 import 'userhome.dart';
 
 //소비자 화면
@@ -79,6 +78,7 @@ class UserMainState extends State<UserMain> {
   ];
 
   dynamic accessToken;
+  bool? isMerchant;
 
   String? username;
   String? id;
@@ -88,8 +88,8 @@ class UserMainState extends State<UserMain> {
     super.initState();
     (() async {
       SharedPreferences prefrs = await SharedPreferences.getInstance();
-      print(localLatitude);
-      print("여기 ${prefrs.getString("accessToken")}");
+      isMerchant = prefrs.getBool("isMerchant");
+      print(isMerchant);
       accessToken = prefrs.getString("accessToken");
       await fetchUserData(prefrs.getString("accessToken"));
       await _locateMe();
@@ -169,30 +169,6 @@ class UserMainState extends State<UserMain> {
       ),
     );
   }
-
-  Future fetchUserData(String? token) async {
-    SharedPreferences prefrs = await SharedPreferences.getInstance();
-    String? accessToken = token;
-    if (accessToken == null) {
-      return;
-    }
-    try {
-      final response = await http
-          .get(Uri.parse('${dotenv.env["SERVER_URL"]}/user/profile'), headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      });
-      data = json.decode(response.body);
-      await prefrs.setString('username', data["username"]);
-      await prefrs.setString('id', data["id"]);
-      await prefrs.setString('phoneNumber', data["phoneNumber"]);
-      await prefrs.setString('birthday', data["birthday"]);
-      return;
-    } catch (e) {
-      print("error: 토큰 만료됨");
-    }
-  }
 }
 
 class ShopInfo {
@@ -267,10 +243,7 @@ class MapPageState extends State<MapPage> {
           marker.setOnTapListener((overlay) {
             // 마커를 탭했을 때 실행할 동작을 여기에 작성합니다.
             // overlay 변수는 탭된 마커를 나타냅니다.
-
             // 가게 정보를 포함하는 하단 시트를 표시합니다.
-            print(longitude);
-            print("여기: ${latitude}");
             Get.to(
                   () => const ShopInfoPage(),
               transition: Transition.downToUp,
@@ -278,8 +251,6 @@ class MapPageState extends State<MapPage> {
           });
         }
       });
-    } else {
-      // Handle the case where latitude or longitude is not available in SharedPreferences.
     }
   }
 

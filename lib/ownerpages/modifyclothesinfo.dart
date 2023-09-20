@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/intl.dart';
 
-import '../Widgets/TextFieldContainer.dart';
 
 final imagesList = [
   'assets/images/clothesImage1.jpeg',
@@ -109,16 +107,16 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                             ),
                             SizedBox(
                               width: size.width * 0.52,
-                              child: Column(
+                              child: const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "가게 이름",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  const Text(
+                                  Text(
                                     "용인시 처인구 김량장동 어쩌구 301-112312",
                                     style: TextStyle(
                                         fontSize: 12, color: Colors.grey),
@@ -160,7 +158,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                         children: [
                           Container(
                             margin: EdgeInsets.only(top: size.height * 0.01),
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               color: Theme.of(context)
                                   .colorScheme
@@ -176,14 +174,14 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                       TextStyle(fontSize: size.height * 0.015),
                                 ),
                                 TextFormField(
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
                                     height: 1.5,
                                     letterSpacing: -0.3,
                                   ),
                                   maxLines: 3,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "옷 이름",
                                     icon: Icon(Icons.mode),
@@ -192,7 +190,9 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                   onChanged: (val) {
                                     clothesInfo["name"] = val;
                                   },
-                                  validator: (value) {},
+                                  validator: (value) {
+                                    return null;
+                                  },
                                 ),
                               ],
                             ),
@@ -203,7 +203,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                           Row(
                             children: [
                               Container(
-                                margin: EdgeInsets.symmetric(vertical: 15),
+                                margin: const EdgeInsets.symmetric(vertical: 15),
                                 child: Text(
                                   "가격  - ",
                                   style: TextStyle(
@@ -212,7 +212,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                   ),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 width: size.width * 0.7,
                                 child: TextFormField(
                                   style: TextStyle(
@@ -222,7 +222,9 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                   keyboardType: TextInputType.number,
                                   validator: (val) {
                                     val! as int == 0 ? "가격을 다시 확인해주세요" : null;
-                                  },
+                                    return null;
+                                  }
+                                  ,
                                   initialValue: clothesInfo["price"].toString(),
                                   onChanged: (val) {
                                     setState(() {
@@ -249,7 +251,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                           Row(
                             children: [
                               Container(
-                                margin: EdgeInsets.symmetric(vertical: 15),
+                                margin: const EdgeInsets.symmetric(vertical: 15),
                                 child: Text(
                                   "세일  - ",
                                   style: TextStyle(
@@ -259,7 +261,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                   ),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 width: size.width * 0.6,
                                 child: TextFormField(
                                   initialValue:
@@ -288,7 +290,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                                   },
                                   decoration: InputDecoration(
                                     counterText: "",
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.mode_edit,
                                       color: Colors.red,
                                     ),
@@ -311,21 +313,19 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                               color: Colors.black,
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '원가 : ${f.format(clothesInfo["price"])}\n세일가 : ${f.format((clothesInfo["price"] - clothesInfo["discountRate"] * (clothesInfo["price"]! / 100)))}',
-                                  // 저장된 가격 출력, 없을 경우 빈 문자열 출력
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                '원가 : ${f.format(clothesInfo["price"])}\n세일가 : ${f.format((clothesInfo["price"] - clothesInfo["discountRate"] * (clothesInfo["price"]! / 100)))}',
+                                // 저장된 가격 출력, 없을 경우 빈 문자열 출력
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -349,7 +349,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                               children: [
                                 Text(
                                   clothesInfo["size"].join(", "),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -395,6 +395,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                               ),
                               keyboardType: TextInputType.number,
                               validator: (val) {
+                                return null;
                               },
                               initialValue: clothesInfo["comment"],
                               maxLines: 6,
@@ -413,7 +414,7 @@ class _ModityClothesInfoState extends State<ModityClothesInfo> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 60,),
+                          const SizedBox(height: 60,),
                         ],
                       ),
                     ),

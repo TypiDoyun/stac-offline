@@ -1,9 +1,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import '../../Widgets/User.dart';
 import '../../servercontroller.dart';
 
-Future sendShopInfoDataToServer(String registrationNumber, representative, openingDate) async {
+Future authShop(String registrationNumber, representative, openingDate) async {
   try {
     final response = await http.get(
       Uri.parse(

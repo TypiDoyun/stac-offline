@@ -1,18 +1,11 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:offline/Widgets/mainlistitem.dart';
-import 'package:offline/Widgets/user-main-shop-list-item.dart';
 import 'package:offline/classes/clothes.dart';
-import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
 import 'package:offline/userpages/userselectedclothes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../ownerpages/shopinfopage.dart';
 import '../utils/common/try-get-clothes-info.dart';
 
 class UserHomePage extends StatefulWidget {

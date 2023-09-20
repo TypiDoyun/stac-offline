@@ -1,21 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:offline/Widgets/background.dart';
+import 'package:offline/ownerpages/ownermain.dart';
 import 'package:offline/ownerpages/shopjoin.dart';
 import 'package:offline/userpages/usermain.dart';
 import 'package:offline/utils/auth/signin.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../Widgets/TextFieldContainer.dart';
 import 'signup.dart';
-
-import 'package:bootpay/bootpay.dart';
-import 'package:bootpay/model/extra.dart';
-import 'package:bootpay/model/item.dart';
-import 'package:bootpay/model/payload.dart';
-import 'package:bootpay/model/stat_item.dart';
-import 'package:bootpay/model/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -102,12 +94,25 @@ class _LoginPageState extends State<LoginPage> {
                     final isValid = signKey.currentState!.validate();
                     if (isValid) {
                       signKey.currentState!.save();
-                      await signIn(loginInput["id"]!, loginInput["password"]!)
-                          ? Get.offAll(
-                              const UserMain(),
-                              transition: Transition.fade,
-                            )
-                          : Get.snackbar("다시 한번 확인하세요!", "아이디 혹은 비밀번호가 잘못되었어요.", backgroundColor: Colors.white, borderColor: Colors.black, borderWidth: 1);
+                      dynamic data = await signIn(
+                          loginInput["id"]!, loginInput["password"]!);
+                      print(data);
+                      if (data == "error") {
+                        Get.snackbar("다시 한번 확인하세요!", "아이디 혹은 비밀번호가 잘못되었어요.",
+                            backgroundColor: Colors.white,
+                            borderColor: Colors.black,
+                            borderWidth: 1);
+                      } else if (data) {
+                        Get.offAll(const OwnerMainPage(),
+                            transition: Transition.fade);
+                      } else if (data == false) {
+                        Get.offAll(
+                          const UserMain(),
+                          transition: Transition.fade,
+                        );
+                      }
+
+
                       setState(() {});
                     }
                   },
@@ -141,7 +146,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   InkWell(
                     onTap: () {
-
                       Get.to(
                         const ShopJoinPage(),
                         transition: Transition.rightToLeft,

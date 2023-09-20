@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 
 import '../Widgets/mainlistitem.dart';
 import '../classes/clothes.dart';
 import '../userpages/userhome.dart';
 import '../userpages/userselectedclothes.dart';
-import '../utils/common/try-get-clothes-info.dart';
 
 class ShopInfoPage extends StatefulWidget {
   const ShopInfoPage({
@@ -29,12 +26,6 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
   final List<Clothes>? shopInfos;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -46,7 +37,7 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
             backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
             foregroundColor: Theme.of(context).colorScheme.tertiary,
             centerTitle: true,
-            leading: IconButton(icon: const Icon(Icons.arrow_downward), onPressed: () {Get.back();},) ,),
+          ),
           // SliverPersistentHeader(
           //   delegate: TabBarDelegate(
           //     maxHeight: 70,
@@ -83,7 +74,6 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                 minHeight: size.width * 0.35,
                 child: Container(
                   height: size.height * 0.2,
-
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                   padding: EdgeInsets.symmetric(
                     horizontal: size.width * 0.03,
@@ -94,8 +84,8 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.03),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.03),
                         height: size.width * 0.25,
                         width: size.width * 0.25,
                         decoration: const BoxDecoration(
@@ -116,7 +106,10 @@ class _ShopInfoPageState extends State<ShopInfoPage> {
                             child: Text(
                               "가게이름",
                               style: TextStyle(
-                                  fontSize: size.height * 0.024, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.tertiary),
+                                  fontSize: size.height * 0.024,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),

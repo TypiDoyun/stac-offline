@@ -83,7 +83,7 @@ Map<String, dynamic> parseJwtPayLoad(String token) {
 Future<void> sendUserInfoDataToServer(User data) async {
   try {
     final response = await http.post(
-      Uri.parse('${dotenv.env["SERVER_URL"]}/auth/signup'), // 서버의 엔드포인트 URL로 변경
+      Uri.parse('${dotenv.env["SERVER_URL"]}/auth/user-signup'), // 서버의 엔드포인트 URL로 변경
       body: {
         'username': data.username,
         'id': data.id,
@@ -92,9 +92,10 @@ Future<void> sendUserInfoDataToServer(User data) async {
         'birthday': data.birthday,
       },
     );
+
     if (response.statusCode == 201) {
       print('Data sent successfully!');
-      Get.offAll(UserMain());
+      Get.offAll(const UserMain());
     } else {
       print('Failed to send data. Error code: ${response.statusCode}');
       print('Failed to send data. Error code: ${json.encode(response.body)}');

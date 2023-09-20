@@ -14,18 +14,18 @@ class UserHomeListItem extends StatelessWidget {
   final String clothesName, clothesImgPath, shopName;
   final int clothesPrice;
   final int? discountRate;
-  final onTap;
+  final void Function() onTap;
 
   // final String shopName;
 
-  var f = NumberFormat('###,###,###,###,###,###');
+  final f = NumberFormat('###,###,###,###,###,###');
 
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onTap();
+        onTap;
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ class UserHomeListItem extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 8, bottom: 5),
+            margin: const EdgeInsets.only(top: 8, bottom: 5),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -73,25 +73,21 @@ class UserHomeListItem extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            child: Text(
-              clothesName,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                letterSpacing: -0.6,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+          Text(
+            clothesName,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              letterSpacing: -0.6,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 5,),
-          Container(
-            child: Text(
-              shopName,
-              style: TextStyle(color: Colors.black54, fontSize: 11, letterSpacing: -0.6,),
-            ),
+          const SizedBox(height: 5,),
+          Text(
+            shopName,
+            style: const TextStyle(color: Colors.black54, fontSize: 11, letterSpacing: -0.6,),
           ),
 
         ],

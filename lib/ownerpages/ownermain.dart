@@ -3,7 +3,12 @@ import 'package:get/get.dart';
 import 'package:offline/ownerpages/clothesupload.dart';
 import 'package:offline/ownerpages/ownerorderreception.dart';
 import 'package:offline/userpages/usermain.dart';
+import 'package:offline/utils/common/get-owner-clothes-info.dart';
+import 'package:offline/utils/shop/get-shop-info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../classes/shop.dart';
+import '../utils/common/fetch-user-data.dart';
 import 'ownerhome.dart';
 
 class OwnerMainPage extends StatefulWidget {
@@ -21,6 +26,19 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
     const ClothesUploadPage(),
     const OrderReceptionPage(),
   ];
+  String? accessToken, shopName, address, logo;
+  Shop? shopInfo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    (() async {
+      SharedPreferences prefrs = await SharedPreferences.getInstance();
+      await fetchShopData(prefrs.getString("accessToken"));
+
+    })();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +60,10 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {
+              onPressed: () async {
+                SharedPreferences prefrs =
+                    await SharedPreferences.getInstance();
+                prefrs.remove("accessToken");
                 Get.offAll(const UserMain());
               },
               icon: const Icon(Icons.logout),

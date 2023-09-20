@@ -13,14 +13,15 @@ class OwnerClothesListItem extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  final String clothesName, clothesSize, clothesComment;
+  final String? clothesName, clothesSize, clothesComment;
   final int clothesPrice;
   final dynamic clothesImage, onPressedDelete, onTap;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return InkWell(
+    return clothesName == null ? CircularProgressIndicator() :
+      InkWell(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: size.width * 0.01),
@@ -31,41 +32,48 @@ class OwnerClothesListItem extends StatelessWidget {
             Container(
               height: size.width * 0.3,
               width: size.width * 0.3,
-              color: Colors.black,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(
+                      clothesImage),
+                  fit: BoxFit.contain, // 이미지가 잘리지 않도록 설정
+                ),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '옷 이름',
+                  clothesName!,
                   style: TextStyle(
                     fontSize: size.height * 0.02,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: size.height * 0.07,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '20,000',
+                        clothesPrice.toString(),
                         style: TextStyle(
                           fontSize: size.height * 0.015,
                         ),
                       ),
                       Text(
-                        'Size: Free',
+                        clothesSize == "Free" ? "Free" : "85(XS) ~ 110(2XL)",
                         style: TextStyle(
                           fontSize: size.height * 0.015,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: size.width * 0.5,
                         child: Text(
-                          'isThreeLine : true 로 주면 subtitle 이 어떻게 변할까',
+                          clothesComment!,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -87,11 +95,14 @@ class OwnerClothesListItem extends StatelessWidget {
                         child: const Text("아니요"), onPressed: () async {}),
                     TextButton(
                       child: const Text("네"),
-                      onPressed: () => Get.back(),
+                      onPressed: () {
+                        Get.back();
+                        onPressedDelete;
+                      },
                     ),
                   ],
                 )),
-              );}, icon: Icon(Icons.delete),
+              );}, icon: const Icon(Icons.delete),
             ),
           ],
         ), //dense: true,

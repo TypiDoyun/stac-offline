@@ -32,7 +32,7 @@ void main() async {
   await tryRefreshAccessToken(); // <-로컬 저장소에 있는 엑세스토큰의 유효기간 확인
 
   return runApp(
-    MyApp(),
+    const MyApp(),
   );
 }
 

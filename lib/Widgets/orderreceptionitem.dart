@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class OrderReceptionItem extends StatelessWidget {
   final String clothesLocation, username, address;
   final int price;
-  final onTap;
+  final void Function() onTap;
 
   const OrderReceptionItem(
       {Key? key,
@@ -13,7 +12,7 @@ class OrderReceptionItem extends StatelessWidget {
       required this.username,
       required this.address,
       required this.price,
-      this.onTap})
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -43,7 +42,7 @@ class OrderReceptionItem extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: size.height * 0.07,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,7 +60,7 @@ class OrderReceptionItem extends StatelessWidget {
                           fontSize: size.height * 0.015,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: size.width * 0.5,
                         child: Text(
                           'isThreeLine : true 로 주면 subtitle 이 어떻게 변할까',
@@ -96,7 +95,7 @@ class OrderReceptionItem extends StatelessWidget {
                       )),
                     );
                   },
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                 ),
                 IconButton(
                   onPressed: () {
@@ -114,12 +113,12 @@ class OrderReceptionItem extends StatelessWidget {
                       )),
                     );
                   },
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                 ),
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.onSecondaryContainer,
                       borderRadius: BorderRadius.circular(4),

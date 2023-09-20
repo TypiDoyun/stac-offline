@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 ThemeData lightTheme = ThemeData(
   fontFamily: "LINESeedKR",
   brightness: Brightness.light,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xfffefefe),
     foregroundColor: Colors.black,
   ),
-  colorScheme: ColorScheme.light(
+  colorScheme: const ColorScheme.light(
     background: Color(0xfffefefe),
     primary: Colors.black,
     primaryContainer: Colors.white,

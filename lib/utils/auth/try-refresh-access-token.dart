@@ -10,7 +10,6 @@ tryRefreshAccessToken() async {
   SharedPreferences prefrs = await SharedPreferences.getInstance();
   String? accessToken = prefrs.getString('accessToken');
   print("refresh");
-
   if (accessToken == null) return;
   dynamic accessPayload = parseJwtPayLoad(accessToken);
 
@@ -20,7 +19,9 @@ tryRefreshAccessToken() async {
   if (expirationTime - 5000 > now) return; //<-여기에서 끝나면 유효한거지?
 
 
+
   String? refreshToken = prefrs.getString('refreshToken');
+  print("리프래쉬: $refreshToken");
   if (refreshToken == null) return;
 
   try {
@@ -30,12 +31,13 @@ tryRefreshAccessToken() async {
       'Authorization': 'Bearer $refreshToken',
     });
     // print(response.body);
+    print("good");
     dynamic tokens = json.decode(response.body);
     dynamic createdAccessToken = tokens["accessToken"];
     String createdRefreshToken = tokens["refreshToken"];
     await prefrs.setString("accessToken", createdAccessToken);
     await prefrs.setString("refreshToken", createdRefreshToken);
-
+    print("리프래쉬 성공");
     return true;
   } catch (e){
       print("error: $e");

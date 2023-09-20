@@ -3,7 +3,7 @@ import "merchant.dart";
 class Clothes {
   String name, comment;
   List<String> size;
-  List<dynamic> images;
+  List<String> images;
   int discountRate, price;
   Merchant owner;
 
@@ -18,12 +18,10 @@ class Clothes {
   });
 
   factory Clothes.fromJson(Map<String, dynamic> json) {
-    List<String> size = List<String>.from(json["size"]);
-    List<String> images = List<String>.from(json["images"]);
     Clothes clothes = Clothes(
       name: json["name"],
-      images: images,
-      size: size,
+      images: List<String>.from(json["images"]),
+      size: List<String>.from(json["size"]),
       comment: json["comment"],
       price: json["price"],
       discountRate: json["discountRate"],

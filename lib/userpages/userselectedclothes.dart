@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../classes/clothes.dart';
 
@@ -10,10 +9,8 @@ import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
-import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 
 class UserSelectedClothesPage extends StatefulWidget {
@@ -214,7 +211,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                                 Text(
                                   clothesInfo.discountRate == 0
                                       ? '${f.format(clothesInfo.price)}원'
-                                      : '${f.format((clothesInfo.price - (clothesInfo.price * clothesInfo.discountRate / 100)))}',
+                                      : '${f.format((clothesInfo.price - (clothesInfo.price * clothesInfo.discountRate / 100)))}원',
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 28,
@@ -228,7 +225,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                               clothesInfo.discountRate == 0
                                   ? ""
                                   : "${f.format(clothesInfo.price)}원",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 17,
                               ),
@@ -265,7 +262,7 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                             children: [
                               Text(
                                 clothesInfo.size.join(", "),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -304,8 +301,8 @@ class _UserSelectedClothesPageState extends State<UserSelectedClothesPage> {
                             ],
                           ),
                           child: Text(
-                            "${clothesInfo.comment}",
-                            style: TextStyle(fontWeight: FontWeight.w400),
+                            clothesInfo.comment,
+                            style: const TextStyle(fontWeight: FontWeight.w400),
                           ),
                         ),
                         Container(
@@ -432,7 +429,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final Future<WebViewController> _webViewControllerFuture;
 
     // _webViewControllerFuture.then((value) => value.runJavascript(javaScriptString))
 
@@ -440,18 +436,16 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50.0),
-            child: Column(
-              children: [
-                TextButton(
-                    onPressed: () => Get.to(DefaultPayment()),
-                    child: const Text('1. PG일반 결제 테스트', style: TextStyle(fontSize: 16.0))
-                ),
-              ],
-            ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50.0),
+          child: Column(
+            children: [
+              TextButton(
+                  onPressed: () => Get.to(const DefaultPayment()),
+                  child: const Text('1. PG일반 결제 테스트', style: TextStyle(fontSize: 16.0))
+              ),
+            ],
           ),
         ),
       ),
@@ -462,10 +456,12 @@ class _MyHomePageState extends State<MyHomePage> {
 class DefaultPayment extends StatelessWidget {
   // You can ask Get to find a Controller that is being used by another page and redirect you to it.
 
-  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
-  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
+  final String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
+  final String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   // String iosApplicationId = '62c3f02be38c3000215af228';
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  final String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+
+  const DefaultPayment({super.key});
 
   // String iosApplicationId = '60949a355b2948002e07c707';
 
@@ -601,7 +597,7 @@ class DefaultPayment extends StatelessWidget {
 
   Future<void> closeBootpay(BuildContext context) async {
 
-    await Future.delayed(Duration(seconds: 0)).then((value) {
+    await Future.delayed(const Duration(seconds: 0)).then((value) {
       print('Bootpay().dismiss');
 
       Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출

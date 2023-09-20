@@ -2,12 +2,19 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:offline/Widgets/TextFieldContainer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offline/Widgets/background.dart';
+import 'package:offline/classes/merchant.dart';
 import 'package:offline/servercontroller.dart';
+import 'package:offline/utils/shop/upload-clothes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../classes/clothes.dart';
+import '../utils/auth/try-refresh-access-token.dart';
 
 class ClothesUploadPage extends StatefulWidget {
   const ClothesUploadPage({super.key});
@@ -26,14 +33,15 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
     setState(() {
       textIndex = (textIndex + 1) % textOptions.length;
       if (textOptions[textIndex] == 'Free') {
-        clothesInfo["size"] = 'Free';
+        clothesSizes = ["Free"];
+        print(clothesSizes);
       } else if (textOptions[textIndex] == '85(XS) ~ 110(2XL)') {
-        clothesInfo["size"] = ['', '', '', '', '', ''];
+        clothesSizes = ['', '', '', '', '', ''];
         List selectedSizes = [];
         for (int i = 0; i < buttonSelectedStates.length; i++) {
           if (buttonSelectedStates[i]) {
             selectedSizes.add(sizeMenusNum[i]);
-            clothesInfo["size"][i] = selectedSizes;
+            clothesSizes[i] = selectedSizes[i];
           }
         }
       }
@@ -58,25 +66,25 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
   }
 
   final Map<String, dynamic> clothesInfo = {
-    "name": "",
-    "price": 0,
-    "size": 'Free',
-    "comment": "",
-    "discountRate": 0,
-    "time": DateTime.now().toIso8601String(),
+    "name": TextEditingController(),
+    "price": TextEditingController(),
+    "comment": TextEditingController(),
+    "discountRate": TextEditingController(),
+    "accessToken": "",
   };
+  List<XFile> images = [];
+  List<String> clothesSizes = ["Free"];
+  num price = 0;
+  int discountRate = 0;
 
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
   bool isCheckboxChecked = false;
 
+
+
   var f = NumberFormat('###,###,###,###,###,###');
-
-
-
-
-
 
   void _removeImage(int index) {
     setState(() {
@@ -114,18 +122,17 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    Future PickImages() async {
+    Future pickImages() async {
       final picker = ImagePicker();
       final pickedImages = await picker.pickMultiImage(
         imageQuality: 30,
       );
-
       setState(() {
         _selectedImages = pickedImages;
       });
     }
 
-    Future<void> CameraImages() async {
+    Future<void> cameraImages() async {
       final picker = ImagePicker();
       final pickedImages = await picker.getImage(
         source: ImageSource.camera,
@@ -137,7 +144,6 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
       });
     }
 
-
     return Scaffold(
       body: Form(
         key: formkey,
@@ -147,7 +153,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Container(
+              SizedBox(
                 height: size.width * 1.3,
                 width: size.width,
                 child: PageView(
@@ -160,31 +166,31 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                   children: [
                     Column(
                       children: [
-                        ClothesUploadTitleWidget(title: "옷의 이름을 작성해주세요"),
+                        const ClothesUploadTitleWidget(title: "옷의 이름을 작성해주세요"),
                         TextFieldContainer(
+                          controller: clothesInfo["name"],
                           color: Theme.of(context)
                               .colorScheme
                               .onSecondaryContainer,
                           hintText: "옷 이름",
                           enabled: true,
-                          onSaved: (val) {
-                            clothesInfo["name"] = val;
-                          },
                           validator: (val) {
+                            if(val == null) {
+                              return "이름 안씀";
+                            }
                             return null;
                           },
                           keyboardType: TextInputType.text,
                           icon: Icons.abc,
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 15),
+                          margin: const EdgeInsets.symmetric(vertical: 15),
                           child: Text(
                             "1+1 이벤트, 옷의 색상, 종류 등\n손님들의 눈길을 사로잡을 정보들을 담는게 좋아요",
                             style: TextStyle(
                                 fontSize: size.height * 0.015,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondary),
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -192,12 +198,14 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ),
                     Column(
                       children: [
-                        ClothesUploadTitleWidget(title: "이미지를 선택해주세요"),
-                        SizedBox(height: 8),
+                        const ClothesUploadTitleWidget(title: "이미지를 선택해주세요"),
+                        const SizedBox(height: 8),
                         Container(
                           height: size.height * 0.35,
-                          padding: EdgeInsets.symmetric(vertical: size.height * 0.02,),
-                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.02,
+                          ),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
                             color: Theme.of(context)
                                 .colorScheme
@@ -213,8 +221,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                                   Align(
                                     alignment: Alignment.center,
                                     child: Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Image.file(
                                         File(_selectedImages[index].path),
                                         fit: BoxFit.cover,
@@ -247,43 +255,41 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 18),
+                          margin: const EdgeInsets.symmetric(vertical: 18),
                           child: Text(
                             "첫번째로 선택된 사진이\n손님들에게 가장 많이 노출될꺼에요",
                             style: TextStyle(
                                 fontSize: 13,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondary),
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary),
                             textAlign: TextAlign.center,
                           ),
                         ),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: PickImages,
-                              child: Column(
+                              onTap: pickImages,
+                              child: const Column(
                                 children: [
                                   Icon(Icons.add_photo_alternate_outlined),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  const Text("갤러리에서 선택"),
+                                  Text("갤러리에서 선택"),
                                 ],
                               ),
                             ),
                             InkWell(
-                              onTap:  CameraImages,
-                              child: Column(
+                              onTap: cameraImages,
+                              child: const Column(
                                 children: [
                                   Icon(Icons.add_a_photo_outlined),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  const Text("카메라로 촬영"),
+                                  Text("카메라로 촬영"),
                                 ],
                               ),
                             ),
@@ -293,14 +299,15 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ),
                     Column(
                       children: [
-                        ClothesUploadTitleWidget(title: "버튼을 눌러 사이즈 단위를 선택해주세요"),
+                        const ClothesUploadTitleWidget(
+                            title: "버튼을 눌러 사이즈 단위를 선택해주세요"),
                         SizedBox(
                           height: size.width * 0.01,
                         ),
                         InkWell(
                           onTap: _changeText,
                           child: Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: 10, left: 13, right: 13, bottom: 7),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
@@ -353,17 +360,17 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                                     onTap: () {
                                       _toggleButton(index);
                                       if (buttonSelectedStates[index]) {
-                                        clothesInfo["size"][index] =
+                                        clothesSizes[index] =
                                             sizeMenusNum[index];
                                       } else {
-                                        clothesInfo["size"][index] =
+                                        clothesSizes[index] =
                                             ""; // 또는 null을 할당할 수 있습니다.
                                       }
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 5),
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 10, horizontal: 7),
                                       width: size.width * 0.3,
                                       decoration: BoxDecoration(
@@ -404,11 +411,12 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ),
                     Column(
                       children: [
-                        ClothesUploadTitleWidget(title: "옷의 가격을 입력해주세요"),
+                        const ClothesUploadTitleWidget(title: "옷의 가격을 입력해주세요"),
                         SizedBox(
                           height: size.width * 0.01,
                         ),
                         TextFieldContainer(
+                          controller: clothesInfo["price"],
                           color: Theme.of(context)
                               .colorScheme
                               .onSecondaryContainer,
@@ -418,13 +426,8 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                           onChanged: (val) {
                             setState(() {
                               num parsedValue = double.tryParse(val) ?? 0;
-                              clothesInfo["price"] = parsedValue;
+                              price = parsedValue;
                             });
-                          },
-                          onSaved: (val) {
-                            num parsedValue = int.tryParse(val) ??
-                                0; // 문자열을 숫자로 변환 (기본값은 0)
-                            clothesInfo["price"] = parsedValue;
                           },
                           validator: (val) {
                             return null;
@@ -462,13 +465,12 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             TextFieldContainer(
+                                controller: clothesInfo["discountRate"],
                                 color: isCheckboxChecked
                                     ? Theme.of(context)
                                         .colorScheme
                                         .onSecondaryContainer
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary,
+                                    : Theme.of(context).colorScheme.onSecondary,
                                 hintText: "세일 %",
                                 keyboardType: TextInputType.number,
                                 enabled: isCheckboxChecked,
@@ -478,8 +480,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                                       num discountValue =
                                           double.tryParse(val) ??
                                               0; // 문자열을 숫자로 변환 (기본값은 0)
-                                      clothesInfo["discountRate"] =
-                                          discountValue;
+                                      discountRate = discountValue.toInt();
                                     },
                                   );
                                 },
@@ -492,9 +493,10 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                                   return null;
                                 },
                                 icon: Icons.discount),
+
                             isCheckboxChecked
                                 ? Container(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 20),
                                     width: size.width * 0.5,
                                     decoration: BoxDecoration(
@@ -502,7 +504,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                                           .colorScheme
                                           .onSecondaryContainer
                                           .withOpacity(0.5),
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                           bottomLeft: Radius.circular(10),
                                           bottomRight: Radius.circular(10)),
                                     ),
@@ -511,16 +513,16 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '원가  ${f.format(clothesInfo["price"])} ₩',
+                                          '원가  ${f.format(price)} ₩',
                                           // 저장된 가격 출력, 없을 경우 빈 문자열 출력
                                           style: TextStyle(
                                               fontSize: size.height * 0.015),
                                         ),
-                                        Divider(
+                                        const Divider(
                                           color: Colors.black,
                                         ),
                                         Text(
-                                          '세일가   ${f.format((clothesInfo["price"] - clothesInfo["discountRate"] * (clothesInfo["price"]! / 100)))} ₩',
+                                          '세일가   ${f.format((price - discountRate * (price / 100)))} ₩',
                                           // 저장된 가격 출력, 없을 경우 빈 문자열 출력
                                           style: TextStyle(
                                             fontSize: size.height * 0.015,
@@ -537,7 +539,7 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ),
                     Column(
                       children: [
-                        ClothesUploadTitleWidget(title: "코멘트를 입력해주세요"),
+                        const ClothesUploadTitleWidget(title: "코멘트를 입력해주세요"),
                         SizedBox(
                           height: size.width * 0.01,
                         ),
@@ -553,9 +555,10 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                             borderRadius: BorderRadius.circular(29),
                           ),
                           child: TextFormField(
-                            onChanged: (val) {},
-                            onSaved: (val) {},
-                            validator: (val) {},
+                            controller: clothesInfo["comment"],
+                            validator: (val) {
+                              return null;
+                            },
                             autovalidateMode: AutovalidateMode.always,
                             keyboardType: TextInputType.text,
                             maxLines: 10,
@@ -599,20 +602,25 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                           child: Container(
                             alignment: Alignment.center,
                             height: size.height * 0.08,
-                            child: Icon(Icons.arrow_back),
-                          )
-                      ),
+                            child: const Icon(Icons.arrow_back),
+                          )),
                     if ((_currentPage >= 1) && (_currentPage < 4))
-                      SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                     if (_currentPage < 4)
                       InkWell(
-                      onTap: _nextPage,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: size.height * 0.08,
-                        child: Text("다음"),
-                      )
-                    ),
+                          onTap: () {
+                            _nextPage();
+                            _currentPage == 1
+                                ? images = _selectedImages
+                                : null;
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: size.height * 0.08,
+                            child: const Text("다음"),
+                          )),
                   ],
                 ),
               ),
@@ -631,19 +639,29 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
                     ),
                   ),
                   onPressed: () async {
-                    // await _tryValidation();
+                    print(clothesInfo["name"]!.text);
+                    print((price - discountRate * (price / 100)));
+                    print(clothesSizes);
+                    print(clothesInfo["comment"]!.text);
+                    print(discountRate);
+                    SharedPreferences prefrs =
+                        await SharedPreferences.getInstance();
+                    final isValid = formkey.currentState!.validate();
+                    if (isValid) {
+                      formkey.currentState!.save();
+                      (clothesSizes).removeWhere((element) => element == "");
+                      clothesInfo["accessToken"] = prefrs.getString("accessToken");
+                      await tryRefreshAccessToken();
+                      await uploadClothes(
+                          clothesInfo["name"]!.text,
+                          clothesInfo["comment"]!.text,
+                          clothesInfo["accessToken"],
+                          (price - discountRate * (price / 100)).toInt(),
+                          discountRate,
+                          clothesSizes,_selectedImages[0].path);
 
-                    // sendClothesDataToServer(clothesInfo);
-                    // patchUserProfileImage();
-                    (clothesInfo["size"] as List<String>)
-                        .removeWhere((element) => element == "");
-                    print(clothesInfo["name"]);
-                    print(clothesInfo["price"]);
-                    print(clothesInfo["size"]);
-                    print(clothesInfo["comment"]);
-                    print(clothesInfo["discountRate"]);
-                    print(clothesInfo["time"]);
-                    Get.back(result: clothesInfo);
+                      Get.back(result: clothesInfo);
+                    }
                   },
                   child: const Text(
                     "옷 전시하기!",
@@ -658,23 +676,15 @@ class _ClothesUploadPageState extends State<ClothesUploadPage> {
           : null,
     );
   }
-
-  void _tryValidation() {
-    final isValid = formkey.currentState!.validate();
-    if (isValid) {
-      formkey.currentState!.save();
-    }
-  }
 }
-
 
 List<XFile> _selectedImages = [];
 
-Future<dynamic> patchUserProfileImage() async {
+Future<dynamic> patchUserProfileImage(String path) async {
   if (_selectedImages.isEmpty) return;
   var formData = dio.FormData.fromMap({
     "name": "what a fucking shit day!",
-    'images': [dio.MultipartFile.fromFileSync(_selectedImages[0].path)]
+    'images': [dio.MultipartFile.fromFileSync(path)]
   });
   // dio.MultipartFile.fromFileSync(_selectedImages[0].path, contentType: MediaType("image", "jpg"))
   print("프로필 사진을 서버에 업로드 합니다.");
@@ -683,7 +693,7 @@ Future<dynamic> patchUserProfileImage() async {
     // request.options.contentType = 'multipart/form-data';
     // request.options.maxRedirects.isFinite;
 
-    var response = await request.post('$serverUrl_2/clothes',
+    var response = await request.post('${dotenv.env["SERVER_URL"]}/clothes',
         data: formData, options: Options(contentType: 'multipart/form-data'));
     print('성공적으로 업로드했습니다');
     return response.data;
@@ -693,7 +703,8 @@ Future<dynamic> patchUserProfileImage() async {
 }
 
 class ClothesUploadTitleWidget extends StatelessWidget {
-  const ClothesUploadTitleWidget({Key? key, required this.title}) : super(key: key);
+  const ClothesUploadTitleWidget({Key? key, required this.title})
+      : super(key: key);
 
   final String title;
 
@@ -707,11 +718,8 @@ class ClothesUploadTitleWidget extends StatelessWidget {
         style: TextStyle(
             fontSize: size.height * 0.02,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context)
-                .colorScheme
-                .tertiaryContainer),
+            color: Theme.of(context).colorScheme.tertiaryContainer),
       ),
     );
   }
 }
-

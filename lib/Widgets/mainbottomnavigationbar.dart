@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MainBottomNavigationBar extends StatefulWidget {
-  MainBottomNavigationBar({
+class MainBottomNavigationBar extends StatelessWidget {
+  const MainBottomNavigationBar({
     Key? key,
     required this.selectedIndex,
     required this.iconItem1,
@@ -10,41 +10,31 @@ class MainBottomNavigationBar extends StatefulWidget {
     required this.label1,
     required this.label2,
     required this.label3,
+    required this.onIndexChanged, // 추가: 인덱스 변경 콜백
   }) : super(key: key);
 
-  int selectedIndex; // 이름을 selectIndex에서 selectedIndex로 변경
+  final int selectedIndex;
   final Icon iconItem1, iconItem2, iconItem3;
   final String label1, label2, label3;
-
-  @override
-  State<MainBottomNavigationBar> createState() => _MainBottomNavigationBarState();
-}
-
-class _MainBottomNavigationBarState extends State<MainBottomNavigationBar> {
+  final void Function(int) onIndexChanged; // 추가: 인덱스 변경 콜백
 
   @override
   Widget build(BuildContext context) {
-    // selectedIndex를 widget.selectedIndex로 변경
     return BottomNavigationBar(
-      currentIndex: widget.selectedIndex,
-      onTap: (index) {
-        // widget.selectedIndex를 업데이트하도록 변경
-        setState(() {
-          widget.selectedIndex = index;
-        });
-      },
+      currentIndex: selectedIndex,
+      onTap: onIndexChanged, // 변경: 콜백 호출
       items: [
         BottomNavigationBarItem(
-          icon: widget.iconItem1,
-          label: widget.label1,
+          icon: iconItem1,
+          label: label1,
         ),
         BottomNavigationBarItem(
-          icon: widget.iconItem2,
-          label: widget.label2,
+          icon: iconItem2,
+          label: label2,
         ),
         BottomNavigationBarItem(
-          icon: widget.iconItem3,
-          label: widget.label3,
+          icon: iconItem3,
+          label: label3,
         ),
       ],
       selectedItemColor: Theme.of(context).colorScheme.onTertiaryContainer,

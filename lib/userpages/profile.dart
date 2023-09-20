@@ -92,29 +92,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          child: Text(
-                            "아이디",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          "아이디",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
-                        Container(
-                          child: Text(
-                            "성함",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          "성함",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
-                        Container(
-                          child: Text(
-                            "생년월일",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          "생년월일",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
-                        Container(
-                          child: Text(
-                            "주소",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          "주소",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
                       ],
                     ),
@@ -122,32 +114,24 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          child: Text(
-                            user != null ?
-                            user!.id! : "로딩중",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          user != null ?
+                          user!.id! : "로딩중",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
-                        Container(
-                          child: Text(
-                            user != null ?
-                            user!.username! : "로딩중",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          user != null ?
+                          user!.username! : "로딩중",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
-                        Container(
-                          child: Text(
-                            user != null ?
-                            user!.birthday! : "로딩중",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          user != null ?
+                          user!.birthday! : "로딩중",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
-                        Container(
-                          child: Text(
-                            "",
-                            style: TextStyle(fontSize: size.height * 0.016),
-                          ),
+                        Text(
+                          "",
+                          style: TextStyle(fontSize: size.height * 0.016),
                         ),
                       ],
                     ),
@@ -158,59 +142,78 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.dialog(
-                      (AlertDialog(
-                        title: Text(
-                          "정말로 로그아웃 하시겠습니까?",
-                        ),
-                        actions: [
-                          TextButton(
-                            child: const Text("아니요"),
-                            onPressed: () => Get.back(),
-                          ),
-                          TextButton(
-                              child: const Text("네"),
-                              onPressed: () async {
-                                SharedPreferences prefrs =
-                                    await SharedPreferences.getInstance();
-                                prefrs.remove("accessToken");
-                                Get.offAll(const UserMain());
-                              }),
-                        ],
-                      )),
-                    );
-                  },
-                  child: Text(
-                    "로그아웃",
-                    style: TextStyle(fontSize: size.height * 0.015),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Get.dialog(
-                      (AlertDialog(
-                        title: const Text(
-                          "정말로 회원을 탈퇴하시겠습니까?",
-                        ),
-                        actions: [
-                          TextButton(
-                              child: const Text("아니요"), onPressed: () async {}),
-                          TextButton(
-                            child: const Text("네"),
-                            onPressed: () => Get.back(),
-                          ),
-                        ],
-                      )),
+                    Get.defaultDialog(
+                      titlePadding: EdgeInsets.only(
+                          top: size.height * 0.02),
+                      title: "로그아웃 하시겠어요?",
+                      titleStyle: TextStyle(
+                          fontSize: size.height * 0.02),
+                      content: Container(),
+                      textCancel: "아니요",
+                      cancelTextColor: Theme.of(context)
+                          .colorScheme
+                          .tertiaryContainer,
+                      textConfirm: "네",
+                      onConfirm: () async {
+                        Get.back();
+                        SharedPreferences prefrs =
+                            await SharedPreferences.getInstance();
+                        prefrs.remove("accessToken");
+                        Get.offAll(const UserMain());
+                      },
+                      confirmTextColor: Theme.of(context)
+                          .colorScheme
+                          .tertiary,
+                      buttonColor: Theme.of(context)
+                          .colorScheme
+                          .tertiaryContainer,
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
                     child: Text(
-                      "회원 탈퇴",
+                      "로그아웃",
                       style: TextStyle(fontSize: size.height * 0.015),
                     ),
                   ),
                 ),
+                // InkWell(
+                //   onTap: () {
+                //     Get.defaultDialog(
+                //       titlePadding: EdgeInsets.only(
+                //           top: size.height * 0.02),
+                //       title: "회원을 탈퇴하시겠어요?",
+                //       titleStyle: TextStyle(
+                //           fontSize: size.height * 0.02),
+                //
+                //       textCancel: "아니요",
+                //       cancelTextColor: Theme.of(context)
+                //           .colorScheme
+                //           .tertiaryContainer,
+                //       textConfirm: "네",
+                //       onConfirm: () async {
+                //         Get.back();
+                //         SharedPreferences prefrs =
+                //         await SharedPreferences.getInstance();
+                //         prefrs.remove("accessToken");
+                //         Get.offAll(const UserMain());
+                //       },
+                //       confirmTextColor: Theme.of(context)
+                //           .colorScheme
+                //           .tertiary,
+                //       buttonColor: Theme.of(context)
+                //           .colorScheme
+                //           .tertiaryContainer,
+                //     );
+                //   },
+                //   child: Container(
+                //     margin: const EdgeInsets.symmetric(vertical: 20),
+                //     child: Text(
+                //       "회원 탈퇴",
+                //       style: TextStyle(fontSize: size.height * 0.015),
+                //     ),
+                //   ),
+                // ),
               ],
             )
           ],

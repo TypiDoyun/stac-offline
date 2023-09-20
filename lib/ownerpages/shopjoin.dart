@@ -168,7 +168,9 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                         const Text(
                                           "보세 옷가게만 등록이 가능하며,\n브랜드 매장은 등록할 수 없습니다.",
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(height: 2, fontWeight: FontWeight.w400),
+                                          style: TextStyle(
+                                              height: 2,
+                                              fontWeight: FontWeight.w400),
                                         ),
                                         SizedBox(
                                           height: size.height * 0.03,
@@ -306,17 +308,50 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                             .tertiaryContainer,
                                       ),
                                       onPressed: () async {
-                                        //사업자 등록 번호 조회 API
-                                        await sendShopInfoDataToServer(
-                                          shopJoinController["residentNumber"]!
-                                              .text,
-                                          shopJoinController["merchantname"]!
-                                              .text,
-                                          shopJoinController["shopbirthday"]!
-                                              .text,
-                                        )
-                                            ? _nextPage()
-                                            : Get.snackbar("다시 확인", "해주세요");
+                                        print(
+                                            "${shopJoinController["residentNumber"]!.text}");
+                                        print(
+                                            "${shopJoinController["merchantname"]!.text}");
+                                        print(
+                                            "${shopJoinController["shopbirthday"]!.text}");
+                                        if (shopJoinController[
+                                                    "residentNumber"]!
+                                                .text
+                                                .isEmpty ||
+                                            shopJoinController["merchantname"]!
+                                                .text
+                                                .isEmpty ||
+                                            shopJoinController["shopbirthday"]!
+                                                .text
+                                                .isEmpty) {
+                                          Get.snackbar(
+                                            "다시 한번 확인하세요!",
+                                            "비어있는 공간이 있어요",
+                                            backgroundColor: Colors.white,
+                                            borderColor: Colors.black,
+                                            borderWidth: 1,
+                                          );
+                                        } else {
+                                          await authShop(
+                                            //사업자 등록 번호 조회 API
+                                            shopJoinController[
+                                                    "residentNumber"]!
+                                                .text,
+                                            shopJoinController["merchantname"]!
+                                                .text,
+                                            shopJoinController["shopbirthday"]!
+                                                .text,
+                                          )
+                                              ? _nextPage()
+                                              : Get.snackbar(
+                                                  "확인된 사업자 등록 정보가 없어요",
+                                                  "정보를 다시한번 확인해주세요",
+                                                  backgroundColor: Colors.white,
+                                                  borderColor: Colors.black,
+                                                  borderWidth: 1,
+                                                );
+                                        }
+
                                         // Shop newShop = Shop(
                                         //     name: "",
                                         //     shopNumber: "",
@@ -345,7 +380,9 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                   .colorScheme
                                   .onSecondaryContainer,
                               hintText: "정확하게 입력해주세요",
-                              validator: (val) {},
+                              validator: (val) {
+                                return null;
+                              },
                               icon: Icons.location_on,
                               topText: "도로명 주소 검색",
                               fontSize: size.height * 0.015,
@@ -411,8 +448,8 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                                       .tertiaryContainer,
                                                 ),
                                                 Container(
-                                                  margin: const EdgeInsets.symmetric(
-                                                      vertical: 10),
+                                                  margin: const EdgeInsets
+                                                      .symmetric(vertical: 10),
                                                   child: Text(
                                                     list[index]['roadAddr'],
                                                     style: TextStyle(
@@ -445,8 +482,8 @@ class _ShopJoinPageState extends State<ShopJoinPage> {
                                         );
                                       },
                                       child: Container(
-                                          margin:
-                                              const EdgeInsets.symmetric(vertical: 8),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 8),
                                           decoration: const BoxDecoration(),
                                           child: Text(
                                               "${list[index]['roadAddr']}")),

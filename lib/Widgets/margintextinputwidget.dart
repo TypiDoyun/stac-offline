@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MarginTextInputWidget extends StatelessWidget {
-  String hintText, topText;
-  FormFieldValidator validator;
-  IconData icon;
-  Color color;
-  double fontSize;
-  bool obscureText;
-  TextInputType? keyboardType;
-  int? maxLength;
-  bool? enabled;
-  TextEditingController? controller;
-  Function(String)? onChanged;
-  Function(String)? onFieldSubmitted;
-  FocusNode? focusNode;
-  List<TextInputFormatter>? inputFomatters;
+  final String hintText, topText;
+  final FormFieldValidator validator;
+  final IconData icon;
+  final Color color;
+  final double fontSize;
+  final bool obscureText;
+  final TextInputType? keyboardType;
+  final int? maxLength;
+  final bool? enabled;
+  final TextEditingController? controller;
+  final Function(String)? onChanged;
+  final Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFomatters;
 
-  MarginTextInputWidget({
+  const MarginTextInputWidget({
     Key? key,
     required this.color,
     required this.hintText,
@@ -33,6 +33,7 @@ class MarginTextInputWidget extends StatelessWidget {
     this.inputFomatters,
     this.maxLength,
     this.obscureText = false,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
